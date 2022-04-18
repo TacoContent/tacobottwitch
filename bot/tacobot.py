@@ -5,6 +5,8 @@ import traceback
 import sys
 from .cogs.lib import mongo
 from .cogs.lib import settings
+from .cogs.lib import logger
+from .cogs.lib import loglevel
 
 # https://twitchio.dev/en/latest/exts/commands.html#twitchio.ext.commands.Bot.load_module
 class TacoBot():
@@ -18,6 +20,14 @@ class TacoBot():
             raise Exception("TWITCH_CLIENT_SECRET is not set")
 
         self.db = mongo.MongoDatabase()
+
+        log_level = loglevel.LogLevel[self.settings.log_level.upper()]
+        if not log_level:
+            log_level = loglevel.LogLevel.DEBUG
+
+        self.log = logger.Log(minimumLogLevel=log_level)
+        self.log.debug("NONE", "tacobot.__init__", "Initialized")
+
         # Initialise our Bot with our access token, prefix and a list of channels to join on boot...
         # prefix can be a callable, which returns a list of strings or a string...
         # initial_channels can also be a callable which returns a list of strings...
@@ -32,17 +42,19 @@ class TacoBot():
             except Exception as e:
                 print(f'Failed to load extension {extension}.', file=sys.stderr)
                 traceback.print_exc()
-        print(f"starting bot")
+        # print(f"starting bot")
+        self.log.debug("NONE", "tacobot.__init__", "Starting bot")
+
         self.bot.run()
 
     def get_initial_channels(self):
         try:
             channels = self.db.get_bot_twitch_channels()
-            print(f"joining channels: {', '.join(channels)}")
+            self.log.debug("NONE", "tacobot.get_initial_channels", f"joining channels: {', '.join(channels)}")
+
             return channels
         except Exception as e:
-            print(f"{e}")
-            traceback.print_exc()
+            self.log.error("NONE", "tacobot.get_initial_channels", str(e), traceback.format_exc())
             return self.settings.default_channels
 
     async def get_prefixes(self, client, message):
@@ -51,5 +63,4 @@ class TacoBot():
             prefixes = self.settings.bot_prefixes
             return prefixes
         except Exception as e:
-            print(f"{e}")
-            traceback.print_exc()
+            self.log.error("NONE", "tacobot.get_prefixes", str(e), traceback.format_exc())

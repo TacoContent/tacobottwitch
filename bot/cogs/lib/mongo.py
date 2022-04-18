@@ -7,7 +7,7 @@ import pytz
 import uuid
 from . import utils
 from . import settings
-
+from . import loglevel
 class MongoDatabase():
     def __init__(self):
         self.client = None
@@ -29,12 +29,12 @@ class MongoDatabase():
             print(ex)
             traceback.print_exc()
 
-    def insert_log(self, guildId: int, level: str, method: str, message: str, stackTrace: str = None):
+    def insert_log(self, channel: str, level: loglevel.LogLevel, method: str, message: str, stackTrace: str = None):
         try:
             if self.connection is None:
                 self.open()
             payload = {
-                "guild_id": guildId,
+                "channel: ": channel.strip().lower(),
                 "timestamp": utils.get_timestamp(),
                 "level": level.name,
                 "method": method,
@@ -45,14 +45,19 @@ class MongoDatabase():
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-    def clear_log(self, guildId):
+        finally:
+            self.close()
+
+    def clear_log(self, channel: str):
         try:
             if self.connection is None:
                 self.open()
-            self.connection.logs.delete_many({ "guild_id": guildId })
+            self.connection.logs.delete_many({ "channel": channel.strip().lower() })
         except Exception as ex:
             print(ex)
             traceback.print_exc()
+        finally:
+            self.close()
 
     def get_bot_twitch_channels(self):
         try:
