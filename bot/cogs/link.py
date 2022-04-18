@@ -8,7 +8,7 @@ import json
 from .lib import mongo
 from .lib import settings
 from .lib import utils
-from .lib import permissions
+# from .lib import permissions
 
 ### DiscordAccountLinkCog ###
 # A way to link a twitch account to a discord account
