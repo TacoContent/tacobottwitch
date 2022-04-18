@@ -22,27 +22,38 @@ class DiscordAccountLinkCog(commands.Cog):
 
     @commands.command(name='link')
     async def link(self, ctx, code: str = None):
-        if ctx.message.echo:
-            return
         if code:
-            # lookup code in db
-            # if code is valid, link discord account to twitch account
-            # if code is invalid, return error
-            # if code is already linked, return error
-            pass
+            try:
+                result = self.db.link_twitch_to_discord_from_code(ctx.message.author.name, code)
+                if result:
+                    await ctx.reply(f"{ctx.message.author.mention}, I used the code {code} to link your discord account to your twitch account. Thank you!")
+                else:
+                    await ctx.reply(f"{ctx.message.author.mention}, I couldn't find a verification code with that value. Please try again.")
+            except ValueError as ver:
+                await ctx.reply(f"{ctx.message.author.mention}, {ver}")
         else:
-            # generate code
-            # save code to db
-            # send code to user in chat
-            pass
-        # if code:
-        #     invite_data = self.db.get_invite_for_code(code)
-        #     if invite_data:
-        #         await ctx.send(f"{invite_data['info']['url']}")
-        #     else:
-        #         await ctx.send(f"No invite found for code {code}")
-        # else:
-        #     await ctx.send(f"Please provide a code")
+            try:
+                # generate code
+                invite_data = self.db.get_invite_for_user(ctx.message.channel.name)
+                if invite_data:
+                    print(f"found invite data for {ctx.message.channel.name}")
+                    discord_invite = invite_data['info']['url']
+                else:
+                    invite_data = self.db.get_any_invite()
+                    if invite_data:
+                        print(f"found random invite data")
+                        discord_invite = invite_data['info']['url']
+
+                code = utils.get_random_string(length=6)
+                # save code to db
+                result = self.db.set_twitch_discord_link_code(ctx.message.author.name, code)
+                if result:
+                    # send code to user in chat
+                    await ctx.reply(f"{ctx.message.author.mention}, Please use this code in discord to link your discord and twitch accounts -> .taco link {code} <- {discord_invite}")
+                else:
+                    await ctx.reply(f"{ctx.message.author.mention}, I couldn't save your code. Please try again.")
+            except ValueError as ver:
+                await ctx.reply(f"{ctx.message.author.mention}, {ver}")
 
     async def cog_check(self, ctx: commands.core.Context) -> bool:
         return True

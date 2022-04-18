@@ -22,9 +22,12 @@ class TacoInviteCog(commands.Cog):
         try:
             if ctx.message.echo:
                 return
+                
             invite_data = self.db.get_invite_for_user(ctx.message.channel.name)
             if invite_data is None:
-                # use a default invite
+                invite_data = self.db.get_any_invite()
+
+            if invite_data is None:
                 await ctx.send(f"I was unable to find invite code for {ctx.message.channel.name}.")
                 return
             else:

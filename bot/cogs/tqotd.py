@@ -25,6 +25,8 @@ class TacoQuestionOfTheDayCog(commands.Cog):
                 await ctx.send(f"TACO Question of the Day: {question} -> Join the discussion: {invite_data['info']['url']}")
             else:
                 await ctx.send(f"TACO Question of the Day: {question}")
+        else:
+            await ctx.send(f"No TACO Question of the Day found. Check back later.")
 
 def prepare(bot):
     bot.add_cog(TacoQuestionOfTheDayCog())
