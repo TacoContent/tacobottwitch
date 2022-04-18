@@ -6,6 +6,7 @@ import glob
 import typing
 import requests
 import random
+import string
 import re
 import datetime
 import inspect
@@ -33,6 +34,9 @@ def chunk_list(lst, size):
     # looping till length l
     for i in range(0, len(lst), size):
         yield lst[i:i + size]
+
+def get_random_string(length: int = 10):
+    return "".join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
 
 def get_random_name(noun_count = 1, adjective_count = 1):
     try:

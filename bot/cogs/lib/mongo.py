@@ -71,13 +71,30 @@ class MongoDatabase():
         finally:
             self.close()
 
+    def get_any_invite(self):
+        try:
+            if self.connection is None:
+                self.open()
+            result = self.connection.invite_codes.find_one({ "guild_id": self.settings.discord_guild_id } )
+            if result:
+                return result
+            else:
+                print(f"Unable to find invite code for bot")
+                return None
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+            return None
+        finally:
+            self.close()
+
     def get_invite_for_user(self, twitch_name: str):
         try:
             if self.connection is None:
                 self.open()
             discord_user_id = self._get_discord_id(twitch_name)
             if discord_user_id:
-                result = self.connection.invite_codes.find_one({ "info.inviter_id": discord_user_id } )
+                result = self.connection.invite_codes.find_one({ "guild_id": self.settings.discord_guild_id, "info.inviter_id": discord_user_id } )
                 if result:
                     return result
                 else:

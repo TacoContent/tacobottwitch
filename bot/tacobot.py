@@ -10,11 +10,6 @@ from .cogs.lib import settings
 class TacoBot():
 
     def __init__(self):
-        # Initialise our Bot with our access token, prefix and a list of channels to join on boot...
-        # prefix can be a callable, which returns a list of strings or a string...
-        # initial_channels can also be a callable which returns a list of strings...
-        # super().__init__(token='ACCESS_TOKEN', initial_channels=['...'])
-
         self.settings = settings.Settings()
 
         if not self.settings.twitch_oauth_token:
@@ -23,12 +18,14 @@ class TacoBot():
             raise Exception("TWITCH_CLIENT_SECRET is not set")
 
         self.db = mongo.MongoDatabase()
-
-
+        # Initialise our Bot with our access token, prefix and a list of channels to join on boot...
+        # prefix can be a callable, which returns a list of strings or a string...
+        # initial_channels can also be a callable which returns a list of strings...
         self.bot = commands.Bot(token=self.settings.twitch_oauth_token, prefix=self.get_prefixes, initial_channels=self.get_initial_channels)
 
+        # get a list of all the cogs in the cogs directory
         cogs = [ f"bot.cogs.{os.path.splitext(f)[0]}" for f in os.listdir("bot/cogs") if f.endswith(".py") and not f.startswith("_") ]
-
+        # load all the cogs
         for extension in cogs:
             try:
                 self.bot.load_module(extension)

@@ -27,14 +27,28 @@ class DiscordAccountLinkCog(commands.Cog):
         if code:
             # lookup code in db
             # if code is valid, link discord account to twitch account
+            await ctx.reply(f"{ctx.message.author.mention}, I used the code {code} to link your discord account to your twitch account. Thank you!")
             # if code is invalid, return error
             # if code is already linked, return error
             pass
         else:
             # generate code
+            invite_data = self.db.get_invite_for_user(ctx.message.channel.name)
+            if invite_data:
+                print(f"found invite data for {ctx.message.channel.name}")
+                discord_invite = invite_data['info']['url']
+            else:
+                invite_data = self.db.get_any_invite()
+                if invite_data:
+                    print(f"found random invite data")
+                    discord_invite = invite_data['info']['url']
+
+            code = utils.get_random_string(length=6)
+            print(f"generated code: {code}")
             # save code to db
             # send code to user in chat
-            pass
+            await ctx.reply(f"{ctx.message.author.mention}, Please use this code in discord to link your discord and twitch accounts -> .taco link {code} <- {discord_invite}")
+
         # if code:
         #     invite_data = self.db.get_invite_for_code(code)
         #     if invite_data:
