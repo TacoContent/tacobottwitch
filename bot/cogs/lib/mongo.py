@@ -142,7 +142,15 @@ class MongoDatabase:
             if result:
                 return result["question"]
             else:
-                print(f"Unable to find tqotd")
+                # get yesterday's tqotd if we didnt find one for "today"
+                date = date - datetime.timedelta(days=1)
+                ts_date = datetime.datetime.combine(date, datetime.time.min)
+                timestamp = utils.to_timestamp(ts_date)
+                result = self.connection.tqotd.find_one(
+                    {"guild_id": self.settings.discord_guild_id, "timestamp": timestamp}
+                )
+                if result:
+                    return result["question"]
                 return None
         except Exception as ex:
             print(ex)
@@ -158,7 +166,6 @@ class MongoDatabase:
         if result:
             return result["user_id"]
         else:
-            print(f"Unable to find discord user id for twitch user {username}")
             return None
 
     def set_twitch_discord_link_code(self, username: str, code: str):
@@ -200,6 +207,8 @@ class MongoDatabase:
                     raise ValueError(f"Unable to find an entry for a user with link code: {code}")
             else:
                 raise ValueError(f"Twitch user {twitch_name} already linked")
+        except ValueError as ve:
+            raise ve
         except Exception as ex:
             print(ex)
             traceback.print_exc()
