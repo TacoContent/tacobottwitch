@@ -26,6 +26,7 @@ class Settings:
         self.twitch_oauth_token = utils.dict_get(os.environ, "TWITCH_OAUTH_TOKEN", default_value=None)
         self.twitch_team_name = utils.dict_get(os.environ, "TWITCH_TEAM_NAME", default_value="taco")
         self.discord_guild_id = utils.dict_get(os.environ, "DISCORD_GUILD_ID", default_value="935294040386183228")
+        self.bot_restricted_channels = [ f"{c.lower().strip()}" for c in utils.dict_get(os.environ, "BOT_RESTRICTED_CHANNELS", default_value="ourtacobot,ourtaco").split(",") ]
         self.bot_prefixes = [
             f"{p.lower().lstrip()}" for p in utils.dict_get(os.environ, "BOT_PREFIXES", default_value="!").split(",")
         ]

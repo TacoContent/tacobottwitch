@@ -52,9 +52,14 @@ class TacoInviteCog(commands.Cog):
             self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 
     @commands.command(name="invite", aliases=["inv", "join"])
+    # @commands.restrict_channels(channels=["ourtacobot", "ourtaco"])
     async def invite(self, ctx):
         _method = inspect.stack()[1][3]
         try:
+            # only allowed in restricted channels
+            if ctx.message.channel.name not in self.settings.bot_restricted_channels:
+                return
+
             if ctx.message.echo:
                 return
             # check if we know who this user is in discord.
@@ -73,9 +78,14 @@ class TacoInviteCog(commands.Cog):
             self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 
     @commands.command(name="leave", aliases=["part", "remove"])
+    # @commands.restrict_channels(channels=["ourtacobot", "ourtaco"])
     async def leave(self, ctx):
         _method = inspect.stack()[1][3]
         try:
+            # only allowed in restricted channels
+            if ctx.message.channel.name not in self.settings.bot_restricted_channels:
+                return
+
             if ctx.message.echo:
                 return
             # check if we know who this user is in discord.
