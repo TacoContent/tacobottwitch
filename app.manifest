@@ -8,8 +8,8 @@
 	"commands": {
 		"taco": {
 			"description": "Promotes the TACO discord using an invite that you have created in the discord.",
-			"usage": "!taco",
-			"examples": ["!taco"],
+			"usage": "{prefix}taco",
+			"examples": ["{prefix}taco"],
 			"cooldown": 30,
 			"permissions": [ "everyone" ],
 			"enabled": true,
@@ -18,8 +18,21 @@
 		},
 		"tqotd": {
 			"description": "Gives you the TACO question of the day.",
-			"usage": "!tqotd",
-			"examples": ["!tqotd"],
+			"usage": "{prefix}tqotd",
+			"examples": ["{prefix}tqotd"],
+			"cooldown": 30,
+			"permissions": [ "everyone" ],
+			"enabled": true,
+			"subcommands": {},
+			"fields": []
+		},
+		"link": {
+			"description": "Allows you to link your discord account to your twitch account.",
+			"usage": "{prefix}link [code]",
+			"examples": [
+				"{prefix}link",
+				"{prefix}link 123456"
+			],
 			"cooldown": 30,
 			"permissions": [ "everyone" ],
 			"enabled": true,
