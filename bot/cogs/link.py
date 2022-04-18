@@ -1,3 +1,4 @@
+import imp
 from twitchio.ext import commands
 import twitchio
 import os
@@ -7,6 +8,7 @@ import json
 from .lib import mongo
 from .lib import settings
 from .lib import utils
+from .lib import permissions
 
 ### DiscordAccountLinkCog ###
 # A way to link a twitch account to a discord account
@@ -21,6 +23,7 @@ class DiscordAccountLinkCog(commands.Cog):
         self.settings = settings.Settings()
 
     @commands.command(name='link')
+    # @permissions.has_permission(permission=permissions.Permssions.EVERYONE)
     async def link(self, ctx, code: str = None):
         if code:
             try:

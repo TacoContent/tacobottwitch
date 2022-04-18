@@ -8,18 +8,39 @@
 	"commands": {
 		"taco": {
 			"description": "Promotes the TACO discord using an invite that you have created in the discord.",
-			"usage": "{prefix}taco",
-			"examples": ["{prefix}taco"],
+			"usage": "{{prefix}}taco",
+			"examples": ["{{prefix}}taco"],
 			"cooldown": 30,
 			"permissions": [ "everyone" ],
 			"enabled": true,
 			"subcommands": {},
 			"fields": []
 		},
+		"tacos": {
+			"description": "Set of commands to deal with tacos.",
+			"usage": "{{prefix}}tacos help",
+			"examples": ["{{prefix}}tacos help"],
+			"cooldown": 30,
+			"permissions": [ "everyone" ],
+			"enabled": true,
+			"subcommands": {
+				"help": {
+					"description": "Shows the help for the tacos subcommands.",
+					"usage": "{{prefix}}tacos help",
+					"examples": ["{{prefix}}tacos help"],
+					"cooldown": 30,
+					"permissions": [ "everyone" ],
+					"enabled": true,
+					"subcommands": {},
+					"fields": []
+				}
+			},
+			"fields": []
+		},
 		"tqotd": {
 			"description": "Gives you the TACO question of the day.",
-			"usage": "{prefix}tqotd",
-			"examples": ["{prefix}tqotd"],
+			"usage": "{{prefix}}tqotd",
+			"examples": ["{{prefix}}tqotd"],
 			"cooldown": 30,
 			"permissions": [ "everyone" ],
 			"enabled": true,
@@ -28,10 +49,10 @@
 		},
 		"link": {
 			"description": "Allows you to link your discord account to your twitch account.",
-			"usage": "{prefix}link [code]",
+			"usage": "{{prefix}}link [code]",
 			"examples": [
-				"{prefix}link",
-				"{prefix}link 123456"
+				"{{prefix}}link",
+				"{{prefix}}link 123456"
 			],
 			"cooldown": 30,
 			"permissions": [ "everyone" ],
