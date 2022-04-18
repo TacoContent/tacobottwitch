@@ -1,0 +1,6 @@
+*.env
+.env
+.editorconfig
+.git/
+.gitignore
+__pycache__/**
