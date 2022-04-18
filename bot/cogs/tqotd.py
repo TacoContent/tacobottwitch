@@ -9,6 +9,8 @@ from .lib import settings
 from .lib import utils
 from .lib import logger
 from .lib import loglevel
+
+
 class TacoQuestionOfTheDayCog(commands.Cog):
     def __init__(self):
         self.db = mongo.MongoDatabase()
@@ -20,7 +22,7 @@ class TacoQuestionOfTheDayCog(commands.Cog):
         self.log = logger.Log(minimumLogLevel=log_level)
         self.log.debug("NONE", "toqtd.__init__", "Initialized")
 
-    @commands.command(name='tqotd')
+    @commands.command(name="tqotd")
     async def tqotd(self, ctx):
         if ctx.message.echo:
             return
@@ -28,11 +30,14 @@ class TacoQuestionOfTheDayCog(commands.Cog):
         if question:
             invite_data = self.db.get_invite_for_user(ctx.message.channel.name)
             if invite_data:
-                await ctx.send(f"TACO Question of the Day: {question} -> Join the discussion: {invite_data['info']['url']}")
+                await ctx.send(
+                    f"TACO Question of the Day: {question} -> Join the discussion: {invite_data['info']['url']}"
+                )
             else:
                 await ctx.send(f"TACO Question of the Day: {question}")
         else:
             await ctx.send(f"No TACO Question of the Day found. Check back later.")
+
 
 def prepare(bot):
     bot.add_cog(TacoQuestionOfTheDayCog())

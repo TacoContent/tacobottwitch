@@ -18,8 +18,8 @@ from .lib import logger
 # If a code is supplied, it will be used to link the discord account to the twitch account
 # If no code is supplied, it will generate a code and then can be used in discord to link the discord account to the twitch account
 
-class DiscordAccountLinkCog(commands.Cog):
 
+class DiscordAccountLinkCog(commands.Cog):
     def __init__(self):
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
@@ -30,16 +30,20 @@ class DiscordAccountLinkCog(commands.Cog):
         self.log = logger.Log(minimumLogLevel=log_level)
         self.log.debug("NONE", "account_link.__init__", "Initialized")
 
-    @commands.command(name='link')
+    @commands.command(name="link")
     # @permissions.has_permission(permission=permissions.Permssions.EVERYONE)
     async def link(self, ctx, code: str = None):
         if code:
             try:
                 result = self.db.link_twitch_to_discord_from_code(ctx.message.author.name, code)
                 if result:
-                    await ctx.reply(f"{ctx.message.author.mention}, I used the code {code} to link your discord account to your twitch account. Thank you!")
+                    await ctx.reply(
+                        f"{ctx.message.author.mention}, I used the code {code} to link your discord account to your twitch account. Thank you!"
+                    )
                 else:
-                    await ctx.reply(f"{ctx.message.author.mention}, I couldn't find a verification code with that value. Please try again.")
+                    await ctx.reply(
+                        f"{ctx.message.author.mention}, I couldn't find a verification code with that value. Please try again."
+                    )
             except ValueError as ver:
                 await ctx.reply(f"{ctx.message.author.mention}, {ver}")
         else:
@@ -47,20 +51,30 @@ class DiscordAccountLinkCog(commands.Cog):
                 # generate code
                 invite_data = self.db.get_invite_for_user(ctx.message.channel.name)
                 if invite_data:
-                    self.log.debug(ctx.message.channel.name, "account_link.link", f"Found invite data for {ctx.message.channel.name}")
-                    discord_invite = invite_data['info']['url']
+                    self.log.debug(
+                        ctx.message.channel.name,
+                        "account_link.link",
+                        f"Found invite data for {ctx.message.channel.name}",
+                    )
+                    discord_invite = invite_data["info"]["url"]
                 else:
                     invite_data = self.db.get_any_invite()
                     if invite_data:
-                        self.log.debug(ctx.message.channel.name, "account_link.link", f"Found random invite data for {ctx.message.channel.name}")
-                        discord_invite = invite_data['info']['url']
+                        self.log.debug(
+                            ctx.message.channel.name,
+                            "account_link.link",
+                            f"Found random invite data for {ctx.message.channel.name}",
+                        )
+                        discord_invite = invite_data["info"]["url"]
 
                 code = utils.get_random_string(length=6)
                 # save code to db
                 result = self.db.set_twitch_discord_link_code(ctx.message.author.name, code)
                 if result:
                     # send code to user in chat
-                    await ctx.reply(f"{ctx.message.author.mention}, Please use this code in discord to link your discord and twitch accounts -> .taco link {code} <- {discord_invite}")
+                    await ctx.reply(
+                        f"{ctx.message.author.mention}, Please use this code in discord to link your discord and twitch accounts -> .taco link {code} <- {discord_invite}"
+                    )
                 else:
                     await ctx.reply(f"{ctx.message.author.mention}, I couldn't save your code. Please try again.")
             except ValueError as ver:
@@ -77,6 +91,7 @@ class DiscordAccountLinkCog(commands.Cog):
             await ctx.send(str(error))
         else:
             await ctx.send(f"Error: {error}")
+
 
 def prepare(bot):
     bot.add_cog(DiscordAccountLinkCog())

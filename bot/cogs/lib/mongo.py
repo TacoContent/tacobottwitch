@@ -8,19 +8,21 @@ import uuid
 from . import utils
 from . import settings
 from . import loglevel
-class MongoDatabase():
+
+
+class MongoDatabase:
     def __init__(self):
         self.client = None
         self.connection = None
         self.settings = settings.Settings()
         pass
 
-
     def open(self):
         if not self.settings.db_url:
             raise ValueError("MONGODB_URL is not set")
         self.client = MongoClient(self.settings.db_url)
         self.connection = self.client.tacobot
+
     def close(self):
         try:
             if self.client:
@@ -39,7 +41,7 @@ class MongoDatabase():
                 "level": level.name,
                 "method": method,
                 "message": message,
-                "stack_trace": stackTrace
+                "stack_trace": stackTrace,
             }
             self.connection.logs.insert_one(payload)
         except Exception as ex:
@@ -52,7 +54,7 @@ class MongoDatabase():
         try:
             if self.connection is None:
                 self.open()
-            self.connection.logs.delete_many({ "channel": channel.strip().lower() })
+            self.connection.logs.delete_many({"channel": channel.strip().lower()})
         except Exception as ex:
             print(ex)
             traceback.print_exc()
@@ -63,7 +65,7 @@ class MongoDatabase():
         try:
             if self.connection is None:
                 self.open()
-            result = self.connection.twitch_channels.find({ "guild_id": self.settings.discord_guild_id } )
+            result = self.connection.twitch_channels.find({"guild_id": self.settings.discord_guild_id})
             if result:
                 return [f"#{x['channel'].lower().strip()}" for x in result] + self.settings.default_channels
             else:
@@ -80,7 +82,7 @@ class MongoDatabase():
         try:
             if self.connection is None:
                 self.open()
-            result = self.connection.invite_codes.find_one({ "guild_id": self.settings.discord_guild_id } )
+            result = self.connection.invite_codes.find_one({"guild_id": self.settings.discord_guild_id})
             if result:
                 return result
             else:
@@ -99,7 +101,9 @@ class MongoDatabase():
                 self.open()
             discord_user_id = self._get_discord_id(twitch_name)
             if discord_user_id:
-                result = self.connection.invite_codes.find_one({ "guild_id": self.settings.discord_guild_id, "info.inviter_id": discord_user_id } )
+                result = self.connection.invite_codes.find_one(
+                    {"guild_id": self.settings.discord_guild_id, "info.inviter_id": discord_user_id}
+                )
                 if result:
                     return result
                 else:
@@ -132,7 +136,9 @@ class MongoDatabase():
             ts_date = datetime.datetime.combine(date, datetime.time.min)
             timestamp = utils.to_timestamp(ts_date)
 
-            result = self.connection.tqotd.find_one({ "guild_id": self.settings.discord_guild_id, "timestamp": timestamp } )
+            result = self.connection.tqotd.find_one(
+                {"guild_id": self.settings.discord_guild_id, "timestamp": timestamp}
+            )
             if result:
                 return result["question"]
             else:
@@ -148,7 +154,7 @@ class MongoDatabase():
     def _get_discord_id(self, username: str):
         if self.connection is None:
             self.open()
-        result = self.connection.twitch_user.find_one({ "twitch_name": username } )
+        result = self.connection.twitch_user.find_one({"twitch_name": username})
         if result:
             return result["user_id"]
         else:
@@ -161,11 +167,10 @@ class MongoDatabase():
                 self.open()
             discord_user_id = self._get_discord_id(username)
             if not discord_user_id:
-                payload = {
-                    "twitch_name": username.strip().lower(),
-                    "link_code": code.strip()
-                }
-                self.connection.twitch_user.update_one( { "twitch_name": username.strip().lower() }, { "$set": payload }, upsert=True )
+                payload = {"twitch_name": username.strip().lower(), "link_code": code.strip()}
+                self.connection.twitch_user.update_one(
+                    {"twitch_name": username.strip().lower()}, {"$set": payload}, upsert=True
+                )
                 return True
             else:
                 raise ValueError(f"Twitch user {username} already linked")
@@ -182,14 +187,14 @@ class MongoDatabase():
                 self.open()
             discord_user_id = self._get_discord_id(twitch_name)
             if not discord_user_id:
-                result = self.connection.twitch_user.find_one({ "link_code": code.strip() } )
+                result = self.connection.twitch_user.find_one({"link_code": code.strip()})
                 if result:
                     payload = {
                         "twitch_name": twitch_name.strip().lower(),
                         # "user_id": result["user_id"],
                         # "link_code": code.strip()
                     }
-                    self.connection.twitch_user.update_one( { "link_code": code.strip() }, { "$set": payload }, upsert=True )
+                    self.connection.twitch_user.update_one({"link_code": code.strip()}, {"$set": payload}, upsert=True)
                     return True
                 else:
                     raise ValueError(f"Unable to find an entry for a user with link code: {code}")
