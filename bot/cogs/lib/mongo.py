@@ -149,3 +149,50 @@ class MongoDatabase():
         else:
             print(f"Unable to find discord user id for twitch user {username}")
             return None
+
+    def set_twitch_discord_link_code(self, username: str, code: str):
+        try:
+            if self.connection is None:
+                self.open()
+            discord_user_id = self._get_discord_id(username)
+            if not discord_user_id:
+                payload = {
+                    "twitch_name": username.strip().lower(),
+                    "link_code": code.strip()
+                }
+                self.connection.twitch_user.update_one( { "twitch_name": username.strip().lower() }, { "$set": payload }, upsert=True )
+                return True
+            else:
+                raise ValueError(f"Twitch user {username} already linked")
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+            raise ex
+        finally:
+            self.close()
+
+    def link_twitch_to_discord_from_code(self, twitch_name: str, code: str):
+        try:
+            if self.connection is None:
+                self.open()
+            discord_user_id = self._get_discord_id(twitch_name)
+            if not discord_user_id:
+                result = self.connection.twitch_user.find_one({ "link_code": code.strip() } )
+                if result:
+                    payload = {
+                        "twitch_name": twitch_name.strip().lower(),
+                        # "user_id": result["user_id"],
+                        # "link_code": code.strip()
+                    }
+                    self.connection.twitch_user.update_one( { "link_code": code.strip() }, { "$set": payload }, upsert=True )
+                    return True
+                else:
+                    raise ValueError(f"Unable to find an entry for a user with link code: {code}")
+            else:
+                raise ValueError(f"Twitch user {twitch_name} already linked")
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+            raise ex
+        finally:
+            self.close()
