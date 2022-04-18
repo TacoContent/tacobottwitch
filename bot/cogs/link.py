@@ -8,6 +8,9 @@ import json
 from .lib import mongo
 from .lib import settings
 from .lib import utils
+from .lib import loglevel
+from .lib import logger
+
 # from .lib import permissions
 
 ### DiscordAccountLinkCog ###
@@ -18,9 +21,14 @@ from .lib import utils
 class DiscordAccountLinkCog(commands.Cog):
 
     def __init__(self):
-        print(f"loading DiscordAccountLink Cog")
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
+        log_level = loglevel.LogLevel[self.settings.log_level.upper()]
+        if not log_level:
+            log_level = loglevel.LogLevel.DEBUG
+
+        self.log = logger.Log(minimumLogLevel=log_level)
+        self.log.debug("NONE", "account_link.__init__", "Initialized")
 
     @commands.command(name='link')
     # @permissions.has_permission(permission=permissions.Permssions.EVERYONE)
@@ -39,12 +47,12 @@ class DiscordAccountLinkCog(commands.Cog):
                 # generate code
                 invite_data = self.db.get_invite_for_user(ctx.message.channel.name)
                 if invite_data:
-                    print(f"found invite data for {ctx.message.channel.name}")
+                    self.log.debug(ctx.message.channel.name, "account_link.link", f"Found invite data for {ctx.message.channel.name}")
                     discord_invite = invite_data['info']['url']
                 else:
                     invite_data = self.db.get_any_invite()
                     if invite_data:
-                        print(f"found random invite data")
+                        self.log.debug(ctx.message.channel.name, "account_link.link", f"Found random invite data for {ctx.message.channel.name}")
                         discord_invite = invite_data['info']['url']
 
                 code = utils.get_random_string(length=6)

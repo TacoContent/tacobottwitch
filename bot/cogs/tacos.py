@@ -6,16 +6,22 @@ import sys
 import json
 from .lib import mongo
 from .lib import settings
-
+from .lib import logger
+from .lib import loglevel
 
 class TacosCog(commands.Cog):
     """Allows the streamer to give a user tacos"""
 
     def __init__(self):
-        print(f"loading TacosCog")
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
         self.subcommands = [ "give", "take", "balance", "leaderboard", "top", "stats", "help" ]
+        log_level = loglevel.LogLevel[self.settings.log_level.upper()]
+        if not log_level:
+            log_level = loglevel.LogLevel.DEBUG
+
+        self.log = logger.Log(minimumLogLevel=log_level)
+        self.log.debug("NONE", "tacos.__init__", "Initialized")
 
     @commands.command(name='tacos')
     async def tacos(self, ctx, subcommand: str, *args):

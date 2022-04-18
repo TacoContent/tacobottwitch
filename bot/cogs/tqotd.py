@@ -7,12 +7,18 @@ import json
 from .lib import mongo
 from .lib import settings
 from .lib import utils
-
+from .lib import logger
+from .lib import loglevel
 class TacoQuestionOfTheDayCog(commands.Cog):
     def __init__(self):
-        print(f"loading TacoQuestionOfTheDayCog")
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
+        log_level = loglevel.LogLevel[self.settings.log_level.upper()]
+        if not log_level:
+            log_level = loglevel.LogLevel.DEBUG
+
+        self.log = logger.Log(minimumLogLevel=log_level)
+        self.log.debug("NONE", "toqtd.__init__", "Initialized")
 
     @commands.command(name='tqotd')
     async def tqotd(self, ctx):
