@@ -39,8 +39,10 @@ class TacosCog(commands.Cog):
                 await self._tacos_top(ctx, args)
             elif subcommand == "stats":
                 await self._tacos_stats(ctx, args)
-            elif subcommand == "help":
+            else:
                 await self._tacos_help(ctx, args)
+        else:
+            await self._tacos_help(ctx, args)
 
     async def _tacos_give(self, ctx, args):
         if ctx.message.echo:

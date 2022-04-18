@@ -142,7 +142,15 @@ class MongoDatabase:
             if result:
                 return result["question"]
             else:
-                print(f"Unable to find tqotd")
+                # get yesterday's tqotd if we didnt find one for "today"
+                date = date - datetime.timedelta(days=1)
+                ts_date = datetime.datetime.combine(date, datetime.time.min)
+                timestamp = utils.to_timestamp(ts_date)
+                result = self.connection.tqotd.find_one(
+                    {"guild_id": self.settings.discord_guild_id, "timestamp": timestamp}
+                )
+                if result:
+                    return result["question"]
                 return None
         except Exception as ex:
             print(ex)
