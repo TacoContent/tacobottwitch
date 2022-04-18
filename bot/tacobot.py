@@ -9,8 +9,7 @@ from .cogs.lib import logger
 from .cogs.lib import loglevel
 
 # https://twitchio.dev/en/latest/exts/commands.html#twitchio.ext.commands.Bot.load_module
-class TacoBot():
-
+class TacoBot:
     def __init__(self):
         self.settings = settings.Settings()
 
@@ -31,16 +30,22 @@ class TacoBot():
         # Initialise our Bot with our access token, prefix and a list of channels to join on boot...
         # prefix can be a callable, which returns a list of strings or a string...
         # initial_channels can also be a callable which returns a list of strings...
-        self.bot = commands.Bot(token=self.settings.twitch_oauth_token, prefix=self.get_prefixes, initial_channels=self.get_initial_channels)
+        self.bot = commands.Bot(
+            token=self.settings.twitch_oauth_token, prefix=self.get_prefixes, initial_channels=self.get_initial_channels
+        )
 
         # get a list of all the cogs in the cogs directory
-        cogs = [ f"bot.cogs.{os.path.splitext(f)[0]}" for f in os.listdir("bot/cogs") if f.endswith(".py") and not f.startswith("_") ]
+        cogs = [
+            f"bot.cogs.{os.path.splitext(f)[0]}"
+            for f in os.listdir("bot/cogs")
+            if f.endswith(".py") and not f.startswith("_")
+        ]
         # load all the cogs
         for extension in cogs:
             try:
                 self.bot.load_module(extension)
             except Exception as e:
-                print(f'Failed to load extension {extension}.', file=sys.stderr)
+                print(f"Failed to load extension {extension}.", file=sys.stderr)
                 traceback.print_exc()
         # print(f"starting bot")
         self.log.debug("NONE", "tacobot.__init__", "Starting bot")
