@@ -20,7 +20,8 @@ from .lib import logger
 
 
 class DiscordAccountLinkCog(commands.Cog):
-    def __init__(self):
+    def __init__(self, bot: commands.Bot):
+        self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
@@ -94,4 +95,4 @@ class DiscordAccountLinkCog(commands.Cog):
 
 
 def prepare(bot):
-    bot.add_cog(DiscordAccountLinkCog())
+    bot.add_cog(DiscordAccountLinkCog(bot))

@@ -67,7 +67,9 @@ class MongoDatabase:
                 self.open()
             result = self.connection.twitch_channels.find({"guild_id": self.settings.discord_guild_id})
             if result:
-                return [f"#{x['channel'].lower().strip()}" for x in result] + self.settings.default_channels
+                channels = [f"#{x['channel'].lower().strip()}" for x in result]
+                [ channels.append(f"#{x.replace('#','').lower().strip()}") for x in self.settings.default_channels if x not in channels ]
+                return channels
             else:
                 print(f"Unable to find channels for bot")
                 return self.settings.default_channels
@@ -75,6 +77,57 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
             return None
+        finally:
+            self.close()
+
+    def add_bot_to_channel(self, twitch_channel):
+        try:
+            if self.connection is None:
+                self.open()
+            twitch_channel = twitch_channel.strip().lower()
+            result = self.connection.twitch_channels.find_one(
+                {"guild_id": self.settings.discord_guild_id, "channel": twitch_channel}
+            )
+            if not result:
+                date = datetime.datetime.utcnow().date()
+                ts_date = datetime.datetime.combine(date, datetime.time.min)
+                timestamp = utils.to_timestamp(ts_date)
+                payload = {
+                    "guild_id": self.settings.discord_guild_id,
+                    "channel": twitch_channel,
+                    "timestamp": timestamp,
+                }
+                self.connection.twitch_channels.insert_one(payload)
+                return True
+            else:
+                raise ValueError(f"Twitch channel {twitch_channel} already added")
+        except ValueError as ve:
+            raise ve
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+            raise ex
+        finally:
+            self.close()
+
+    def remove_bot_from_channel(self, twitch_channel):
+        try:
+            if self.connection is None:
+                self.open()
+            twitch_channel = twitch_channel.strip().lower()
+            result = self.connection.twitch_channels.delete_one(
+                {"guild_id": self.settings.discord_guild_id, "channel": twitch_channel}
+            )
+            if result.deleted_count == 1:
+                return True
+            else:
+                raise ValueError(f"I was unable to leave channel {twitch_channel}, as I am not in it.")
+        except ValueError as ve:
+            raise ve
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+            raise ex
         finally:
             self.close()
 

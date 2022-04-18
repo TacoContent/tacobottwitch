@@ -6,15 +6,45 @@
 	"author": "DarthMinos#1161",
 	"changelog": "changelog.txt",
 	"commands": {
-		"taco": {
+		"discord": {
 			"description": "Promotes the TACO discord using an invite that you have created in the discord.",
-			"usage": "{{prefix}}taco",
-			"examples": ["{{prefix}}taco"],
+			"usage": "{{prefix}}discord",
+			"examples": ["{{prefix}}discord"],
 			"cooldown": 30,
 			"permissions": [ "everyone" ],
 			"enabled": true,
 			"subcommands": {},
-			"fields": []
+			"fields": [],
+			"aliases": [ "taco" ]
+		},
+		"invite": {
+			"description": "Invite OurTacoBot to your twitch channel.",
+			"usage": "{{prefix}}invite",
+			"examples": ["{{prefix}}invite"],
+			"cooldown": 30,
+			"permissions": [ "everyone" ],
+			"enabled": true,
+			"subcommands": {},
+			"fields": [],
+			"aliases": [ "inv", "join" ]
+		},
+		"leave": {
+			"description": "Remove OurTacoBot to your twitch channel.",
+			"usage": "{{prefix}}leave",
+			"examples": [
+				"{{prefix}}leave"
+			],
+			"cooldown": 30,
+			"permissions": [
+				"everyone"
+			],
+			"enabled": true,
+			"subcommands": {},
+			"fields": [],
+			"aliases": [
+				"part",
+				"remove"
+			]
 		},
 		"tacos": {
 			"description": "Set of commands to deal with tacos.",

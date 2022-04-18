@@ -12,7 +12,8 @@ from .lib import loglevel
 
 
 class TacoQuestionOfTheDayCog(commands.Cog):
-    def __init__(self):
+    def __init__(self, bot: commands.Bot):
+        self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
@@ -40,4 +41,4 @@ class TacoQuestionOfTheDayCog(commands.Cog):
 
 
 def prepare(bot):
-    bot.add_cog(TacoQuestionOfTheDayCog())
+    bot.add_cog(TacoQuestionOfTheDayCog(bot))

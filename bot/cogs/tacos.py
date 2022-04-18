@@ -13,7 +13,8 @@ from .lib import loglevel
 class TacosCog(commands.Cog):
     """Allows the streamer to give a user tacos"""
 
-    def __init__(self):
+    def __init__(self, bot: commands.Bot):
+        self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
         self.subcommands = ["give", "take", "balance", "leaderboard", "top", "stats", "help"]
@@ -90,4 +91,4 @@ class TacosCog(commands.Cog):
 
 
 def prepare(bot):
-    bot.add_cog(TacosCog())
+    bot.add_cog(TacosCog(bot))
