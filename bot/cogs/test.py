@@ -13,14 +13,9 @@ class TestCog(commands.Cog):
         print(f"loading test cog")
         pass
 
-    @commands.command(name="foo")
-    async def test(self, ctx):
-        print(f"test command")
-        await ctx.reply("bar")
-
     @commands.Cog.event()
     async def event_raw_data(self, data):
-        # print(data)
+        print(data)
         pass
 
     @commands.Cog.event()
@@ -30,7 +25,7 @@ class TestCog(commands.Cog):
         if message.echo:
             return
 
-        print(message.content)
+        print(f"{message.channel.name} -> {json.dumps(message.author.badges)} {message.author.name} -> {message.content}")
 
     @commands.Cog.event()
     async def event_ready(self):

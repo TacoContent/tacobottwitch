@@ -1,14 +1,17 @@
+from dataclasses import replace
 from twitchio.ext import commands
 import twitchio
 import os
 import traceback
 import sys
 import json
+import inspect
 from .lib import mongo
 from .lib import settings
 from .lib import logger
 from .lib import loglevel
-
+from .lib import permissions
+from .lib import command_helper
 
 class TacosCog(commands.Cog):
     """Allows the streamer to give a user tacos"""
@@ -18,15 +21,24 @@ class TacosCog(commands.Cog):
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
         self.subcommands = ["give", "take", "balance", "leaderboard", "top", "stats", "help"]
+        self.permissions_helper = permissions.Permissions()
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
         if not log_level:
             log_level = loglevel.LogLevel.DEBUG
 
         self.log = logger.Log(minimumLogLevel=log_level)
+
         self.log.debug("NONE", "tacos.__init__", "Initialized")
 
     @commands.command(name="tacos")
-    async def tacos(self, ctx, subcommand: str, *args):
+    async def tacos(self, ctx, subcommand: str = None, *args):
+        _method = inspect.stack()[1][3]
+
+        if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
+            self.log.debug(ctx.message.channel.name, _method, f"{ctx.message.author.name} does not have permission to use this command.")
+            return
+
+
         if subcommand in self.subcommands:
             if subcommand == "give":
                 await self._tacos_give(ctx, args)
@@ -46,10 +58,30 @@ class TacosCog(commands.Cog):
             await self._tacos_help(ctx, args)
 
     async def _tacos_give(self, ctx, args):
+        _method = inspect.stack()[1][3]
         if ctx.message.echo:
             return
+
+        if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
+            self.log.debug(ctx.message.channel.name, _method, f"{ctx.message.author.name} does not have permission to use this command.")
+            return
+
+        channel = self.bot.get_channel(ctx.message.channel.name)
+        if not channel:
+            self.log.debug(ctx.message.channel.name, _method, f"Channel {ctx.message.channel.name} not found.")
+            return
+
+
+
         if len(args) >= 2:
             user = args[0]
+            chatter = channel.get_chatter(user.lower().replace("@","").strip())
+            if not chatter:
+                self.log.debug(ctx.message.channel.name, _method, f"User {user} not found.")
+                return
+            if not await command_helper.check_linked_account(ctx, chatter):
+                return
+
             amount = args[1]
             reason = ""
             if len(args) > 2:
@@ -60,6 +92,8 @@ class TacosCog(commands.Cog):
                     taco_word = "taco"
                     if amount > 1:
                         taco_word = "tacos"
+
+
                     # if self.db.give_tacos(user, amount, reason):
                     await ctx.send(f"{user} has been given {amount} {taco_word} 🌮!")
                     # else:
