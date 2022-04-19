@@ -1,5 +1,6 @@
 import enum
 import twitchio
+import typing
 from . import settings
 from . import mongo
 
@@ -18,8 +19,11 @@ class Permissions:
         self.settings = settings.Settings()
         self.db = mongo.MongoDatabase()
 
-    def has_linked_account(self, user: twitchio.Chatter = None):
-        did = self.db.get_discord_id_for_twitch_username(user.name)
+    def has_linked_account(self, user: typing.Union[twitchio.Chatter,str] = None):
+        if isinstance(user, twitchio.Chatter):
+            user = user.name
+        user = user.replace("@", "").strip()
+        did = self.db.get_discord_id_for_twitch_username(user)
         return did is not None
 
     def has_permission(self, user: twitchio.Chatter, level: PermissionLevel = PermissionLevel.EVERYONE):
