@@ -5,6 +5,7 @@
 	"icon": "https://i.imgur.com/ejJu8de.png",
 	"author": "DarthMinos#1161",
 	"changelog": "changelog.txt",
+	"restricted_channels": ["ourtaco", "ourtacobot"],
 	"commands": {
 		"discord": {
 			"description": "Promotes the TACO discord using an invite that you have created in the discord.",
@@ -26,7 +27,11 @@
 			"enabled": true,
 			"subcommands": {},
 			"fields": [],
-			"aliases": [ "inv", "join" ]
+			"aliases": [ "inv", "join" ],
+			"restricted": [
+				"ourtaco",
+				"ourtacobot"
+			]
 		},
 		"leave": {
 			"description": "Remove OurTacoBot to your twitch channel.",
@@ -44,6 +49,10 @@
 			"aliases": [
 				"part",
 				"remove"
+			],
+			"restricted": [
+				"ourtaco",
+				"ourtacobot"
 			]
 		},
 		"tacos": {

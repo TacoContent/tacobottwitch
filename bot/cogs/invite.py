@@ -11,7 +11,7 @@ from .lib import settings
 from .lib import utils
 from .lib import loglevel
 from .lib import logger
-
+from .lib import permissions
 
 class TacoInviteCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -24,6 +24,7 @@ class TacoInviteCog(commands.Cog):
             log_level = loglevel.LogLevel.DEBUG
 
         self.log = logger.Log(minimumLogLevel=log_level)
+        self.permissions_helper = permissions.Permissions()
 
         self.invite_message = "🌮🌮🌮 Join an amazing discord community that I am passionate about. TACO - The Alliance Collective Order - Tacos Aren't Just For Tuesday 🌮🌮🌮 -> Discord: {{url}} -> Twitch Team: https://twitch.tv/team/{{team}} -> Twitter: https://www.twitter.com/OurTaco"
         self.log.debug("NONE", "invite.__init__", "Initialized")
@@ -56,8 +57,7 @@ class TacoInviteCog(commands.Cog):
     async def invite(self, ctx):
         _method = inspect.stack()[1][3]
         try:
-            # only allowed in restricted channels
-            if ctx.message.channel.name not in self.settings.bot_restricted_channels:
+            if not self.permissions_helper.in_command_restricted_channel(ctx):
                 return
 
             if ctx.message.echo:
@@ -83,7 +83,10 @@ class TacoInviteCog(commands.Cog):
         _method = inspect.stack()[1][3]
         try:
             # only allowed in restricted channels
-            if ctx.message.channel.name not in self.settings.bot_restricted_channels:
+            # if ctx.message.channel.name not in self.settings.bot_restricted_channels:
+            #     return
+            if not self.permissions_helper.in_command_restricted_channel(ctx):
+                self.log.debug(ctx.message.channel.name, _method, f"I am not in one of the required channels. {','.join(self.settings.bot_restricted_channels)}")
                 return
 
             if ctx.message.echo:
@@ -96,7 +99,11 @@ class TacoInviteCog(commands.Cog):
             # we know who they are. add the channel to the database for channels to join.
             self.db.remove_bot_from_channel(ctx.message.author.name)
             self.log.debug(ctx.message.channel.name, _method, f"Removed channel {ctx.message.author.name} from the channel list and left the channel.")
-            await self.bot.part_channels([f"#{ctx.message.author.name}"])
+            # this currently doesn't work.
+            # should be in future update of twitchio.
+            # await self.bot.part_channels([f"#{ctx.message.author.name}"])
+            # workaround:
+            await self.bot._connection.send(f"PART #{ctx.message.author.name}\r\n")
             await ctx.reply(f"{ctx.message.author.mention}, I have removed your channel from the list and left your channel.")
         except ValueError as e:
             await ctx.reply(f"{ctx.message.author.mention}, {e}")
