@@ -12,7 +12,9 @@ from .lib import logger
 from .lib import loglevel
 from .lib import permissions
 from .lib import command_helper
-from .lib.discord import tacos_log as discord_tacos_log
+from .lib import tacos_log as tacos_log
+
+
 class TacosCog(commands.Cog):
     """Allows the streamer to give a user tacos"""
 
@@ -22,7 +24,7 @@ class TacosCog(commands.Cog):
         self.settings = settings.Settings()
         self.subcommands = ["give", "take", "balance", "count", "top", "leaderboard", "help"]
         self.permissions_helper = permissions.Permissions()
-        self.tacos_log = discord_tacos_log.TacosLog()
+        self.tacos_log = tacos_log.TacosLog(self.bot)
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
         if not log_level:
             log_level = loglevel.LogLevel.DEBUG
@@ -57,6 +59,62 @@ class TacosCog(commands.Cog):
         else:
             await self._tacos_help(ctx, args)
 
+    async def _tacos_balance(self, ctx, args):
+        _method = inspect.stack()[1][3]
+        if ctx.message.echo:
+            return
+        try:
+            if len(args) >= 1:
+                # mod command
+                if not self.permissions_helper.has_permission(
+                    ctx.message.author, permissions.PermissionLevel.MODERATOR
+                ):
+                    self.log.debug(
+                        ctx.message.channel.name,
+                        _method,
+                        f"{ctx.message.author.name} does not have permission to use this command.",
+                    )
+                    return
+                user = args[0].lower().replace("@", "").strip()
+                await self._tacos_balance_for_user(ctx, user)
+            elif len(args) == 0:
+                # user command
+                if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
+                    self.log.debug(
+                        ctx.message.channel.name,
+                        _method,
+                        f"{ctx.message.author.name} does not have permission to use this command.",
+                    )
+                    return
+                await self._tacos_balance_for_user(ctx, ctx.message.author.name)
+        except Exception as e:
+            self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
+
+    async def _tacos_balance_for_user(self, ctx, user):
+        _method = inspect.stack()[1][3]
+        if ctx.message.echo:
+            return
+        if not await command_helper.check_linked_account(ctx, user):
+            return
+
+        try:
+            if user == ctx.message.author.name:
+                response_user = "you"
+                response_has = "have"
+            else:
+                response_user = user
+                response_has = "has"
+            user_tacos = self.db.get_tacos_count(user)
+            if user_tacos:
+                taco_word = "taco"
+                if user_tacos != 1:
+                    taco_word = "tacos"
+                await ctx.reply(f"{ctx.message.author.mention}, {response_user} {response_has} {user_tacos} {taco_word} 🌮.")
+            else:
+                await ctx.reply(f"@{ctx.message.author.mention}, {response_user} {response_has} no tacos 🌮.")
+        except Exception as e:
+            self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
+
     async def _tacos_give(self, ctx, args):
         _method = inspect.stack()[1][3]
         if ctx.message.echo:
@@ -87,15 +145,7 @@ class TacosCog(commands.Cog):
             if amount.isdigit():
                 amount = int(amount)
                 if amount > 0:
-                    taco_word = "taco"
-                    if amount > 1:
-                        taco_word = "tacos"
-
-                    # if self.db.give_tacos(user, amount, reason):
-                    await ctx.send(f"@{user} has been given {amount} {taco_word} 🌮 by @{ctx.message.channel.name} for {reason}.")
-                    self.tacos_log.send(ctx.message.channel.name, user, amount, reason)
-                    # else:
-                    #     await ctx.send(f"I do not know who {user} is in the discord.")
+                    await self.tacos_log.give_user_tacos(ctx.message.channel.name, user, amount, reason)
                 else:
                     await ctx.send(f"You can't give negative tacos!")
             else:
@@ -132,15 +182,7 @@ class TacosCog(commands.Cog):
             if amount.isdigit():
                 amount = int(amount)
                 if amount > 0:
-                    taco_word = "taco"
-                    if amount > 1:
-                        taco_word = "tacos"
-
-                    # if self.db.take_tacos(user, amount, reason):
-                    await ctx.send(f"@{ctx.message.channel.name} has taken {amount} {taco_word} 🌮 from @{user} for {reason}.")
-                    self.tacos_log.send(ctx.message.channel.name, user, -(amount), reason)
-                    # else:
-                    #     await ctx.send(f"I do not know who {user} is in the discord.")
+                    await self.tacos_log.give_user_tacos(ctx.message.channel.name, user, -(amount), reason)
                 else:
                     await ctx.send(f"You can't take negative tacos!")
             else:
@@ -151,20 +193,7 @@ class TacosCog(commands.Cog):
     async def _tacos_help(self, ctx, args):
         if ctx.message.echo:
             return
-        await ctx.send(f"Usage: !tacos give <user> <amount> [reason]")
-
-    @commands.Cog.event()
-    async def event_raw_data(self, data):
-        pass
-
-    @commands.Cog.event()
-    # https://twitchio.dev/en/latest/reference.html#twitchio.Message
-    async def event_message(self, message):
-        # is the message from the bot?
-        if message.echo:
-            return
-
-        pass
+        await ctx.send(f"Usage: !taco tacos [command] [args]")
 
 
 def prepare(bot):
