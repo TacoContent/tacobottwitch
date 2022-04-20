@@ -152,9 +152,9 @@ class TacosCog(commands.Cog):
                 taco_word = "taco"
                 if user_tacos != 1:
                     taco_word = "tacos"
-                await ctx.reply(f"{response_user} {response_has} {user_tacos} {taco_word} 🌮.")
+                await ctx.reply(f"{ctx.message.author.mention}, {response_user} {response_has} {user_tacos} {taco_word} 🌮.")
             else:
-                await ctx.reply(f"{response_user} {response_has} no tacos 🌮.")
+                await ctx.reply(f"{ctx.message.author.mention}, {response_user} {response_has} no tacos 🌮.")
         except Exception as e:
             self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 
