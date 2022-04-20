@@ -5,29 +5,45 @@
 	"icon": "https://i.imgur.com/ejJu8de.png",
 	"author": "DarthMinos#1161",
 	"changelog": "changelog.txt",
-	"restricted_channels": ["ourtaco", "ourtacobot"],
+	"restricted_channels": [
+		"ourtaco",
+		"ourtacobot"
+	],
 	"commands": {
 		"discord": {
 			"description": "Promotes the TACO discord using an invite that you have created in the discord.",
 			"usage": "{{prefix}}discord",
-			"examples": ["{{prefix}}discord"],
+			"examples": [
+				"{{prefix}}discord"
+			],
 			"cooldown": 30,
-			"permissions": [ "everyone" ],
+			"permissions": [
+				"everyone"
+			],
 			"enabled": true,
 			"subcommands": {},
 			"fields": [],
-			"aliases": [ "taco" ]
+			"aliases": [
+				"taco"
+			]
 		},
 		"invite": {
 			"description": "Invite OurTacoBot to your twitch channel.",
 			"usage": "{{prefix}}invite",
-			"examples": ["{{prefix}}invite"],
+			"examples": [
+				"{{prefix}}invite"
+			],
 			"cooldown": 30,
-			"permissions": [ "everyone" ],
+			"permissions": [
+				"everyone"
+			],
 			"enabled": true,
 			"subcommands": {},
 			"fields": [],
-			"aliases": [ "inv", "join" ],
+			"aliases": [
+				"inv",
+				"join"
+			],
 			"restricted": [
 				"ourtaco",
 				"ourtacobot"
@@ -58,46 +74,148 @@
 		"tacos": {
 			"description": "Set of commands to deal with tacos.",
 			"usage": "{{prefix}}tacos help",
-			"examples": ["{{prefix}}tacos help"],
+			"examples": [
+				"{{prefix}}tacos help"
+			],
 			"cooldown": 30,
-			"permissions": [ "everyone" ],
+			"permissions": [
+				"everyone"
+			],
+			"fields": [],
 			"enabled": true,
 			"subcommands": {
+				"count": {
+					"description": "Get the number of tacos that you have.",
+					"usage": "{{prefix}}tacos count",
+					"examples": [
+						"{{prefix}}tacos count"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"everyone"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"fields": [],
+					"aliases": [
+						"count",
+						"bal"
+					],
+					"restricted": []
+				},
+				"_count": {
+					"description": "Get the number of tacos for a user",
+					"usage": "{{prefix}}tacos count <user>",
+					"examples": [
+						"{{prefix}}tacos count @DarthMinos"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"moderator"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"fields": [],
+					"aliases": [
+						"balance",
+						"bal"
+					],
+					"restricted": []
+				},
+				"give": {
+					"description": "Give a user tacos.",
+					"usage": "{{prefix}}tacos give <user> <amount> [reason]",
+					"examples": [
+						"{{prefix}}tacos give @DarthMinos 1 being awesome"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"moderator"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"fields": [],
+					"aliases": [],
+					"restricted": []
+				},
 				"help": {
 					"description": "Shows the help for the tacos subcommands.",
 					"usage": "{{prefix}}tacos help",
-					"examples": ["{{prefix}}tacos help"],
+					"examples": [
+						"{{prefix}}tacos help"
+					],
 					"cooldown": 30,
-					"permissions": [ "everyone" ],
+					"permissions": [
+						"everyone"
+					],
 					"enabled": true,
 					"subcommands": {},
 					"fields": []
+				},
+				"take": {
+					"description": "Take tacos from a user.",
+					"usage": "{{prefix}}tacos take <user> <amount> [reason]",
+					"examples": [
+						"{{prefix}}tacos take @DarthMinos 1 incorrect trivia answer"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"moderator"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"fields": [],
+					"aliases": [],
+					"restricted": []
+				},
+				"top": {
+					"description": "Get the leaderboard for tacos.",
+					"usage": "{{prefix}}tacos top [limit]",
+					"examples": [
+						"{{prefix}}tacos top 5"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"moderator"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"fields": [],
+					"aliases": [
+						"leaderboard",
+						"lb"
+					],
+					"restricted": []
 				}
 			},
-			"fields": []
-		},
-		"tqotd": {
-			"description": "Gives you the TACO question of the day.",
-			"usage": "{{prefix}}tqotd",
-			"examples": ["{{prefix}}tqotd"],
-			"cooldown": 30,
-			"permissions": [ "everyone" ],
-			"enabled": true,
-			"subcommands": {},
-			"fields": []
-		},
-		"link": {
-			"description": "Allows you to link your discord account to your twitch account.",
-			"usage": "{{prefix}}link [code]",
-			"examples": [
-				"{{prefix}}link",
-				"{{prefix}}link 123456"
-			],
-			"cooldown": 30,
-			"permissions": [ "everyone" ],
-			"enabled": true,
-			"subcommands": {},
-			"fields": []
+			"tqotd": {
+				"description": "Gives you the TACO question of the day.",
+				"usage": "{{prefix}}tqotd",
+				"examples": [
+					"{{prefix}}tqotd"
+				],
+				"cooldown": 30,
+				"permissions": [
+					"everyone"
+				],
+				"enabled": true,
+				"subcommands": {},
+				"fields": []
+			},
+			"link": {
+				"description": "Allows you to link your discord account to your twitch account.",
+				"usage": "{{prefix}}link [code]",
+				"examples": [
+					"{{prefix}}link",
+					"{{prefix}}link 123456"
+				],
+				"cooldown": 30,
+				"permissions": [
+					"everyone"
+				],
+				"enabled": true,
+				"subcommands": {},
+				"fields": []
+			}
 		}
 	}
-}

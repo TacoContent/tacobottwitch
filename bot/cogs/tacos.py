@@ -52,12 +52,53 @@ class TacosCog(commands.Cog):
                 await self._tacos_take(ctx, args)
             elif subcommand == "balance" or subcommand == "bal" or subcommand == "count":
                 await self._tacos_balance(ctx, args)
-            elif subcommand == "top" or subcommand == "leaderboard":
+            elif subcommand == "top" or subcommand == "leaderboard" or subcommand == "lb":
+                print("calling leaderboard")
                 await self._tacos_top(ctx, args)
             else:
                 await self._tacos_help(ctx, args)
         else:
             await self._tacos_help(ctx, args)
+
+    async def _tacos_top(self, ctx, args):
+        _method = inspect.stack()[1][3]
+        if ctx.message.echo:
+            return
+        try:
+            limit = 5
+
+            if len(args) >= 1:
+                limit = int(args[0])
+                if limit > 10:
+                    limit = 10
+                elif limit < 1:
+                    limit = 1
+
+            # user command
+            if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
+                self.log.debug(
+                    ctx.message.channel.name,
+                    _method,
+                    f"{ctx.message.author.name} does not have permission to use this command.",
+                )
+                return
+            lb = self.db.get_top_tacos_leaderboard(limit=limit)
+            message_out = "Tacos Leaderboard: "
+            index_position = 1
+            for i in lb:
+
+                taco_count = i["count"]
+                taco_word = "taco"
+                if taco_count != 1:
+                    taco_word = "tacos"
+
+                message_out += f"::{index_position}:: {i['user']['twitch_name']} <-> {taco_count} {taco_word} 🌮 "
+                if index_position < limit:
+                    message_out += " -> "
+                index_position = index_position + 1
+            await ctx.reply(message_out)
+        except Exception as e:
+            self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 
     async def _tacos_balance(self, ctx, args):
         _method = inspect.stack()[1][3]

@@ -287,6 +287,31 @@ class MongoDatabase:
         finally:
             self.close()
 
+    def get_top_tacos_leaderboard(self, limit: int = 10):
+        try:
+            if self.connection is None:
+                self.open()
+            result = self.connection.tacos.aggregate(
+                [
+                    { "$lookup": { "from": "twitch_user", "localField": "user_id", "foreignField": "user_id", "as": "user" } },
+                    { "$unwind": "$user" },
+                    { "$match": { "guild_id": self.settings.discord_guild_id } },
+                    { "$sort": { "count": -1 } },
+                    { "$limit": limit },
+                ]
+            )
+
+            if result:
+                return list(result)
+            else:
+                return None
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+            return None
+        finally:
+            self.close()
+
     def get_tacos_count(self, twitch_name: str):
         try:
             if self.connection is None:
