@@ -81,6 +81,7 @@ class TacosLog():
             reason_msg = reason if reason else "no reason given" # self.settings.get_string(fromUser, 'no_reason')
 
             total_taco_count = self.db.add_tacos(toUser, taco_count)
+            self.db.track_taco_gift(fromUser.strip().lower(), toUser.strip().lower(), taco_count, reason_msg)
             await self._log(fromUser, toUser, taco_count, total_taco_count, reason_msg)
             return total_taco_count
         except Exception as e:
