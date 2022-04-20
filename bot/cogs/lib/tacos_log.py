@@ -3,6 +3,8 @@ from . import settings
 from . import loglevel
 from . import logger
 from . import tacotypes
+from . import mongo
+
 import traceback
 import inspect
 
@@ -11,6 +13,7 @@ class TacosLog():
         self.settings = settings.Settings()
         self.bot = bot
         self.webhook = discord_webhook.DiscordWebhook(self.settings.discord_tacos_log_webhook_url)
+        self.db = mongo.MongoDatabase()
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
         if not log_level:
