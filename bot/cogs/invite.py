@@ -86,7 +86,7 @@ class TacoInviteCog(commands.Cog):
             self.log.debug(ctx.message.channel.name, _method, f"Added channel {channel} to channel list and joined channel.")
             await self.bot.join_channels([f"#{channel}"])
             await ctx.reply(f"{ctx.message.author.mention}, I have added {channel} to the channel list and joined the channel.")
-            await self.tacos_log.give_user_tacos(ctx.message.channel.name, channel, "Inviting @ourtacobot to their channel.", tacos_log.TacoType.CUSTOM, 5)
+            await self.tacos_log.give_user_tacos(ctx.message.channel.name, channel, "Inviting @ourtacobot to their channel.", tacotypes.TacoTypes.CUSTOM, 5)
         except ValueError as e:
             await ctx.reply(f"{ctx.message.author.mention}, {e}")
         except Exception as e:
@@ -107,9 +107,9 @@ class TacoInviteCog(commands.Cog):
             if ctx.message.echo:
                 return
 
-            channel = ctx.message.author.name
-            if channel is not None and channel != "" and self.permissions_helper.has_permission(ctx.message.author.name, permissions.PermissionLevel.BOT_OWNER):
+            if channel is not None and channel != "" and self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT_OWNER):
                 channel = channel.lower().strip().replace("@", "")
+                self.log.debug(ctx.message.channel.name, _method, f"USER IS BOT OWNER. CHANNEL: {channel}")
 
             if channel is None or channel == "":
                 channel = ctx.message.author.name
