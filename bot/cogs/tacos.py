@@ -165,11 +165,11 @@ class TacosCog(commands.Cog):
 
         ## Need to track how many tacos the user has given.
         ## If they give more than 500 in 24 hours, they can't give anymore.
-        ## Limit the number they can give to a specific user in 24 hours.
-        ## Limit the number they can give to a user at a time.
         max_give_per_day = 500
-        max_give_per_user = 10
+        ## Limit the number they can give to a specific user in 24 hours.
         max_give_per_user_per_day = 50
+        ## Limit the number they can give to a user at a time.
+        max_give_per_user = 10
 
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
             self.log.debug(
