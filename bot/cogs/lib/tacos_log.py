@@ -8,7 +8,8 @@ from . import mongo
 import traceback
 import inspect
 
-class TacosLog():
+
+class TacosLog:
     def __init__(self, bot):
         self.settings = settings.Settings()
         self.bot = bot
@@ -20,7 +21,6 @@ class TacosLog():
             log_level = loglevel.LogLevel.DEBUG
 
         self.log = logger.Log(minimumLogLevel=log_level)
-
 
     async def _log(self, fromUser: str, toUser: str, amount: int, total_taco_count: int, reason: str = None):
         if amount == 0:
@@ -45,23 +45,36 @@ class TacosLog():
 
         # send to discord
         self.webhook.send(content)
-        channels = [ fromUser ]
+        channels = [fromUser("#", "").replace("@", "").lower().strip()]
         # send to bot channels + the fromUser
-        [ channels.append(f"{x.replace('#','').lower().strip()}") for x in self.settings.default_channels if x not in channels ]
+        [
+            channels.append(f"{x.replace('#','').replace('@', '').lower().strip()}")
+            for x in self.settings.default_channels
+            if x not in channels
+        ]
 
         for c in channels:
             channel = self.bot.get_channel(c)
             if channel:
                 await channel.send(content)
 
-    async def give_user_tacos(self, fromUser: str, toUser: str, reason: str = None, give_type: tacotypes.TacoTypes = tacotypes.TacoTypes.CUSTOM, amount: int = 1):
+    async def give_user_tacos(
+        self,
+        fromUser: str,
+        toUser: str,
+        reason: str = None,
+        give_type: tacotypes.TacoTypes = tacotypes.TacoTypes.CUSTOM,
+        amount: int = 1,
+    ):
         try:
             _method = inspect.stack()[0][3]
             # get taco settings
             taco_settings = self.settings.get_settings(self.db, "tacos")
             if not taco_settings:
                 # raise exception if there are no tacos settings
-                self.log.error(fromUser, "tacos.on_message", f"No tacos settings found for guild {self.settings.discord_guild_id}")
+                self.log.error(
+                    fromUser, "tacos.on_message", f"No tacos settings found for guild {self.settings.discord_guild_id}"
+                )
                 return
             taco_count = amount
 
@@ -78,7 +91,7 @@ class TacosLog():
                 self.log.warn(fromUser, "tacos.on_message", f"Invalid taco count {taco_count}")
                 return
 
-            reason_msg = reason if reason else "no reason given" # self.settings.get_string(fromUser, 'no_reason')
+            reason_msg = reason if reason else "no reason given"  # self.settings.get_string(fromUser, 'no_reason')
 
             total_taco_count = self.db.add_tacos(toUser, taco_count)
             self.db.track_taco_gift(fromUser.strip().lower(), toUser.strip().lower(), taco_count, reason_msg)
