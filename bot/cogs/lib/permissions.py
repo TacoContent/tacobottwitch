@@ -12,6 +12,8 @@ class PermissionLevel(enum.Enum):
     MODERATOR = 8
     BROADCASTER = 16
 
+    BOT_OWNER = 1024
+
 
 class Permissions:
 
@@ -29,9 +31,12 @@ class Permissions:
     def has_permission(self, user: twitchio.Chatter, level: PermissionLevel = PermissionLevel.EVERYONE):
         def is_vip(user):
             return "vip" in user.badges
+        def is_bot_owner(user):
+            return user.name.lower().strip() == self.settings.bot_owner.lower().strip()
         user_level = PermissionLevel.FOLLOWER # Since cant check follower, everyone is a follower...
-
-        if user.is_broadcaster:
+        if is_bot_owner(user):
+            user_level = PermissionLevel.BOT_OWNER
+        elif user.is_broadcaster:
             user_level = PermissionLevel.BROADCASTER
         elif user.is_mod:
             user_level = PermissionLevel.MODERATOR
