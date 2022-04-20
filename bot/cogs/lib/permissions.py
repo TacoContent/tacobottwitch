@@ -32,7 +32,6 @@ class Permissions:
         def is_vip(user):
             return "vip" in user.badges
         def is_bot_owner(user):
-            
             return user.name.lower().strip() == self.settings.bot_owner.lower().strip()
         user_level = PermissionLevel.FOLLOWER # Since cant check follower, everyone is a follower...
         if is_bot_owner(user):
