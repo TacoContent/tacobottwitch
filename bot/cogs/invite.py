@@ -12,12 +12,16 @@ from .lib import utils
 from .lib import loglevel
 from .lib import logger
 from .lib import permissions
+from .lib import command_helper
+from .lib import tacos_log as tacos_log
+from .lib import tacotypes
 
 class TacoInviteCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
+        self.tacos_log = tacos_log.TacosLog(self.bot)
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
         if not log_level:
@@ -82,6 +86,7 @@ class TacoInviteCog(commands.Cog):
             self.log.debug(ctx.message.channel.name, _method, f"Added channel {channel} to channel list and joined channel.")
             await self.bot.join_channels([f"#{channel}"])
             await ctx.reply(f"{ctx.message.author.mention}, I have added {channel} to the channel list and joined the channel.")
+            await self.tacos_log.give_user_tacos(ctx.message.channel.name, channel, "Inviting @ourtacobot to their channel.", tacos_log.TacoType.CUSTOM, 5)
         except ValueError as e:
             await ctx.reply(f"{ctx.message.author.mention}, {e}")
         except Exception as e:
