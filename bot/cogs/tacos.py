@@ -186,6 +186,15 @@ class TacosCog(commands.Cog):
 
         if len(args) >= 2:
             user = args[0].lower().replace("@", "").strip()
+
+            if user.strip().lower() == ctx.message.channel.name.lower() or user.strip().lower() == ctx.message.author.name.lower():
+                await ctx.reply(f"@{ctx.message.author.display_name}, you can't give yourself tacos.")
+                return
+
+            ## Give all users tacos??
+            ## should this be implemented? I don't think so.
+
+
             amount = args[1]
             if amount.isdigit():
                 amount = int(amount)
