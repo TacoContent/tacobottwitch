@@ -61,17 +61,16 @@ class MongoDatabase:
         finally:
             self.close()
 
-
-    def get_settings(self, name:str):
+    def get_settings(self, name: str):
         try:
             if self.connection is None:
                 self.open()
-            settings = self.connection.settings.find_one({ "guild_id": self.settings.discord_guild_id, "name": name })
+            settings = self.connection.settings.find_one({"guild_id": self.settings.discord_guild_id, "name": name})
             # explicitly return None if no settings are found
             if settings is None:
                 return None
             # return the settings object
-            return settings['settings']
+            return settings["settings"]
         except Exception as ex:
             print(ex)
             traceback.print_exc()
@@ -86,7 +85,11 @@ class MongoDatabase:
             result = self.connection.twitch_channels.find({"guild_id": self.settings.discord_guild_id})
             if result:
                 channels = [f"#{x['channel'].lower().strip()}" for x in result]
-                [ channels.append(f"#{x.replace('#','').lower().strip()}") for x in self.settings.default_channels if x not in channels ]
+                [
+                    channels.append(f"#{x.replace('#','').lower().strip()}")
+                    for x in self.settings.default_channels
+                    if x not in channels
+                ]
                 return channels
             else:
                 print(f"Unable to find channels for bot")
@@ -293,11 +296,18 @@ class MongoDatabase:
                 self.open()
             result = self.connection.tacos.aggregate(
                 [
-                    { "$lookup": { "from": "twitch_user", "localField": "user_id", "foreignField": "user_id", "as": "user" } },
-                    { "$unwind": "$user" },
-                    { "$match": { "guild_id": self.settings.discord_guild_id } },
-                    { "$sort": { "count": -1 } },
-                    { "$limit": limit },
+                    {
+                        "$lookup": {
+                            "from": "twitch_user",
+                            "localField": "user_id",
+                            "foreignField": "user_id",
+                            "as": "user",
+                        }
+                    },
+                    {"$unwind": "$user"},
+                    {"$match": {"guild_id": self.settings.discord_guild_id}},
+                    {"$sort": {"count": -1}},
+                    {"$limit": limit},
                 ]
             )
 
@@ -320,11 +330,15 @@ class MongoDatabase:
             if not discord_user_id:
                 return 0
 
-            data = self.connection.tacos.find_one({ "guild_id": self.settings.discord_guild_id, "user_id": discord_user_id })
+            data = self.connection.tacos.find_one(
+                {"guild_id": self.settings.discord_guild_id, "user_id": discord_user_id}
+            )
             if data is None:
-                print(f"[DEBUG] [mongo.get_tacos_count] [channel:none] User {twitch_name}[{discord_user_id}] not in table")
+                print(
+                    f"[DEBUG] [mongo.get_tacos_count] [channel:none] User {twitch_name}[{discord_user_id}] not in table"
+                )
                 return 0
-            return data['count']
+            return data["count"]
         except Exception as ex:
             print(ex)
             traceback.print_exc()
@@ -341,18 +355,25 @@ class MongoDatabase:
             if not discord_user_id:
                 return 0
 
-
             user_tacos = self.get_tacos_count(twitch_name=twitch_name)
             if user_tacos is None:
                 print(f"[DEBUG] [mongo.add_tacos] [channel:none] User {twitch_name}[{discord_user_id}] not in table")
                 user_tacos = 0
             else:
                 user_tacos = user_tacos or 0
-                print(f"[DEBUG] [mongo.add_tacos] [channel:none] User {twitch_name}[{discord_user_id}] has {user_tacos} tacos")
+                print(
+                    f"[DEBUG] [mongo.add_tacos] [channel:none] User {twitch_name}[{discord_user_id}] has {user_tacos} tacos"
+                )
 
             user_tacos += count
-            print(f"[DEBUG] [mongo.add_tacos] [channel:none] User {twitch_name}[{discord_user_id}] now has {user_tacos} tacos")
-            self.connection.tacos.update_one({ "guild_id": self.settings.discord_guild_id, "user_id": discord_user_id }, { "$set": { "count": user_tacos } }, upsert=True)
+            print(
+                f"[DEBUG] [mongo.add_tacos] [channel:none] User {twitch_name}[{discord_user_id}] now has {user_tacos} tacos"
+            )
+            self.connection.tacos.update_one(
+                {"guild_id": self.settings.discord_guild_id, "user_id": discord_user_id},
+                {"$set": {"count": user_tacos}},
+                upsert=True,
+            )
             return user_tacos
         except Exception as ex:
             print(ex)
@@ -373,22 +394,112 @@ class MongoDatabase:
             if not discord_user_id:
                 return 0
 
-
             user_tacos = self.get_tacos_count(twitch_name=twitch_name)
             if user_tacos is None:
                 print(f"[DEBUG] [mongo.remove_tacos] [channel:none] User {twitch_name}[{discord_user_id}] not in table")
                 user_tacos = 0
             else:
                 user_tacos = user_tacos or 0
-                print(f"[DEBUG] [mongo.remove_tacos] [channel:none] User {twitch_name}[{discord_user_id}] has {user_tacos} tacos")
+                print(
+                    f"[DEBUG] [mongo.remove_tacos] [channel:none] User {twitch_name}[{discord_user_id}] has {user_tacos} tacos"
+                )
 
             user_tacos -= count
             if user_tacos < 0:
                 user_tacos = 0
 
-            print(f"[DEBUG] [mongo.remove_tacos] [channel:none] User {twitch_name}[{discord_user_id}] now has {user_tacos} tacos")
-            self.connection.tacos.update_one({ "guild_id": self.settings.discord_guild_id, "user_id": discord_user_id }, { "$set": { "count": user_tacos } }, upsert=True)
+            print(
+                f"[DEBUG] [mongo.remove_tacos] [channel:none] User {twitch_name}[{discord_user_id}] now has {user_tacos} tacos"
+            )
+            self.connection.tacos.update_one(
+                {"guild_id": self.settings.discord_guild_id, "user_id": discord_user_id},
+                {"$set": {"count": user_tacos}},
+                upsert=True,
+            )
             return user_tacos
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+        finally:
+            if self.connection:
+                self.close()
+
+    def track_taco_gift(self, channel: str, user: str, amount: int, reason: str = None):
+        try:
+            if self.connection is None:
+                self.open()
+
+            from_discord_user_id = self._get_discord_id(channel.lower().strip())
+            to_discord_user_id = self._get_discord_id(user.lower().strip())
+
+            payload = {
+                "guild_id": self.settings.discord_guild_id,
+                "channel": channel.lower().strip(),
+                "from_user_id": from_discord_user_id,
+                "twitch_name": user.lower().strip(),
+                "to_user_id": to_discord_user_id,
+                "count": amount,
+                "timestamp": utils.get_timestamp(),
+                "reason": reason,
+            }
+
+            self.connection.twitch_tacos_gifts.insert_one(payload)
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+        finally:
+            if self.connection:
+                self.close()
+
+    def get_total_gifted_tacos(self, channel: str, timespan_seconds: int = 86400):
+        try:
+            if self.connection is None:
+                self.open()
+            timestamp = utils.to_timestamp(datetime.datetime.utcnow())
+
+            data = self.connection.taco_gifts.find(
+                {
+                    "guild_id": self.settings.discord_guild_id,
+                    "channel": channel.lower().strip(),
+                    "timestamp": {"$gt": timestamp - timespan_seconds},
+                }
+            )
+            if data is None:
+                return 0
+            # add up all the gifts from the count column
+            total_gifts = 0
+            for gift in data:
+                total_gifts += gift["count"]
+            return total_gifts
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+        finally:
+            if self.connection:
+                self.close()
+
+    def get_total_gifted_tacos_to_user(self, channel: str, user: str, timespan_seconds: int = 86400):
+        try:
+            if self.connection is None:
+                self.open()
+            timestamp = utils.to_timestamp(datetime.datetime.utcnow())
+
+            data = self.connection.taco_gifts.find(
+                {
+                    "guild_id": self.settings.discord_guild_id,
+                    "channel": channel.lower().strip(),
+                    "twitch_name": user.lower().strip(),
+                    "timestamp": {"$gt": timestamp - timespan_seconds},
+                }
+            )
+
+            if data is None:
+                return 0
+            # add up all the gifts from the count column
+            total_gifts = 0
+            for gift in data:
+                total_gifts += gift["count"]
+            return total_gifts
         except Exception as ex:
             print(ex)
             traceback.print_exc()

@@ -163,6 +163,14 @@ class TacosCog(commands.Cog):
         if ctx.message.echo:
             return
 
+        ## Need to track how many tacos the user has given.
+        ## If they give more than 500 in 24 hours, they can't give anymore.
+        ## Limit the number they can give to a specific user in 24 hours.
+        ## Limit the number they can give to a user at a time.
+        max_give_per_day = 500
+        max_give_per_user = 10
+        max_give_per_user_per_day = 50
+
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
             self.log.debug(
                 ctx.message.channel.name,
@@ -178,15 +186,52 @@ class TacosCog(commands.Cog):
 
         if len(args) >= 2:
             user = args[0].lower().replace("@", "").strip()
-            if not await command_helper.check_linked_account(ctx, user):
+
+            if user.strip().lower() == ctx.message.channel.name.lower() or user.strip().lower() == ctx.message.author.name.lower():
+                await ctx.reply(f"@{ctx.message.author.display_name}, you can't give yourself tacos.")
                 return
 
+            ## Give all users tacos??
+            ## should this be implemented? I don't think so.
+
+
             amount = args[1]
-            reason = "just being awesome"
-            if len(args) > 2:
-                reason = " ".join(args[2:])
             if amount.isdigit():
                 amount = int(amount)
+
+                if not await command_helper.check_linked_account(ctx, user):
+                    return
+
+                total_gifted_to_user = self.db.get_total_gifted_tacos_to_user(ctx.message.channel.name.lower(), ctx.message.author.name.lower(), 86400)
+                remaining_gifts_to_user = max_give_per_user_per_day - total_gifted_to_user
+
+                if remaining_gifts_to_user < 1:
+                    await ctx.reply(f"@{ctx.message.author.display_name}, you have reached the maximum number of tacos you can give to {user} in a rolling 24 hours.")
+                    return
+                elif remaining_gifts_to_user < amount:
+                    await ctx.reply(f"@{ctx.message.author.display_name}, you can only give {remaining_gifts_to_user} tacos to {user} in a rolling 24 hours.")
+                    return
+
+
+                total_gifted_24_hours = self.db.get_total_gifted_tacos(ctx.message.channel.name.lower(), 86400)
+                remaining_gifts_24_hours = max_give_per_day - total_gifted_24_hours
+                if remaining_gifts_24_hours < 1:
+                    await ctx.reply(f"@{ctx.message.author.display_name}, you have reached the maximum number of tacos you can give in a rolling 24 hours.")
+                    return
+                elif remaining_gifts_24_hours < amount:
+                    await ctx.reply(f"@{ctx.message.author.display_name}, you can only have {remaining_gifts_24_hours} tacos you can give out in a rolling 24 hours.")
+                    return
+
+                reason = "just being awesome"
+                if len(args) > 2:
+                    reason = " ".join(args[2:])
+
+                if amount > max_give_per_user:
+                    await ctx.reply(
+                        f"@{ctx.message.author.display_name}, you can only give a maximum of {max_give_per_user} tacos at a time."
+                    )
+                    return
+
                 if amount > 0:
                     await self.tacos_log.give_user_tacos(ctx.message.channel.name, user, reason, give_type=tacotypes.TacoTypes.CUSTOM, amount=amount)
                 else:
