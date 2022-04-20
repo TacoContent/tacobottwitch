@@ -4,6 +4,7 @@
 	"version": "1.0.0-snapshot",
 	"icon": "https://i.imgur.com/ejJu8de.png",
 	"author": "DarthMinos#1161",
+	"twitch_author": "DarthMinos",
 	"changelog": "changelog.txt",
 	"restricted_channels": [
 		"ourtaco",
