@@ -22,7 +22,8 @@ class TacosCog(commands.Cog):
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
-        self.subcommands = ["give", "take", "balance", "count", "top", "leaderboard", "help"]
+        self.subcommands = ["give", "take", "balance", "bal", "count", "top", "leaderboard", "lb"]
+
         self.permissions_helper = permissions.Permissions()
         self.tacos_log = tacos_log.TacosLog(self.bot)
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
@@ -46,19 +47,20 @@ class TacosCog(commands.Cog):
             return
 
         if subcommand in self.subcommands:
-            if subcommand == "give":
+            if subcommand.lower() == "give":
                 await self._tacos_give(ctx, args)
-            elif subcommand == "take":
+            elif subcommand.lower() == "take":
                 await self._tacos_take(ctx, args)
-            elif subcommand == "balance" or subcommand == "bal" or subcommand == "count":
+            elif subcommand.lower() == "balance" or subcommand.lower() == "bal" or subcommand.lower() == "count":
                 await self._tacos_balance(ctx, args)
-            elif subcommand == "top" or subcommand == "leaderboard" or subcommand == "lb":
-                print("calling leaderboard")
+            elif subcommand.lower() == "top" or subcommand.lower() == "leaderboard" or subcommand.lower() == "lb":
                 await self._tacos_top(ctx, args)
-            else:
+            elif subcommand.lower() == "help":
                 await self._tacos_help(ctx, args)
+            else:
+                await self._tacos_balance(ctx, args)
         else:
-            await self._tacos_help(ctx, args)
+            await self._tacos_balance(ctx, args)
 
     async def _tacos_top(self, ctx, args):
         _method = inspect.stack()[1][3]
@@ -234,7 +236,7 @@ class TacosCog(commands.Cog):
     async def _tacos_help(self, ctx, args):
         if ctx.message.echo:
             return
-        await ctx.send(f"Usage: !taco tacos [command] [args]")
+        await ctx.send(f"Usage: !taco tacos [command] [args]. Available Commands: {', '.join(self.subcommands)}")
 
 
 def prepare(bot):
