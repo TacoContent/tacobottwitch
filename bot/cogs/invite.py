@@ -69,7 +69,7 @@ class TacoInviteCog(commands.Cog):
                 return
 
             channel = ctx.message.author.name
-            if channel is not None and channel != "" and self.permissions_helper.has_permission(ctx.message.author.name, permissions.PermissionLevel.BOT_OWNER):
+            if channel is not None and channel != "" and self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT_OWNER):
                 channel = channel.lower().strip().replace("@", "")
 
             if channel is None or channel == "":
