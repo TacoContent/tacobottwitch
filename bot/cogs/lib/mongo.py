@@ -61,6 +61,24 @@ class MongoDatabase:
         finally:
             self.close()
 
+
+    def get_settings(self, name:str):
+        try:
+            if self.connection is None:
+                self.open()
+            settings = self.connection.settings.find_one({ "guild_id": self.settings.discord_guild_id, "name": name })
+            # explicitly return None if no settings are found
+            if settings is None:
+                return None
+            # return the settings object
+            return settings['settings']
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+        finally:
+            if self.connection:
+                self.close()
+
     def get_bot_twitch_channels(self):
         try:
             if self.connection is None:
@@ -268,3 +286,87 @@ class MongoDatabase:
             raise ex
         finally:
             self.close()
+
+    def get_tacos_count(self, twitch_name: str):
+        try:
+            if self.connection is None:
+                self.open()
+            discord_user_id = self._get_discord_id(twitch_name)
+            if not discord_user_id:
+                return 0
+
+            data = self.connection.tacos.find_one({ "guild_id": self.settings.discord_guild_id, "user_id": discord_user_id })
+            if data is None:
+                print(f"[DEBUG] [mongo.get_tacos_count] [channel:none] User {twitch_name}[{discord_user_id}] not in table")
+                return 0
+            return data['count']
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+        finally:
+            if self.connection:
+                self.close()
+
+    def add_tacos(self, twitch_name: str, count: int):
+        try:
+            if self.connection is None:
+                self.open()
+
+            discord_user_id = self._get_discord_id(twitch_name)
+            if not discord_user_id:
+                return 0
+
+
+            user_tacos = self.get_tacos_count(twitch_name=twitch_name)
+            if user_tacos is None:
+                print(f"[DEBUG] [mongo.add_tacos] [channel:none] User {twitch_name}[{discord_user_id}] not in table")
+                user_tacos = 0
+            else:
+                user_tacos = user_tacos or 0
+                print(f"[DEBUG] [mongo.add_tacos] [channel:none] User {twitch_name}[{discord_user_id}] has {user_tacos} tacos")
+
+            user_tacos += count
+            print(f"[DEBUG] [mongo.add_tacos] [channel:none] User {twitch_name}[{discord_user_id}] now has {user_tacos} tacos")
+            self.connection.tacos.update_one({ "guild_id": self.settings.discord_guild_id, "user_id": discord_user_id }, { "$set": { "count": user_tacos } }, upsert=True)
+            return user_tacos
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+        finally:
+            if self.connection:
+                self.close()
+
+    def remove_tacos(self, twitch_name: str, count: int):
+        try:
+            if count < 0:
+                print(f"[DEBUG] [mongo.remove_tacos] [channel:none] Count is less than 0")
+                return 0
+            if self.connection is None:
+                self.open()
+
+            discord_user_id = self._get_discord_id(twitch_name)
+            if not discord_user_id:
+                return 0
+
+
+            user_tacos = self.get_tacos_count(twitch_name=twitch_name)
+            if user_tacos is None:
+                print(f"[DEBUG] [mongo.remove_tacos] [channel:none] User {twitch_name}[{discord_user_id}] not in table")
+                user_tacos = 0
+            else:
+                user_tacos = user_tacos or 0
+                print(f"[DEBUG] [mongo.remove_tacos] [channel:none] User {twitch_name}[{discord_user_id}] has {user_tacos} tacos")
+
+            user_tacos -= count
+            if user_tacos < 0:
+                user_tacos = 0
+
+            print(f"[DEBUG] [mongo.remove_tacos] [channel:none] User {twitch_name}[{discord_user_id}] now has {user_tacos} tacos")
+            self.connection.tacos.update_one({ "guild_id": self.settings.discord_guild_id, "user_id": discord_user_id }, { "$set": { "count": user_tacos } }, upsert=True)
+            return user_tacos
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+        finally:
+            if self.connection:
+                self.close()

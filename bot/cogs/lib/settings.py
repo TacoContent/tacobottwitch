@@ -45,26 +45,21 @@ class Settings:
         self.timezone = utils.dict_get(os.environ, "TIMEZONE", default_value="America/Chicago")
         self.discord_guild_id = utils.dict_get(os.environ, "DISCORD_GUILD_ID", default_value="")
 
-        # log_level = loglevel.LogLevel[self.log_level.upper()]
-        # if not log_level:
-        #     log_level = loglevel.LogLevel.DEBUG
-
-        # self.log = logger.Log(minimumLogLevel=self.log_level)
-
         self.load_language_manifest()
         self.load_strings()
 
-    def get_settings(self, db, guildId: int, name: str):
-        return db.get_settings(guildId, name)
+    def get_settings(self, db, name: str):
+        return db.get_settings(name)
 
-    def get_string(self, guildId: int, key: str, *args, **kwargs):
+    def get_string(self, key: str, *args, **kwargs):
+        guild_id = self.discord_guild_id
         _method = inspect.stack()[1][3]
         if not key:
             # self.log.debug(guildId, _method, f"KEY WAS EMPTY")
             return ""
-        if str(guildId) in self.strings:
-            if key in self.strings[str(guildId)]:
-                return utils.str_replace(self.strings[str(guildId)][key], *args, **kwargs)
+        if guild_id in self.strings:
+            if key in self.strings[guild_id]:
+                return utils.str_replace(self.strings[guild_id][key], *args, **kwargs)
             elif key in self.strings[self.language]:
                 # self.log.debug(guildId, _method, f"Unable to find key in defined language. Falling back to {self.language}")
                 return utils.str_replace(self.strings[self.language][key], *args, **kwargs)
@@ -80,17 +75,18 @@ class Settings:
                 print(f"UNKNOWN KEY: LANG: {self.language} - {key}", file=sys.stderr)
                 return utils.str_replace(f"{key}", *args, **kwargs)
 
-    def set_guild_strings(self, guildId: int, lang: str = None):
+    def set_guild_strings(self, lang: str = None):
+        guild_id = self.discord_guild_id
         _method = inspect.stack()[1][3]
         # guild_settings = self.db.get_guild_settings(guildId)
         if not lang:
             lang = self.language
         # if guild_settings:
         #     lang = guild_settings.language
-        self.strings[str(guildId)] = self.strings[lang]
+        self.strings[guild_id] = self.strings[lang]
         # self.log.debug(guildId, _method, f"Guild Language Set: {lang}")
 
-    def get_language(self, guildId: int):
+    def get_language(self):
         # guild_setting = self.db.get_guild_settings(guildId)
         # if not guild_setting:
         return self.language
