@@ -54,24 +54,34 @@ class TacoInviteCog(commands.Cog):
 
     @commands.command(name="invite", aliases=["inv", "join"])
     # @commands.restrict_channels(channels=["ourtacobot", "ourtaco"])
-    async def invite(self, ctx):
+    async def invite(self, ctx, channel: str = None):
         _method = inspect.stack()[1][3]
         try:
             if not self.permissions_helper.in_command_restricted_channel(ctx):
+                self.log.debug(ctx.message.channel.name, _method, f"I am not in one of the required channels. {','.join(self.settings.bot_restricted_channels)}")
                 return
 
             if ctx.message.echo:
                 return
+
+            channel = ctx.message.author.name
+            if channel is not None and channel != "" and self.permissions_helper.has_permission(ctx.message.author.name, permissions.PermissionLevel.BOT_OWNER):
+                channel = channel.lower().strip().replace("@", "")
+
+            if channel is None or channel == "":
+                channel = ctx.message.author.name
+
+
             # check if we know who this user is in discord.
-            discord_id = self.db.get_discord_id_for_twitch_username(ctx.message.author.name)
+            discord_id = self.db.get_discord_id_for_twitch_username(channel)
             if discord_id is None:
-                await ctx.reply(f"{ctx.message.author.mention}, I was unable to find your discord id. Try running `!taco link` first.")
+                await ctx.reply(f"{ctx.message.author.mention}, I was unable to find a discord id for {channel}. Try running `!taco link` first.")
                 return
             # we know who they are. add the channel to the database for channels to join.
-            self.db.add_bot_to_channel(ctx.message.author.name)
-            self.log.debug(ctx.message.channel.name, _method, f"Added channel {ctx.message.author.name} to channel list and joined channel.")
-            await self.bot.join_channels([f"#{ctx.message.author.name}"])
-            await ctx.reply(f"{ctx.message.author.mention}, I have added you to the channel list and joined your channel.")
+            self.db.add_bot_to_channel(channel)
+            self.log.debug(ctx.message.channel.name, _method, f"Added channel {channel} to channel list and joined channel.")
+            await self.bot.join_channels([f"#{channel}"])
+            await ctx.reply(f"{ctx.message.author.mention}, I have added {channel} to the channel list and joined the channel.")
         except ValueError as e:
             await ctx.reply(f"{ctx.message.author.mention}, {e}")
         except Exception as e:
@@ -79,7 +89,7 @@ class TacoInviteCog(commands.Cog):
 
     @commands.command(name="leave", aliases=["part", "remove"])
     # @commands.restrict_channels(channels=["ourtacobot", "ourtaco"])
-    async def leave(self, ctx):
+    async def leave(self, ctx, channel: str = None):
         _method = inspect.stack()[1][3]
         try:
             # only allowed in restricted channels
@@ -91,20 +101,28 @@ class TacoInviteCog(commands.Cog):
 
             if ctx.message.echo:
                 return
+
+            channel = ctx.message.author.name
+            if channel is not None and channel != "" and self.permissions_helper.has_permission(ctx.message.author.name, permissions.PermissionLevel.BOT_OWNER):
+                channel = channel.lower().strip().replace("@", "")
+
+            if channel is None or channel == "":
+                channel = ctx.message.author.name
+
             # check if we know who this user is in discord.
-            discord_id = self.db.get_discord_id_for_twitch_username(ctx.message.author.name)
+            discord_id = self.db.get_discord_id_for_twitch_username(channel)
             if discord_id is None:
-                await ctx.reply(f"{ctx.message.author.mention}, I was unable to find your discord id. Try running `!taco link` first.")
+                await ctx.reply(f"{ctx.message.author.mention}, I was unable to find {channel} discord id. Try running `!taco link` first.")
                 return
             # we know who they are. add the channel to the database for channels to join.
-            self.db.remove_bot_from_channel(ctx.message.author.name)
-            self.log.debug(ctx.message.channel.name, _method, f"Removed channel {ctx.message.author.name} from the channel list and left the channel.")
+            self.db.remove_bot_from_channel(channel)
+            self.log.debug(ctx.message.channel.name, _method, f"Removed channel {channel} from the channel list and left the channel.")
             # this currently doesn't work.
             # should be in future update of twitchio.
-            # await self.bot.part_channels([f"#{ctx.message.author.name}"])
+            # await self.bot.part_channels([f"#{channel}"])
             # workaround:
-            await self.bot._connection.send(f"PART #{ctx.message.author.name}\r\n")
-            await ctx.reply(f"{ctx.message.author.mention}, I have removed your channel from the list and left your channel.")
+            await self.bot._connection.send(f"PART #{channel}\r\n")
+            await ctx.reply(f"{ctx.message.author.mention}, I have removed the channel {channel} from the list and left the channel.")
         except ValueError as e:
             await ctx.reply(f"{ctx.message.author.mention}, {e}")
         except Exception as e:
