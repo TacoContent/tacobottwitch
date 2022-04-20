@@ -54,7 +54,7 @@ class TacosLog():
             if channel:
                 await channel.send(content)
 
-    async def give_user_tacos(self, fromUser: str, toUser: str, reason: str = None, give_type: tacotypes.TacoTypes = tacotypes.TacoTypes.CUSTOM, taco_amount: int = 1):
+    async def give_user_tacos(self, fromUser: str, toUser: str, reason: str = None, give_type: tacotypes.TacoTypes = tacotypes.TacoTypes.CUSTOM, amount: int = 1):
         try:
             _method = inspect.stack()[0][3]
             # get taco settings
@@ -63,12 +63,12 @@ class TacosLog():
                 # raise exception if there are no tacos settings
                 self.log.error(fromUser, "tacos.on_message", f"No tacos settings found for guild {self.settings.discord_guild_id}")
                 return
-            taco_count = taco_amount
+            taco_count = amount
 
             if give_type != tacotypes.TacoTypes.CUSTOM:
                 taco_count = taco_settings[tacotypes.TacoTypes.get_string_from_taco_type(give_type)]
             elif give_type == tacotypes.TacoTypes.CUSTOM:
-                taco_count = taco_amount
+                taco_count = amount
             else:
                 self.log.warn(fromUser, "tacos.on_message", f"Invalid taco type {give_type}")
                 return

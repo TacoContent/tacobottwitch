@@ -13,7 +13,7 @@ from .lib import loglevel
 from .lib import permissions
 from .lib import command_helper
 from .lib import tacos_log as tacos_log
-
+from .lib import tacotypes
 
 class TacosCog(commands.Cog):
     """Allows the streamer to give a user tacos"""
@@ -145,7 +145,7 @@ class TacosCog(commands.Cog):
             if amount.isdigit():
                 amount = int(amount)
                 if amount > 0:
-                    await self.tacos_log.give_user_tacos(ctx.message.channel.name, user, amount, reason)
+                    await self.tacos_log.give_user_tacos(ctx.message.channel.name, user, reason, give_type=tacotypes.TacoTypes.CUSTOM, amount=amount)
                 else:
                     await ctx.send(f"You can't give negative tacos!")
             else:
@@ -182,7 +182,7 @@ class TacosCog(commands.Cog):
             if amount.isdigit():
                 amount = int(amount)
                 if amount > 0:
-                    await self.tacos_log.give_user_tacos(ctx.message.channel.name, user, -(amount), reason)
+                    await self.tacos_log.give_user_tacos(ctx.message.channel.name, user, reason, give_type=tacotypes.TacoTypes.CUSTOM, amount=-(amount))
                 else:
                     await ctx.send(f"You can't take negative tacos!")
             else:
