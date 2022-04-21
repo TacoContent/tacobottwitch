@@ -15,7 +15,6 @@ class TestCog(commands.Cog):
 
     @commands.Cog.event()
     async def event_raw_data(self, data):
-        print(data)
         pass
 
     @commands.Cog.event()

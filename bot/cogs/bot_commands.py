@@ -38,16 +38,28 @@ class BotCommands(commands.Cog):
     async def raid(self, ctx, source_channel: str, dest_channel: str):
         _method = inspect.stack()[1][3]
         try:
-            if not ctx.message.echo:
+
+            if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT):
                 # ONLY action if THIS account called the command
                 return
             if not self.permissions_helper.in_command_restricted_channel(ctx):
+                self.log.debug(ctx.message.channel.name, _method, f"We are not in one of the restricted channels. we are in {ctx.message.channel.name}.")
+                return
+
+            # check the source channel is a channel that is a taco channel (this should never be false)
+            if not self.db.is_taco_known_channel(source_channel):
+                self.log.warn(ctx.message.channel.name, _method, f"Source channel {source_channel} is not a taco channel.")
+                return
+            # check if the destination channel is a channel that is a "taco" channel
+            if not self.db.is_taco_known_channel(dest_channel):
+                self.log.warn(ctx.message.channel.name, _method, f"Destination channel {dest_channel} is not a taco channel.")
                 return
 
             reason = f"raiding the channel {dest_channel}"
-            # await self.tacos_log.give_user_tacos(ctx.message.channel.name, source_channel, reason, give_type=tacotypes.TacoTypes.CUSTOM, amount=amount)
+            await self.tacos_log.give_user_tacos(ctx.message.channel.name, source_channel, reason, give_type=tacotypes.TacoTypes.CUSTOM, amount=5)
             # self.db.add_twitch_event(source_channel, dest_channel)
             # await ctx.send(f"{source_channel} raided {dest_channel}.")
+            # await ctx.send(f"TombRaid TombRaid {source_channel} raided {dest_channel} 🌮🌮🌮")
         except Exception as e:
             self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 def prepare(bot):

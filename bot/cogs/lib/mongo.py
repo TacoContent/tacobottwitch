@@ -233,6 +233,9 @@ class MongoDatabase:
         finally:
             self.close()
 
+    def is_taco_known_channel(self, channel: str):
+        return self._get_discord_id(channel) is not None
+
     def _get_discord_id(self, username: str):
         if self.connection is None:
             self.open()
