@@ -45,7 +45,7 @@ class TacosLog:
 
         # send to discord
         self.webhook.send(content)
-        channels = [fromUser("#", "").replace("@", "").lower().strip()]
+        channels = [fromUser.replace("#", "").replace("@", "").lower().strip()]
         # send to bot channels + the fromUser
         [
             channels.append(f"{x.replace('#','').replace('@', '').lower().strip()}")
