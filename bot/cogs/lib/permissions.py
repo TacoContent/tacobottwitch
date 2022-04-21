@@ -12,6 +12,7 @@ class PermissionLevel(enum.Enum):
     MODERATOR = 8
     BROADCASTER = 16
 
+    BOT = 512
     BOT_OWNER = 1024
 
 
@@ -33,9 +34,13 @@ class Permissions:
             return "vip" in user.badges
         def is_bot_owner(user):
             return user.name.lower().strip() == self.settings.bot_owner.lower().strip()
+        def is_bot(user):
+            return user.name.lower().strip() == self.settings.bot_name.lower().strip()
         user_level = PermissionLevel.FOLLOWER # Since cant check follower, everyone is a follower...
         if is_bot_owner(user):
             user_level = PermissionLevel.BOT_OWNER
+        if is_bot(user):
+            user_level = PermissionLevel.BOT
         elif user.is_broadcaster:
             user_level = PermissionLevel.BROADCASTER
         elif user.is_mod:
