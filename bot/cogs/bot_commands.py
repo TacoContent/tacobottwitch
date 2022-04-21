@@ -38,6 +38,8 @@ class BotCommands(commands.Cog):
     async def raid(self, ctx, source_channel: str, dest_channel: str):
         _method = inspect.stack()[1][3]
         try:
+            source_channel = source_channel.lower().strip().replace("#", "").replace("@", "")
+            dest_channel = dest_channel.lower().strip().replace("#", "").replace("@", "")
 
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT):
                 # ONLY action if THIS account called the command
