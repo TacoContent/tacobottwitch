@@ -36,7 +36,7 @@ class DiscordAccountLinkCog(commands.Cog):
     async def link(self, ctx, code: str = None):
         if code:
             try:
-                result = self.db.link_twitch_to_discord_from_code(ctx.message.author.name, code)
+                result = self.db.link_twitch_to_discord_from_code(utils.clean_channel_name(ctx.message.author.name), code)
                 if result:
                     await ctx.reply(
                         f"{ctx.message.author.mention}, I used the code {code} to link your discord account to your twitch account. Thank you!"
@@ -50,7 +50,7 @@ class DiscordAccountLinkCog(commands.Cog):
         else:
             try:
                 # generate code
-                invite_data = self.db.get_invite_for_user(ctx.message.channel.name)
+                invite_data = self.db.get_invite_for_user(utils.clean_channel_name(ctx.message.channel.name))
                 if invite_data:
                     self.log.debug(
                         ctx.message.channel.name,
@@ -70,7 +70,7 @@ class DiscordAccountLinkCog(commands.Cog):
 
                 code = utils.get_random_string(length=6)
                 # save code to db
-                result = self.db.set_twitch_discord_link_code(ctx.message.author.name, code)
+                result = self.db.set_twitch_discord_link_code(utils.clean_channel_name(ctx.message.author.name), code)
                 if result:
                     # send code to user in chat
                     await ctx.reply(

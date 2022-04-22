@@ -14,6 +14,7 @@ from .lib import permissions
 from .lib import command_helper
 from .lib import tacos_log as tacos_log
 from .lib import tacotypes
+from .lib import utils
 
 class TacosCog(commands.Cog):
     """Allows the streamer to give a user tacos"""
@@ -145,7 +146,7 @@ class TacosCog(commands.Cog):
                 response_user = "you"
                 response_has = "have"
             else:
-                response_user = user
+                response_user = utils.clean_channel_name(user)
                 response_has = "has"
             user_tacos = self.db.get_tacos_count(user)
             if user_tacos:
@@ -185,9 +186,9 @@ class TacosCog(commands.Cog):
             return
 
         if len(args) >= 2:
-            user = args[0].lower().replace("@", "").strip()
+            user = utils.clean_channel_name(args[0])
 
-            if user.strip().lower() == ctx.message.channel.name.lower() or user.strip().lower() == ctx.message.author.name.lower():
+            if user == utils.clean_channel_name(ctx.message.channel.name) or user == utils.clean_channel_name(ctx.message.author.name):
                 await ctx.reply(f"@{ctx.message.author.display_name}, you can't give yourself tacos.")
                 return
 
@@ -202,7 +203,7 @@ class TacosCog(commands.Cog):
                 if not await command_helper.check_linked_account(ctx, user):
                     return
 
-                total_gifted_to_user = self.db.get_total_gifted_tacos_to_user(ctx.message.channel.name.lower(), ctx.message.author.name.lower(), 86400)
+                total_gifted_to_user = self.db.get_total_gifted_tacos_to_user(utils.clean_channel_name(ctx.message.channel.name), utils.clean_channel_name(ctx.message.author.name), 86400)
                 remaining_gifts_to_user = max_give_per_user_per_day - total_gifted_to_user
 
                 if remaining_gifts_to_user < 1:
@@ -213,7 +214,7 @@ class TacosCog(commands.Cog):
                     return
 
 
-                total_gifted_24_hours = self.db.get_total_gifted_tacos(ctx.message.channel.name.lower(), 86400)
+                total_gifted_24_hours = self.db.get_total_gifted_tacos(utils.clean_channel_name(ctx.message.channel.name), 86400)
                 remaining_gifts_24_hours = max_give_per_day - total_gifted_24_hours
                 if remaining_gifts_24_hours < 1:
                     await ctx.reply(f"@{ctx.message.author.display_name}, you have reached the maximum number of tacos you can give in a rolling 24 hours.")
@@ -260,7 +261,7 @@ class TacosCog(commands.Cog):
             return
 
         if len(args) >= 2:
-            user = args[0].lower().replace("@", "").strip()
+            user = utils.clean_channel_name(args[0])
             if not await command_helper.check_linked_account(ctx, user):
                 return
             amount = args[1]

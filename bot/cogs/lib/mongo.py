@@ -36,7 +36,7 @@ class MongoDatabase:
             if self.connection is None:
                 self.open()
             payload = {
-                "channel: ": channel.strip().lower(),
+                "channel: ": utils.clean_channel_name(channel),
                 "timestamp": utils.get_timestamp(),
                 "level": level.name,
                 "method": method,
@@ -54,7 +54,8 @@ class MongoDatabase:
         try:
             if self.connection is None:
                 self.open()
-            self.connection.logs.delete_many({"channel": channel.strip().lower()})
+            channel = utils.clean_channel_name(channel)
+            self.connection.logs.delete_many({"channel": channel})
         except Exception as ex:
             print(ex)
             traceback.print_exc()
@@ -84,11 +85,11 @@ class MongoDatabase:
                 self.open()
             result = self.connection.twitch_channels.find({"guild_id": self.settings.discord_guild_id})
             if result:
-                channels = [f"#{x['channel'].lower().strip()}" for x in result]
+                channels = [f"#{utils.clean_channel_name(x['channel'])}" for x in result]
                 [
-                    channels.append(f"#{x.replace('#','').lower().strip()}")
+                    channels.append(f"#{utils.clean_channel_name(x)}")
                     for x in self.settings.default_channels
-                    if x not in channels
+                    if utils.clean_channel_name(x) not in channels
                 ]
                 return channels
             else:
@@ -105,7 +106,7 @@ class MongoDatabase:
         try:
             if self.connection is None:
                 self.open()
-            twitch_channel = twitch_channel.strip().lower()
+            twitch_channel = utils.clean_channel_name(twitch_channel)
             result = self.connection.twitch_channels.find_one(
                 {"guild_id": self.settings.discord_guild_id, "channel": twitch_channel}
             )
@@ -135,7 +136,7 @@ class MongoDatabase:
         try:
             if self.connection is None:
                 self.open()
-            twitch_channel = twitch_channel.strip().lower()
+            twitch_channel = utils.clean_channel_name(twitch_channel)
             result = self.connection.twitch_channels.delete_one(
                 {"guild_id": self.settings.discord_guild_id, "channel": twitch_channel}
             )
@@ -233,12 +234,10 @@ class MongoDatabase:
         finally:
             self.close()
 
-    def is_taco_known_channel(self, channel: str):
-        return self._get_discord_id(channel) is not None
-
     def _get_discord_id(self, username: str):
         if self.connection is None:
             self.open()
+        username = utils.clean_username(username)
         result = self.connection.twitch_user.find_one({"twitch_name": username})
         if result:
             return result["user_id"]
@@ -249,11 +248,12 @@ class MongoDatabase:
         try:
             if self.connection is None:
                 self.open()
+            username = utils.clean_channel_name(username)
             discord_user_id = self._get_discord_id(username)
             if not discord_user_id:
-                payload = {"twitch_name": username.strip().lower(), "link_code": code.strip()}
+                payload = {"twitch_name": username, "link_code": code.strip()}
                 self.connection.twitch_user.update_one(
-                    {"twitch_name": username.strip().lower()}, {"$set": payload}, upsert=True
+                    {"twitch_name": username}, {"$set": payload}, upsert=True
                 )
                 return True
             else:
@@ -269,12 +269,13 @@ class MongoDatabase:
         try:
             if self.connection is None:
                 self.open()
+            twitch_name = utils.clean_channel_name(twitch_name)
             discord_user_id = self._get_discord_id(twitch_name)
             if not discord_user_id:
                 result = self.connection.twitch_user.find_one({"link_code": code.strip()})
                 if result:
                     payload = {
-                        "twitch_name": twitch_name.strip().lower(),
+                        "twitch_name": twitch_name,
                         # "user_id": result["user_id"],
                         # "link_code": code.strip()
                     }
@@ -329,6 +330,7 @@ class MongoDatabase:
         try:
             if self.connection is None:
                 self.open()
+            twitch_name = utils.clean_channel_name(twitch_name)
             discord_user_id = self._get_discord_id(twitch_name)
             if not discord_user_id:
                 return 0
@@ -353,7 +355,7 @@ class MongoDatabase:
         try:
             if self.connection is None:
                 self.open()
-
+            twitch_name = utils.clean_channel_name(twitch_name)
             discord_user_id = self._get_discord_id(twitch_name)
             if not discord_user_id:
                 return 0
@@ -392,7 +394,7 @@ class MongoDatabase:
                 return 0
             if self.connection is None:
                 self.open()
-
+            twitch_name = utils.clean_channel_name(twitch_name)
             discord_user_id = self._get_discord_id(twitch_name)
             if not discord_user_id:
                 return 0
@@ -431,15 +433,16 @@ class MongoDatabase:
         try:
             if self.connection is None:
                 self.open()
-
-            from_discord_user_id = self._get_discord_id(channel.lower().strip())
-            to_discord_user_id = self._get_discord_id(user.lower().strip())
+            channel = utils.clean_channel_name(channel)
+            user = utils.clean_channel_name(user)
+            from_discord_user_id = self._get_discord_id(channel)
+            to_discord_user_id = self._get_discord_id(user)
 
             payload = {
                 "guild_id": self.settings.discord_guild_id,
-                "channel": channel.lower().strip(),
+                "channel": channel,
                 "from_user_id": from_discord_user_id,
-                "twitch_name": user.lower().strip(),
+                "twitch_name": user,
                 "to_user_id": to_discord_user_id,
                 "count": amount,
                 "timestamp": utils.get_timestamp(),
@@ -459,11 +462,11 @@ class MongoDatabase:
             if self.connection is None:
                 self.open()
             timestamp = utils.to_timestamp(datetime.datetime.utcnow())
-
+            channel = utils.clean_channel_name(channel)
             data = self.connection.taco_gifts.find(
                 {
                     "guild_id": self.settings.discord_guild_id,
-                    "channel": channel.lower().strip(),
+                    "channel": channel,
                     "timestamp": {"$gt": timestamp - timespan_seconds},
                 }
             )
@@ -486,12 +489,13 @@ class MongoDatabase:
             if self.connection is None:
                 self.open()
             timestamp = utils.to_timestamp(datetime.datetime.utcnow())
-
+            channel = utils.clean_channel_name(channel)
+            user = utils.clean_channel_name(user)
             data = self.connection.taco_gifts.find(
                 {
                     "guild_id": self.settings.discord_guild_id,
-                    "channel": channel.lower().strip(),
-                    "twitch_name": user.lower().strip(),
+                    "channel": channel,
+                    "twitch_name": user,
                     "timestamp": {"$gt": timestamp - timespan_seconds},
                 }
             )

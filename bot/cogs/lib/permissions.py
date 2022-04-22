@@ -3,7 +3,7 @@ import twitchio
 import typing
 from . import settings
 from . import mongo
-
+from . import utils
 class PermissionLevel(enum.Enum):
     EVERYONE = 0
     FOLLOWER = 1
@@ -25,7 +25,7 @@ class Permissions:
     def has_linked_account(self, user: typing.Union[twitchio.Chatter,str] = None):
         if isinstance(user, twitchio.Chatter):
             user = user.name
-        user = user.replace("@", "").strip()
+        user = utils.clean_channel_name(user)
         did = self.db.get_discord_id_for_twitch_username(user)
         return did is not None
 
@@ -33,9 +33,9 @@ class Permissions:
         def is_vip(user):
             return "vip" in user.badges
         def is_bot_owner(user):
-            return user.name.lower().strip() == self.settings.bot_owner.lower().strip()
+            return utils.clean_channel_name(user.name) == utils.clean_channel_name(self.settings.bot_owner)
         def is_bot(user):
-            return user.name.lower().strip() == self.settings.bot_name.lower().strip()
+            return utils.clean_channel_name(user.name) == utils.clean_channel_name(self.settings.bot_name)
         user_level = PermissionLevel.FOLLOWER # Since cant check follower, everyone is a follower...
         if is_bot_owner(user):
             user_level = PermissionLevel.BOT_OWNER
@@ -57,4 +57,4 @@ class Permissions:
         return user_level.value >= level.value
 
     def in_command_restricted_channel(self, ctx):
-        return self.settings.bot_restricted_channels and ctx.message.channel.name in self.settings.bot_restricted_channels
+        return self.settings.bot_restricted_channels and utils.clean_channel_name(ctx.message.channel.name) in self.settings.bot_restricted_channels

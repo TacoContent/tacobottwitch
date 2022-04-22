@@ -69,11 +69,11 @@ class TacoInviteCog(commands.Cog):
                 return
 
             if channel is not None and channel != "" and self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT_OWNER):
-                channel = channel.lower().strip().replace("@", "")
+                channel = utils.clean_channel_name(channel)
                 self.log.debug(ctx.message.channel.name, _method, f"USER IS BOT OWNER. CHANNEL: {channel}")
 
             if channel is None or channel == "":
-                channel = ctx.message.author.name
+                channel = utils.clean_channel_name(ctx.message.author.name)
 
 
             # check if we know who this user is in discord.
@@ -108,11 +108,11 @@ class TacoInviteCog(commands.Cog):
                 return
 
             if channel is not None and channel != "" and self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT_OWNER):
-                channel = channel.lower().strip().replace("@", "")
+                channel = utils.clean_channel_name(channel)
                 self.log.debug(ctx.message.channel.name, _method, f"USER IS BOT OWNER. CHANNEL: {channel}")
 
             if channel is None or channel == "":
-                channel = ctx.message.author.name
+                channel = utils.clean_channel_name(ctx.message.author.name)
 
             # check if we know who this user is in discord.
             discord_id = self.db.get_discord_id_for_twitch_username(channel)
@@ -133,18 +133,6 @@ class TacoInviteCog(commands.Cog):
         except Exception as e:
             self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 
-    @commands.Cog.event()
-    async def event_raw_data(self, data):
-        pass
-
-    @commands.Cog.event()
-    # https://twitchio.dev/en/latest/reference.html#twitchio.Message
-    async def event_message(self, message):
-        # is the message from the bot?
-        if message.echo:
-            return
-
-        pass
 
     async def cog_command_error(self, ctx: commands.core.Context, error: Exception):
         print(f"Error: {str(error)}")

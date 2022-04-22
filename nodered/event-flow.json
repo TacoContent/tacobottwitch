@@ -1,0 +1,798 @@
+[
+	{
+		"id": "46f750dd0c884772",
+		"type": "tab",
+		"label": "OurTacoBot",
+		"disabled": false,
+		"info": ""
+	},
+	{
+		"id": "a1086a4ec9e7afb7",
+		"type": "split",
+		"z": "46f750dd0c884772",
+		"name": "",
+		"splt": "\\n",
+		"spltType": "str",
+		"arraySplt": 1,
+		"arraySpltType": "len",
+		"stream": false,
+		"addname": "",
+		"x": 730,
+		"y": 20,
+		"wires": [
+			[
+				"872337111ee46aba"
+			]
+		]
+	},
+	{
+		"id": "55cbd0c68d78eca6",
+		"type": "debug",
+		"z": "46f750dd0c884772",
+		"name": "",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "false",
+		"statusVal": "",
+		"statusType": "auto",
+		"x": 1670,
+		"y": 180,
+		"wires": []
+	},
+	{
+		"id": "1234a5552197c0f7",
+		"type": "tmi-event-connected",
+		"z": "46f750dd0c884772",
+		"config": "",
+		"name": "",
+		"x": 100,
+		"y": 20,
+		"wires": [
+			[
+				"b7a48f10569cc161"
+			]
+		]
+	},
+	{
+		"id": "872337111ee46aba",
+		"type": "function",
+		"z": "46f750dd0c884772",
+		"name": "format data",
+		"func": "msg.payload = {\n    channel: msg.payload.channel\n};\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 890,
+		"y": 20,
+		"wires": [
+			[
+				"8d07fe0812b084a8"
+			]
+		]
+	},
+	{
+		"id": "8d07fe0812b084a8",
+		"type": "tmi-command-join",
+		"z": "46f750dd0c884772",
+		"config": "",
+		"name": "",
+		"x": 1050,
+		"y": 20,
+		"wires": [
+			[],
+			[]
+		]
+	},
+	{
+		"id": "46229fbb87d2ac60",
+		"type": "tmi-event-hosted",
+		"z": "46f750dd0c884772",
+		"config": "",
+		"name": "",
+		"x": 90,
+		"y": 140,
+		"wires": [
+			[
+				"a736b6720f4061a3"
+			]
+		]
+	},
+	{
+		"id": "3ee3d9ec754b6cab",
+		"type": "tmi-event-join",
+		"z": "46f750dd0c884772",
+		"config": "",
+		"name": "",
+		"x": 90,
+		"y": 80,
+		"wires": [
+			[]
+		]
+	},
+	{
+		"id": "a49a3465e499a7bb",
+		"type": "tmi-event-raided",
+		"z": "46f750dd0c884772",
+		"config": "",
+		"name": "",
+		"x": 90,
+		"y": 240,
+		"wires": [
+			[
+				"35e9fdb59d20e549"
+			]
+		]
+	},
+	{
+		"id": "dfc1e527623c72e7",
+		"type": "tmi-event-cheer",
+		"z": "46f750dd0c884772",
+		"config": "",
+		"name": "",
+		"x": 90,
+		"y": 340,
+		"wires": [
+			[
+				"baf5258ea64c5e0b"
+			]
+		]
+	},
+	{
+		"id": "565c5f87b5816dcb",
+		"type": "tmi-event-subscription",
+		"z": "46f750dd0c884772",
+		"config": "",
+		"name": "",
+		"x": 110,
+		"y": 500,
+		"wires": [
+			[
+				"e6fd12deccdd2307"
+			]
+		]
+	},
+	{
+		"id": "e663ae9e85d5209d",
+		"type": "tmi-event-resub",
+		"z": "46f750dd0c884772",
+		"config": "",
+		"name": "",
+		"x": 90,
+		"y": 600,
+		"wires": [
+			[
+				"e6fd12deccdd2307"
+			]
+		]
+	},
+	{
+		"id": "d50a9ca967187113",
+		"type": "tmi-event-primepaidupgrade",
+		"z": "46f750dd0c884772",
+		"config": "",
+		"name": "",
+		"x": 130,
+		"y": 700,
+		"wires": [
+			[
+				"e6fd12deccdd2307"
+			]
+		]
+	},
+	{
+		"id": "3b1c7d52e3dbbe4d",
+		"type": "tmi-event-subgift",
+		"z": "46f750dd0c884772",
+		"config": "",
+		"name": "",
+		"x": 90,
+		"y": 800,
+		"wires": [
+			[
+				"e6fd12deccdd2307"
+			]
+		]
+	},
+	{
+		"id": "1eaf8485e3fb09da",
+		"type": "tmi-event-giftpaidupgrade",
+		"z": "46f750dd0c884772",
+		"config": "",
+		"name": "",
+		"x": 120,
+		"y": 900,
+		"wires": [
+			[
+				"e6fd12deccdd2307"
+			]
+		]
+	},
+	{
+		"id": "a736b6720f4061a3",
+		"type": "function",
+		"z": "46f750dd0c884772",
+		"name": "Create Action",
+		"func": "msg.payload = {\n    action: \"host\",\n    channel: msg.payload.channel.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    user: msg.payload.username.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    count: msg.payload.viewers\n};\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 300,
+		"y": 140,
+		"wires": [
+			[
+				"9ca901b9e40d2f55"
+			]
+		]
+	},
+	{
+		"id": "ef440c7ac39f0f66",
+		"type": "tmi-command-say",
+		"z": "46f750dd0c884772",
+		"config": "",
+		"name": "",
+		"x": 1810,
+		"y": 280,
+		"wires": [
+			[],
+			[]
+		]
+	},
+	{
+		"id": "30b5f389976ccad1",
+		"type": "mongodb in",
+		"z": "46f750dd0c884772",
+		"mongodb": "cca90e0ad48e5446",
+		"name": "",
+		"collection": "",
+		"operation": "find",
+		"x": 580,
+		"y": 20,
+		"wires": [
+			[
+				"a1086a4ec9e7afb7"
+			]
+		]
+	},
+	{
+		"id": "b7a48f10569cc161",
+		"type": "function",
+		"z": "46f750dd0c884772",
+		"name": "Get Bot Channels Query",
+		"func": "msg.payload = {\n    \"guild_id\": \"935294040386183228\"\n};\nmsg.collection = \"twitch_channels\";\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 330,
+		"y": 20,
+		"wires": [
+			[
+				"30b5f389976ccad1"
+			]
+		]
+	},
+	{
+		"id": "35e9fdb59d20e549",
+		"type": "function",
+		"z": "46f750dd0c884772",
+		"name": "Create Action",
+		"func": "msg.payload = {\n    action: \"raid\",\n    channel: msg.payload.channel.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    user: msg.payload.username.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    count: msg.payload.viewers\n};\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 300,
+		"y": 240,
+		"wires": [
+			[
+				"9ca901b9e40d2f55"
+			]
+		]
+	},
+	{
+		"id": "9ca901b9e40d2f55",
+		"type": "function",
+		"z": "46f750dd0c884772",
+		"name": "Build Command",
+		"func": "msg.payload = {\n    channel: \"ourtacobot\",\n    message: `!taco ${msg.payload.action} ${msg.payload.user} ${msg.payload.channel}`    \n}\n\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 1200,
+		"y": 240,
+		"wires": [
+			[
+				"ffaaaab41b41a887",
+				"fbd7aed491c06946"
+			]
+		]
+	},
+	{
+		"id": "33fc045ae186aa3f",
+		"type": "inject",
+		"z": "46f750dd0c884772",
+		"name": "TEST RAID",
+		"props": [
+			{
+				"p": "payload"
+			},
+			{
+				"p": "test",
+				"v": "true",
+				"vt": "jsonata"
+			}
+		],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\",\"viewers\":5}",
+		"payloadType": "json",
+		"x": 110,
+		"y": 280,
+		"wires": [
+			[
+				"35e9fdb59d20e549"
+			]
+		]
+	},
+	{
+		"id": "58fd5a01580c6e98",
+		"type": "inject",
+		"z": "46f750dd0c884772",
+		"name": "TEST HOST",
+		"props": [
+			{
+				"p": "payload"
+			},
+			{
+				"p": "test",
+				"v": "true",
+				"vt": "jsonata"
+			}
+		],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\",\"viewers\":5}",
+		"payloadType": "json",
+		"x": 110,
+		"y": 180,
+		"wires": [
+			[
+				"a736b6720f4061a3"
+			]
+		]
+	},
+	{
+		"id": "e6fd12deccdd2307",
+		"type": "function",
+		"z": "46f750dd0c884772",
+		"name": "Create Action",
+		"func": "msg.payload = {\n    action: \"support\",\n    channel: msg.payload.channel.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    user: msg.payload.username.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\")\n};\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 920,
+		"y": 740,
+		"wires": [
+			[
+				"9ca901b9e40d2f55"
+			]
+		]
+	},
+	{
+		"id": "baf5258ea64c5e0b",
+		"type": "function",
+		"z": "46f750dd0c884772",
+		"name": "Format Payload",
+		"func": "msg.payload = {\n  channel: msg.payload.channel,\n  username: msg.payload.userstate['display-name'].toLowerCase().replace(\"@\", \"\").replace(\"#\", \"\"),\n  amount: msg.payload.userstate.bits || 1\n};\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 380,
+		"y": 400,
+		"wires": [
+			[
+				"e3f5771cb4dff405",
+				"5d5147cb9cd2625e"
+			]
+		]
+	},
+	{
+		"id": "40497c7d9234c271",
+		"type": "inject",
+		"z": "46f750dd0c884772",
+		"name": "TEST CHEER < 100",
+		"props": [
+			{
+				"p": "payload"
+			},
+			{
+				"p": "test",
+				"v": "true",
+				"vt": "jsonata"
+			}
+		],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"payload": "{\"channel\":\"guynamemike\",\"userstate\":{\"display-name\":\"DarthMinos\",\"bits\":10}}",
+		"payloadType": "json",
+		"x": 130,
+		"y": 380,
+		"wires": [
+			[
+				"baf5258ea64c5e0b"
+			]
+		]
+	},
+	{
+		"id": "81cc523992ad7633",
+		"type": "inject",
+		"z": "46f750dd0c884772",
+		"name": "TEST SUBSCRIPTION",
+		"props": [
+			{
+				"p": "payload"
+			},
+			{
+				"p": "test",
+				"v": "true",
+				"vt": "jsonata"
+			}
+		],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\"}",
+		"payloadType": "json",
+		"x": 140,
+		"y": 540,
+		"wires": [
+			[
+				"e6fd12deccdd2307"
+			]
+		]
+	},
+	{
+		"id": "5b60394a7ab365c7",
+		"type": "inject",
+		"z": "46f750dd0c884772",
+		"name": "TEST RESUB",
+		"props": [
+			{
+				"p": "payload"
+			},
+			{
+				"p": "test",
+				"v": "true",
+				"vt": "jsonata"
+			}
+		],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\",\"streakMonths\":5}",
+		"payloadType": "json",
+		"x": 110,
+		"y": 640,
+		"wires": [
+			[
+				"e6fd12deccdd2307"
+			]
+		]
+	},
+	{
+		"id": "e9a418e2ded6fa78",
+		"type": "inject",
+		"z": "46f750dd0c884772",
+		"name": "TEST PRIME UPGRADE",
+		"props": [
+			{
+				"p": "payload"
+			},
+			{
+				"p": "test",
+				"v": "true",
+				"vt": "jsonata"
+			}
+		],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\"}",
+		"payloadType": "json",
+		"x": 150,
+		"y": 740,
+		"wires": [
+			[
+				"e6fd12deccdd2307"
+			]
+		]
+	},
+	{
+		"id": "fcc3e0a062c5b788",
+		"type": "inject",
+		"z": "46f750dd0c884772",
+		"name": "TEST SUBGIFT",
+		"props": [
+			{
+				"p": "payload"
+			},
+			{
+				"p": "test",
+				"v": "true",
+				"vt": "jsonata"
+			}
+		],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\"}",
+		"payloadType": "json",
+		"x": 120,
+		"y": 840,
+		"wires": [
+			[
+				"e6fd12deccdd2307"
+			]
+		]
+	},
+	{
+		"id": "c1f88b165672acaa",
+		"type": "inject",
+		"z": "46f750dd0c884772",
+		"name": "TEST GIFT UPGRADE",
+		"props": [
+			{
+				"p": "payload"
+			},
+			{
+				"p": "test",
+				"v": "true",
+				"vt": "jsonata"
+			}
+		],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\"}",
+		"payloadType": "json",
+		"x": 140,
+		"y": 940,
+		"wires": [
+			[
+				"e6fd12deccdd2307"
+			]
+		]
+	},
+	{
+		"id": "ffaaaab41b41a887",
+		"type": "switch",
+		"z": "46f750dd0c884772",
+		"name": "Is TEST",
+		"property": "test",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "eq",
+				"v": "true",
+				"vt": "jsonata"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 1,
+		"x": 1400,
+		"y": 180,
+		"wires": [
+			[
+				"55cbd0c68d78eca6"
+			]
+		]
+	},
+	{
+		"id": "fbd7aed491c06946",
+		"type": "switch",
+		"z": "46f750dd0c884772",
+		"name": "Is ACTION",
+		"property": "test",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "neq",
+				"v": "true",
+				"vt": "jsonata"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 1,
+		"x": 1410,
+		"y": 280,
+		"wires": [
+			[
+				"f1bb52da63e95672"
+			]
+		]
+	},
+	{
+		"id": "f1bb52da63e95672",
+		"type": "delay",
+		"z": "46f750dd0c884772",
+		"name": "",
+		"pauseType": "rate",
+		"timeout": "5",
+		"timeoutUnits": "seconds",
+		"rate": "1",
+		"nbRateUnits": "1",
+		"rateUnits": "second",
+		"randomFirst": "1",
+		"randomLast": "5",
+		"randomUnits": "seconds",
+		"drop": false,
+		"allowrate": false,
+		"x": 1630,
+		"y": 280,
+		"wires": [
+			[
+				"ef440c7ac39f0f66"
+			]
+		]
+	},
+	{
+		"id": "27accf06d04c7f46",
+		"type": "inject",
+		"z": "46f750dd0c884772",
+		"name": "TEST CHEER 100+",
+		"props": [
+			{
+				"p": "payload"
+			},
+			{
+				"p": "test",
+				"v": "true",
+				"vt": "jsonata"
+			}
+		],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"payload": "{\"channel\":\"guynamemike\",\"userstate\":{\"display-name\":\"DarthMinos\",\"bits\":500}}",
+		"payloadType": "json",
+		"x": 130,
+		"y": 420,
+		"wires": [
+			[
+				"baf5258ea64c5e0b"
+			]
+		]
+	},
+	{
+		"id": "5d5147cb9cd2625e",
+		"type": "switch",
+		"z": "46f750dd0c884772",
+		"name": "Bits >= 100",
+		"property": "payload.amount",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "gte",
+				"v": "100",
+				"vt": "num"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 1,
+		"x": 590,
+		"y": 520,
+		"wires": [
+			[
+				"e6fd12deccdd2307"
+			]
+		]
+	},
+	{
+		"id": "e3f5771cb4dff405",
+		"type": "switch",
+		"z": "46f750dd0c884772",
+		"name": "Bits < 100",
+		"property": "payload.amount",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "lt",
+				"v": "100",
+				"vt": "num"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 1,
+		"x": 580,
+		"y": 300,
+		"wires": [
+			[
+				"f08aafad55e13bcd"
+			]
+		]
+	},
+	{
+		"id": "f08aafad55e13bcd",
+		"type": "function",
+		"z": "46f750dd0c884772",
+		"name": "Log Message",
+		"func": "msg.payload = { message: \"Ignoring Cheer: Fewer than 100 bits.\" }\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 760,
+		"y": 300,
+		"wires": [
+			[
+				"2e48570e2813eab2"
+			]
+		]
+	},
+	{
+		"id": "2e48570e2813eab2",
+		"type": "debug",
+		"z": "46f750dd0c884772",
+		"name": "",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "false",
+		"statusVal": "",
+		"statusType": "auto",
+		"x": 950,
+		"y": 300,
+		"wires": []
+	},
+	{
+		"id": "cca90e0ad48e5446",
+		"type": "mongodb",
+		"hostname": "andeddu.bit13.local",
+		"topology": "direct",
+		"connectOptions": "authSource=admin",
+		"port": "27017",
+		"db": "tacobot",
+		"name": "Tacobot"
+	}
+]
