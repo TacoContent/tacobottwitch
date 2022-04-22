@@ -37,8 +37,8 @@
 		"complete": "false",
 		"statusVal": "",
 		"statusType": "auto",
-		"x": 1670,
-		"y": 180,
+		"x": 1790,
+		"y": 560,
 		"wires": []
 	},
 	{
@@ -237,7 +237,7 @@
 		"config": "",
 		"name": "",
 		"x": 1810,
-		"y": 280,
+		"y": 600,
 		"wires": [
 			[],
 			[]
@@ -308,7 +308,7 @@
 		"initialize": "",
 		"finalize": "",
 		"libs": [],
-		"x": 1200,
+		"x": 1100,
 		"y": 240,
 		"wires": [
 			[
@@ -613,8 +613,8 @@
 		"checkall": "true",
 		"repair": false,
 		"outputs": 1,
-		"x": 1400,
-		"y": 180,
+		"x": 1500,
+		"y": 560,
 		"wires": [
 			[
 				"55cbd0c68d78eca6"
@@ -638,8 +638,8 @@
 		"checkall": "true",
 		"repair": false,
 		"outputs": 1,
-		"x": 1410,
-		"y": 280,
+		"x": 1510,
+		"y": 600,
 		"wires": [
 			[
 				"f1bb52da63e95672"
@@ -662,8 +662,8 @@
 		"randomUnits": "seconds",
 		"drop": false,
 		"allowrate": false,
-		"x": 1630,
-		"y": 280,
+		"x": 1670,
+		"y": 600,
 		"wires": [
 			[
 				"ef440c7ac39f0f66"
@@ -781,8 +781,329 @@
 		"complete": "false",
 		"statusVal": "",
 		"statusType": "auto",
-		"x": 950,
-		"y": 300,
+		"x": 750,
+		"y": 340,
+		"wires": []
+	},
+	{
+		"id": "617d105d8db46f55",
+		"type": "http in",
+		"z": "46f750dd0c884772",
+		"name": "Invite To Channel",
+		"url": "/tacobot/guild/:guild/invite/:channel",
+		"method": "post",
+		"upload": false,
+		"swaggerDoc": "",
+		"x": 120,
+		"y": 1020,
+		"wires": [
+			[
+				"b0f8aee21e010557",
+				"8ca13e0f98f994e7"
+			]
+		]
+	},
+	{
+		"id": "6f8a5950184f2997",
+		"type": "function",
+		"z": "46f750dd0c884772",
+		"name": "Format Payload",
+		"func": "msg.payload = {\n    action: \"invite\",\n    channel: msg.req.params.channel,\n    guild: msg.req.params.guild\n}\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 1120,
+		"y": 880,
+		"wires": [
+			[
+				"f961d1de47b5d3fa",
+				"5c632a06a9e4e5f7"
+			]
+		]
+	},
+	{
+		"id": "f961d1de47b5d3fa",
+		"type": "function",
+		"z": "46f750dd0c884772",
+		"name": "Build Command",
+		"func": "let _action = msg.payload.action;\nlet _channel = msg.payload.channel;\n\n\nmsg.payload = {\n    channel: \"ourtacobot\",\n    message: `!taco ${_action} ${_channel}`    \n}\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 1360,
+		"y": 880,
+		"wires": [
+			[
+				"ffaaaab41b41a887",
+				"fbd7aed491c06946"
+			]
+		]
+	},
+	{
+		"id": "0e7bb96a38d4110c",
+		"type": "inject",
+		"z": "46f750dd0c884772",
+		"name": "TEST HTTP INVITE",
+		"props": [
+			{
+				"p": "req",
+				"v": "{\"params\":{\"channel\":\"darthminos\",\"guild\":\"935294040386183228\"},\"headers\":{\"X-AUTH-TOKEN\":\"935665133957566525\"}}",
+				"vt": "json"
+			},
+			{
+				"p": "test",
+				"v": "true",
+				"vt": "jsonata"
+			},
+			{
+				"p": "payload"
+			}
+		],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"payload": "{}",
+		"payloadType": "json",
+		"x": 130,
+		"y": 1060,
+		"wires": [
+			[
+				"b0f8aee21e010557",
+				"8ca13e0f98f994e7"
+			]
+		]
+	},
+	{
+		"id": "82d83ce5e40b7360",
+		"type": "inject",
+		"z": "46f750dd0c884772",
+		"name": "TEST HTTP INVITE [NOT AUTHORIZED]",
+		"props": [
+			{
+				"p": "req",
+				"v": "{\"params\":{\"channel\":\"darthminos\",\"guild\":\"935294040386183228\"},\"headers\":{\"X-AUTH-TOKEN\":\"262031734260891648\"}}",
+				"vt": "json"
+			},
+			{
+				"p": "test",
+				"v": "true",
+				"vt": "jsonata"
+			},
+			{
+				"p": "payload"
+			}
+		],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"payload": "{}",
+		"payloadType": "json",
+		"x": 200,
+		"y": 1100,
+		"wires": [
+			[
+				"b0f8aee21e010557",
+				"8ca13e0f98f994e7"
+			]
+		]
+	},
+	{
+		"id": "b0f8aee21e010557",
+		"type": "switch",
+		"z": "46f750dd0c884772",
+		"name": "Is Valid X-AUTH-TOKEN",
+		"property": "req.headers['X-AUTH-TOKEN']",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "eq",
+				"v": "935665133957566525",
+				"vt": "str"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 1,
+		"x": 610,
+		"y": 920,
+		"wires": [
+			[
+				"43d5df8a1a51a83c",
+				"bd583d68bb5f6bc4"
+			]
+		]
+	},
+	{
+		"id": "43d5df8a1a51a83c",
+		"type": "switch",
+		"z": "46f750dd0c884772",
+		"name": "Is Valid Guild",
+		"property": "req.params.guild",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "eq",
+				"v": "935294040386183228",
+				"vt": "str"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 1,
+		"x": 890,
+		"y": 880,
+		"wires": [
+			[
+				"6f8a5950184f2997"
+			]
+		]
+	},
+	{
+		"id": "8ca13e0f98f994e7",
+		"type": "switch",
+		"z": "46f750dd0c884772",
+		"name": "Is NOT Valid X-AUTH-TOKEN",
+		"property": "req.headers['X-AUTH-TOKEN']",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "neq",
+				"v": "935665133957566525",
+				"vt": "str"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 1,
+		"x": 630,
+		"y": 1020,
+		"wires": [
+			[
+				"bfb71e71ad1ce767"
+			]
+		]
+	},
+	{
+		"id": "bd583d68bb5f6bc4",
+		"type": "switch",
+		"z": "46f750dd0c884772",
+		"name": "Is NOT Valid Guild",
+		"property": "req.params.guild",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "neq",
+				"v": "935294040386183228",
+				"vt": "str"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 1,
+		"x": 910,
+		"y": 960,
+		"wires": [
+			[
+				"3e47e6fb49235e3e"
+			]
+		]
+	},
+	{
+		"id": "42ecfa1e206ce3ee",
+		"type": "inject",
+		"z": "46f750dd0c884772",
+		"name": "TEST HTTP INVITE [BAD GUILD]",
+		"props": [
+			{
+				"p": "req",
+				"v": "{\"params\":{\"channel\":\"darthminos\",\"guild\":\"262036511665422336\"},\"headers\":{\"X-AUTH-TOKEN\":\"935665133957566525\"}}",
+				"vt": "json"
+			},
+			{
+				"p": "test",
+				"v": "true",
+				"vt": "jsonata"
+			},
+			{
+				"p": "payload"
+			}
+		],
+		"repeat": "",
+		"crontab": "",
+		"once": false,
+		"onceDelay": 0.1,
+		"topic": "",
+		"payload": "{}",
+		"payloadType": "json",
+		"x": 180,
+		"y": 1140,
+		"wires": [
+			[
+				"b0f8aee21e010557",
+				"8ca13e0f98f994e7"
+			]
+		]
+	},
+	{
+		"id": "3e47e6fb49235e3e",
+		"type": "function",
+		"z": "46f750dd0c884772",
+		"name": "Message Output",
+		"func": "msg.payload = {\n    message: \"Invalid GUILD ID\",\n    req: msg.req\n}\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 1120,
+		"y": 960,
+		"wires": [
+			[
+				"5c632a06a9e4e5f7"
+			]
+		]
+	},
+	{
+		"id": "bfb71e71ad1ce767",
+		"type": "function",
+		"z": "46f750dd0c884772",
+		"name": "Message Output",
+		"func": "msg.payload = {\n    message: \"Invalid X-AUTH-TOKEN\",\n    req: msg.req\n}\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 1120,
+		"y": 1020,
+		"wires": [
+			[
+				"5c632a06a9e4e5f7"
+			]
+		]
+	},
+	{
+		"id": "5c632a06a9e4e5f7",
+		"type": "debug",
+		"z": "46f750dd0c884772",
+		"name": "",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "false",
+		"statusVal": "",
+		"statusType": "auto",
+		"x": 1350,
+		"y": 1020,
 		"wires": []
 	},
 	{
