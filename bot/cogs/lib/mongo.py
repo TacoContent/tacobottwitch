@@ -237,7 +237,7 @@ class MongoDatabase:
     def _get_discord_id(self, username: str):
         if self.connection is None:
             self.open()
-        username = utils.clean_username(username)
+        username = utils.clean_channel_name(username)
         result = self.connection.twitch_user.find_one({"twitch_name": username})
         if result:
             return result["user_id"]
