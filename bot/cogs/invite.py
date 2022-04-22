@@ -65,12 +65,9 @@ class TacoInviteCog(commands.Cog):
                 self.log.debug(ctx.message.channel.name, _method, f"I am not in one of the required channels. {','.join(self.settings.bot_restricted_channels)}")
                 return
 
-            if ctx.message.echo:
-                return
-
-            if channel is not None and channel != "" and self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT_OWNER):
+            if channel is not None and channel != "" and self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT):
                 channel = utils.clean_channel_name(channel)
-                self.log.debug(ctx.message.channel.name, _method, f"USER IS BOT OWNER. CHANNEL: {channel}")
+                self.log.debug(ctx.message.channel.name, _method, f"USER IS BOT OR BOT OWNER. CHANNEL: {channel}")
 
             if channel is None or channel == "":
                 channel = utils.clean_channel_name(ctx.message.author.name)
@@ -104,12 +101,9 @@ class TacoInviteCog(commands.Cog):
                 self.log.debug(ctx.message.channel.name, _method, f"I am not in one of the required channels. {','.join(self.settings.bot_restricted_channels)}")
                 return
 
-            if ctx.message.echo:
-                return
-
-            if channel is not None and channel != "" and self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT_OWNER):
+            if channel is not None and channel != "" and self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT):
                 channel = utils.clean_channel_name(channel)
-                self.log.debug(ctx.message.channel.name, _method, f"USER IS BOT OWNER. CHANNEL: {channel}")
+                self.log.debug(ctx.message.channel.name, _method, f"USER IS BOT OR BOT OWNER. CHANNEL: {channel}")
 
             if channel is None or channel == "":
                 channel = utils.clean_channel_name(ctx.message.author.name)
