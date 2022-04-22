@@ -30,6 +30,8 @@ class TacoQuestionOfTheDayCog(commands.Cog):
         question = self.db.get_tqotd()
         if question:
             invite_data = self.db.get_invite_for_user(ctx.message.channel.name)
+            if not invite_data:
+                invite_data = self.db.get_any_invite()
             if invite_data:
                 await ctx.send(
                     f"TACO Question of the Day: {question} -> Join the discussion: {invite_data['info']['url']}"

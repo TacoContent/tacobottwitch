@@ -4,6 +4,7 @@ from . import loglevel
 from . import logger
 from . import tacotypes
 from . import mongo
+from . import utils
 
 import traceback
 import inspect
@@ -45,10 +46,10 @@ class TacosLog:
 
         # send to discord
         self.webhook.send(content)
-        channels = [fromUser.replace("#", "").replace("@", "").lower().strip()]
+        channels = [utils.clean_channel_name(fromUser)]
         # send to bot channels + the fromUser
         [
-            channels.append(f"{x.replace('#','').replace('@', '').lower().strip()}")
+            channels.append(f"{utils.clean_channel_name(x)}")
             for x in self.settings.default_channels
             if x not in channels
         ]
@@ -94,7 +95,7 @@ class TacosLog:
             reason_msg = reason if reason else "no reason given"  # self.settings.get_string(fromUser, 'no_reason')
 
             total_taco_count = self.db.add_tacos(toUser, taco_count)
-            self.db.track_taco_gift(fromUser.strip().lower(), toUser.strip().lower(), taco_count, reason_msg)
+            self.db.track_taco_gift(utils.clean_channel_name(fromUser), utils.clean_channel_name(toUser), taco_count, reason_msg)
             await self._log(fromUser, toUser, taco_count, total_taco_count, reason_msg)
             return total_taco_count
         except Exception as e:
