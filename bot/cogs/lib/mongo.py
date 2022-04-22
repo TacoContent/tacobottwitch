@@ -89,7 +89,7 @@ class MongoDatabase:
                 [
                     channels.append(f"#{utils.clean_channel_name(x)}")
                     for x in self.settings.default_channels
-                    if utils.clean_channel_name(x) not in channels
+                    if f"#{utils.clean_channel_name(x)}" not in channels
                 ]
                 return channels
             else:
