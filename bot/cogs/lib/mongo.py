@@ -111,9 +111,9 @@ class MongoDatabase:
                 {"guild_id": self.settings.discord_guild_id, "channel": twitch_channel}
             )
             if not result:
-                date = datetime.datetime.utcnow().date()
+                # date = datetime.datetime.utcnow().date()
                 # ts_date = datetime.datetime.combine(date, datetime.time.min)
-                timestamp = utils.to_timestamp(date)
+                timestamp = utils.to_timestamp(datetime.datetime.utcnow())
                 payload = {
                     "guild_id": self.settings.discord_guild_id,
                     "channel": twitch_channel,
