@@ -23,7 +23,7 @@ class TacoQuestionOfTheDayCog(commands.Cog):
         self.log = logger.Log(minimumLogLevel=log_level)
         self.log.debug("NONE", "toqtd.__init__", "Initialized")
 
-    @commands.command(name="tqotd")
+    @commands.command(name="tqotd", aliases=["tqod"])
     async def tqotd(self, ctx):
         if ctx.message.echo:
             return
