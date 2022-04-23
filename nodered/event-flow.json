@@ -37,8 +37,8 @@
 		"complete": "false",
 		"statusVal": "",
 		"statusType": "auto",
-		"x": 1790,
-		"y": 560,
+		"x": 2090,
+		"y": 240,
 		"wires": []
 	},
 	{
@@ -236,8 +236,8 @@
 		"z": "46f750dd0c884772",
 		"config": "",
 		"name": "",
-		"x": 1810,
-		"y": 600,
+		"x": 1910,
+		"y": 280,
 		"wires": [
 			[],
 			[]
@@ -613,8 +613,8 @@
 		"checkall": "true",
 		"repair": false,
 		"outputs": 1,
-		"x": 1500,
-		"y": 560,
+		"x": 1540,
+		"y": 240,
 		"wires": [
 			[
 				"55cbd0c68d78eca6"
@@ -638,11 +638,12 @@
 		"checkall": "true",
 		"repair": false,
 		"outputs": 1,
-		"x": 1510,
-		"y": 600,
+		"x": 1550,
+		"y": 280,
 		"wires": [
 			[
-				"f1bb52da63e95672"
+				"f1bb52da63e95672",
+				"9bb875c9ece15ae0"
 			]
 		]
 	},
@@ -662,8 +663,8 @@
 		"randomUnits": "seconds",
 		"drop": false,
 		"allowrate": false,
-		"x": 1670,
-		"y": 600,
+		"x": 1750,
+		"y": 280,
 		"wires": [
 			[
 				"ef440c7ac39f0f66"
@@ -808,7 +809,7 @@
 		"type": "function",
 		"z": "46f750dd0c884772",
 		"name": "Format Payload",
-		"func": "msg.payload = {\n    action: \"invite\",\n    channel: msg.req.params.channel,\n    guild: msg.req.params.guild\n}\nreturn msg;",
+		"func": "msg.payload = {\n    action: \"invite\",\n    channel: msg.req.params.channel,\n    guild: msg.req.params.guild\n}\nmsg.statusCode = 200;\nreturn msg;",
 		"outputs": 1,
 		"noerr": 0,
 		"initialize": "",
@@ -1057,7 +1058,7 @@
 		"type": "function",
 		"z": "46f750dd0c884772",
 		"name": "Message Output",
-		"func": "msg.payload = {\n    message: \"Invalid GUILD ID\",\n    req: msg.req\n}\nreturn msg;",
+		"func": "msg.payload = {\n    message: \"Invalid GUILD ID\",\n    req: msg.req\n}\nmsg.req = msg.req;\nmsg.statusCode = 403;\nreturn msg;",
 		"outputs": 1,
 		"noerr": 0,
 		"initialize": "",
@@ -1076,7 +1077,7 @@
 		"type": "function",
 		"z": "46f750dd0c884772",
 		"name": "Message Output",
-		"func": "msg.payload = {\n    message: \"Invalid X-AUTH-TOKEN\",\n    req: msg.req\n}\nreturn msg;",
+		"func": "msg.payload = {\n    message: \"Invalid X-AUTH-TOKEN\",\n    req: msg.req\n}\nmsg.statusCode = 403;\nreturn msg;",
 		"outputs": 1,
 		"noerr": 0,
 		"initialize": "",
@@ -1104,6 +1105,70 @@
 		"statusType": "auto",
 		"x": 1350,
 		"y": 1020,
+		"wires": []
+	},
+	{
+		"id": "d61d003709dca254",
+		"type": "http response",
+		"z": "46f750dd0c884772",
+		"name": "Return Status Code",
+		"statusCode": "",
+		"headers": {},
+		"x": 1950,
+		"y": 360,
+		"wires": []
+	},
+	{
+		"id": "9bb875c9ece15ae0",
+		"type": "switch",
+		"z": "46f750dd0c884772",
+		"name": "Check HTTP",
+		"property": "req",
+		"propertyType": "msg",
+		"rules": [
+			{
+				"t": "nnull"
+			}
+		],
+		"checkall": "true",
+		"repair": false,
+		"outputs": 1,
+		"x": 1750,
+		"y": 320,
+		"wires": [
+			[
+				"d61d003709dca254",
+				"8f3551e5552c98b7"
+			]
+		]
+	},
+	{
+		"id": "8f3551e5552c98b7",
+		"type": "function",
+		"z": "46f750dd0c884772",
+		"name": "",
+		"func": "msg.payload = {\n    message: \"IS HTTP REQUEST\"\n}\nreturn msg;",
+		"outputs": 1,
+		"noerr": 0,
+		"initialize": "",
+		"finalize": "",
+		"libs": [],
+		"x": 1920,
+		"y": 320,
+		"wires": [
+			[
+				"55cbd0c68d78eca6"
+			]
+		]
+	},
+	{
+		"id": "b56dbe3bdf0e2cf4",
+		"type": "comment",
+		"z": "46f750dd0c884772",
+		"name": "Invite To Channel",
+		"info": "This is https://nodered.bit13.local/ request to trigger a command",
+		"x": 100,
+		"y": 980,
 		"wires": []
 	},
 	{
