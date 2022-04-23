@@ -30,7 +30,9 @@ class DixperBroCog(commands.Cog):
         self.dixper_user = "dixperbro"
 
         self.purchase_regex = re.compile(r"^(?P<user>\@?\w+)\shas\sbought\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)$")
-        self.gift_regex = re.compile(r"^(?P<user>\@?\w+)\shas\sgifted\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)(?:\sto\s(?P<gifted>\@?\w+))$")
+        self.gift_regex = re.compile(
+            r"^(?P<user>\@?\w+)\shas\sgifted\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)(?:\sto\s(?P<gifted>\@?\w+))$"
+        )
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
         if not log_level:
             log_level = loglevel.LogLevel.DEBUG
@@ -78,7 +80,11 @@ class DixperBroCog(commands.Cog):
                         f"{username} {reason}",
                     )
                     await self.tacos_log.give_user_tacos(
-                        self.settings.bot_name, username, reason, give_type=tacotypes.TacoTypes.CUSTOM, amount=5
+                        utils.clean_channel_name(self.settings.bot_name),
+                        username,
+                        reason,
+                        give_type=tacotypes.TacoTypes.CUSTOM,
+                        amount=5,
                     )
 
                 # if message.content matches gift regex
@@ -111,10 +117,15 @@ class DixperBroCog(commands.Cog):
                         f"{username} {reason}",
                     )
                     await self.tacos_log.give_user_tacos(
-                        self.settings.bot_name, username, reason, give_type=tacotypes.TacoTypes.CUSTOM, amount=5
+                        utils.clean_channel_name(self.settings.bot_name),
+                        username,
+                        reason,
+                        give_type=tacotypes.TacoTypes.CUSTOM,
+                        amount=5,
                     )
         except Exception as e:
             self.log.error(message.channel.name, "dixper.event_message", str(e), traceback.format_exc())
+
 
 def prepare(bot):
     bot.add_cog(DixperBroCog(bot))

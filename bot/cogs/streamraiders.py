@@ -76,7 +76,11 @@ class StreamCaptainBotCog(commands.Cog):
                         f"{username} placed a StreamRaiders {epic_name} in {channel}'s channel",
                     )
                     await self.tacos_log.give_user_tacos(
-                        self.settings.bot_name, username, reason, give_type=tacotypes.TacoTypes.CUSTOM, amount=5
+                        utils.clean_channel_name(self.settings.bot_name),
+                        username,
+                        reason,
+                        give_type=tacotypes.TacoTypes.CUSTOM,
+                        amount=5,
                     )
 
                 # if message.content matches purchase regex
@@ -102,7 +106,11 @@ class StreamCaptainBotCog(commands.Cog):
                         f"{username} purchased a StreamRaiders {skin_name} skin in {channel}'s channel",
                     )
                     await self.tacos_log.give_user_tacos(
-                        self.settings.bot_name, username, reason, give_type=tacotypes.TacoTypes.CUSTOM, amount=5
+                        utils.clean_channel_name(self.settings.bot_name),
+                        username,
+                        reason,
+                        give_type=tacotypes.TacoTypes.CUSTOM,
+                        amount=5,
                     )
         except Exception as e:
             self.log.error(message.channel.name, "streamraiders.event_message", str(e), traceback.format_exc())
