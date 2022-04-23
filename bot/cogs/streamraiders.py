@@ -27,12 +27,15 @@ class StreamCaptainBotCog(commands.Cog):
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
         self.tacos_log = tacos_log.TacosLog(self.bot)
-
+        self.TACO_AMOUNT = 5
         self.stream_captain_bot = "streamcaptainbot"
         self.epic_regex = re.compile(
-            r"^(?P<user>\w+)\sjust\splaced\san\s(?P<name>Epic\s(?:\w+\s?)+?)\son\sthe\sbattlefield"
+            r"^(?P<user>\w+)\sjust\splaced\san\s(?P<name>Epic\s(?:\w+\s?)+?)\son\sthe\sbattlefield",
+            re.MULTILINE | re.IGNORECASE,
         )
-        self.purchase_regex = re.compile(r"^(?P<user>\w+)\sjust\spurchased\sa\s(?P<name>(?:\w+\s?)+)\sfor\s\$")
+        self.purchase_regex = re.compile(
+            r"^(?P<user>\w+)\sjust\spurchased\sa\s(?P<name>(?:\w+\s?)+)\sfor\s\$", re.MULTILINE | re.IGNORECASE
+        )
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
         if not log_level:
@@ -80,8 +83,9 @@ class StreamCaptainBotCog(commands.Cog):
                         username,
                         reason,
                         give_type=tacotypes.TacoTypes.CUSTOM,
-                        amount=5,
+                        amount=self.TACO_AMOUNT,
                     )
+                    return
 
                 # if message.content matches purchase regex
                 match = self.purchase_regex.match(message.content)
@@ -110,8 +114,9 @@ class StreamCaptainBotCog(commands.Cog):
                         username,
                         reason,
                         give_type=tacotypes.TacoTypes.CUSTOM,
-                        amount=5,
+                        amount=self.TACO_AMOUNT,
                     )
+                    return
         except Exception as e:
             self.log.error(message.channel.name, "streamraiders.event_message", str(e), traceback.format_exc())
 

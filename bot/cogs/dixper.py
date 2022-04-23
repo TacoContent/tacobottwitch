@@ -26,12 +26,15 @@ class DixperBroCog(commands.Cog):
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
         self.tacos_log = tacos_log.TacosLog(self.bot)
-
+        self.TACO_AMOUNT = 5
         self.dixper_user = "dixperbro"
 
-        self.purchase_regex = re.compile(r"^(?P<user>\@?\w+)\shas\sbought\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)$")
+        self.purchase_regex = re.compile(
+            r"^(?P<user>\@?\w+)\shas\sbought\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)$", re.MULTILINE | re.IGNORECASE
+        )
         self.gift_regex = re.compile(
-            r"^(?P<user>\@?\w+)\shas\sgifted\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)(?:\sto\s(?P<gifted>\@?\w+))$"
+            r"^(?P<user>\@?\w+)\shas\sgifted\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)(?:\sto\s(?P<gifted>\@?\w+))$",
+            re.MULTILINE | re.IGNORECASE,
         )
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
         if not log_level:
@@ -84,9 +87,9 @@ class DixperBroCog(commands.Cog):
                         username,
                         reason,
                         give_type=tacotypes.TacoTypes.CUSTOM,
-                        amount=5,
+                        amount=self.TACO_AMOUNT,
                     )
-
+                    return
                 # if message.content matches gift regex
                 match = self.gift_regex.match(message.content)
                 if match:
@@ -121,8 +124,9 @@ class DixperBroCog(commands.Cog):
                         username,
                         reason,
                         give_type=tacotypes.TacoTypes.CUSTOM,
-                        amount=5,
+                        amount=self.TACO_AMOUNT,
                     )
+                    return
         except Exception as e:
             self.log.error(message.channel.name, "dixper.event_message", str(e), traceback.format_exc())
 
