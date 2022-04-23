@@ -10,7 +10,6 @@ from .lib import settings
 
 class TestCog(commands.Cog):
     def __init__(self):
-        print(f"loading test cog")
         pass
 
     @commands.Cog.event()
@@ -21,7 +20,7 @@ class TestCog(commands.Cog):
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
     async def event_message(self, message):
         # is the message from the bot?
-        if message.echo:
+        if message.echo or message.author is None or message.channel is None:
             return
 
         print(f"{message.channel.name} -> {json.dumps(message.author.badges)} {message.author.name} -> {message.content}")
