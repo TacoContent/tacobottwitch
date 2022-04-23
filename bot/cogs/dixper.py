@@ -30,7 +30,7 @@ class DixperBroCog(commands.Cog):
         self.dixper_user = "dixperbro"
 
         self.purchase_regex = re.compile(
-            r"^(?P<user>\@?\w+)\shas\sbought\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)$", re.MULTILINE | re.IGNORECASE
+            r"^(?P<user>\@?\w+)\shas\sbought\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)", re.MULTILINE | re.IGNORECASE
         )
         self.gift_regex = re.compile(
             r"^(?P<user>\@?\w+)\shas\sgifted\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)(?:\sto\s(?P<gifted>\@?\w+))$",
@@ -90,6 +90,7 @@ class DixperBroCog(commands.Cog):
                         amount=self.TACO_AMOUNT,
                     )
                     return
+
                 # if message.content matches gift regex
                 match = self.gift_regex.match(message.content)
                 if match:
@@ -127,6 +128,10 @@ class DixperBroCog(commands.Cog):
                         amount=self.TACO_AMOUNT,
                     )
                     return
+
+                # log we have no match
+                # log as warning for now, to gather data
+                self.log.warn(message.channel.name, "dixper.event_message", f"No match for: {sender} -> {message.content}")
         except Exception as e:
             self.log.error(message.channel.name, "dixper.event_message", str(e), traceback.format_exc())
 
