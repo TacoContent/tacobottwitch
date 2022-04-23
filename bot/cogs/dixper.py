@@ -90,6 +90,7 @@ class DixperBroCog(commands.Cog):
                         amount=self.TACO_AMOUNT,
                     )
                     return
+
                 # if message.content matches gift regex
                 match = self.gift_regex.match(message.content)
                 if match:
@@ -127,6 +128,10 @@ class DixperBroCog(commands.Cog):
                         amount=self.TACO_AMOUNT,
                     )
                     return
+
+                # log we have no match
+                # log as warning for now, to gather data
+                self.log.warn(message.channel.name, "dixper.event_message", f"No match for: {sender} -> {message.content}")
         except Exception as e:
             self.log.error(message.channel.name, "dixper.event_message", str(e), traceback.format_exc())
 
