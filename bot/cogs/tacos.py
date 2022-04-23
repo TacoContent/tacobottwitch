@@ -189,7 +189,7 @@ class TacosCog(commands.Cog):
             user = utils.clean_channel_name(args[0])
 
             if user == utils.clean_channel_name(ctx.message.channel.name) or user == utils.clean_channel_name(ctx.message.author.name):
-                await ctx.reply(f"@{ctx.message.author.display_name}, you can't give yourself tacos.")
+                await ctx.reply(f"@{ctx.message.author.display_name}, you can't give yourself (or {ctx.message.channel.name}) tacos.")
                 return
 
             ## Give all users tacos??
