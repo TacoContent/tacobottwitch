@@ -39,7 +39,7 @@ class Permissions:
         user_level = PermissionLevel.FOLLOWER # Since cant check follower, everyone is a follower...
         if is_bot_owner(user):
             user_level = PermissionLevel.BOT_OWNER
-        if is_bot(user):
+        elif is_bot(user):
             user_level = PermissionLevel.BOT
         elif user.is_broadcaster:
             user_level = PermissionLevel.BROADCASTER
