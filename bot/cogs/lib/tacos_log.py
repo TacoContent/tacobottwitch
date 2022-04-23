@@ -51,7 +51,7 @@ class TacosLog:
         [
             channels.append(f"{utils.clean_channel_name(x)}")
             for x in self.settings.default_channels
-            if x not in channels
+            if utils.clean_channel_name(x) not in channels
         ]
 
         for c in channels:
