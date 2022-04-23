@@ -30,7 +30,7 @@ class DixperBroCog(commands.Cog):
         self.dixper_user = "dixperbro"
 
         self.purchase_regex = re.compile(
-            r"^(?P<user>\@?\w+)\shas\sbought\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)$", re.MULTILINE | re.IGNORECASE
+            r"^(?P<user>\@?\w+)\shas\sbought\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)", re.MULTILINE | re.IGNORECASE
         )
         self.gift_regex = re.compile(
             r"^(?P<user>\@?\w+)\shas\sgifted\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)(?:\sto\s(?P<gifted>\@?\w+))$",
