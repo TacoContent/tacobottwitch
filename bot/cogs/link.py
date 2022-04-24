@@ -74,7 +74,7 @@ class DiscordAccountLinkCog(commands.Cog):
                 if result:
                     # send code to user in chat
                     await ctx.reply(
-                        f"{ctx.message.author.mention}, Please use this code in discord to link your discord and twitch accounts -> .taco link {code} <- {discord_invite}"
+                        f"{ctx.message.author.mention}, Please use this code in discord to link your discord and twitch accounts -> `.taco link {code}` <- {discord_invite}"
                     )
                 else:
                     await ctx.reply(f"{ctx.message.author.mention}, I couldn't save your code. Please try again.")
