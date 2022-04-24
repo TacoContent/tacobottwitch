@@ -27,7 +27,7 @@ class StreamCaptainBotCog(commands.Cog):
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
         self.tacos_log = tacos_log.TacosLog(self.bot)
-        self.TACO_AMOUNT = 1
+        self.TACO_AMOUNT = 2
         self.stream_captain_bot = "streamcaptainbot"
         self.epic_regex = re.compile(
             r"^(?P<user>\w+)\sjust\splaced\san\s(?P<name>Epic\s(?:\w+\s?)+?)\son\sthe\sbattlefield",
