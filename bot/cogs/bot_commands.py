@@ -33,6 +33,8 @@ class BotCommands(commands.Cog):
         if not log_level:
             log_level = loglevel.LogLevel.DEBUG
 
+        self.TACO_AMOUNT = 5
+
         self.log = logger.Log(minimumLogLevel=log_level)
         self.permissions_helper = permissions.Permissions()
         self.log.debug("NONE", "bot_commands.__init__", "Initialized")
@@ -63,7 +65,7 @@ class BotCommands(commands.Cog):
                 return
 
             reason = f"raiding the channel {dest_channel}"
-            await self.tacos_log.give_user_tacos(ctx.message.channel.name, source_channel, reason, give_type=tacotypes.TacoTypes.CUSTOM, amount=5)
+            await self.tacos_log.give_user_tacos(ctx.message.channel.name, source_channel, reason, give_type=tacotypes.TacoTypes.CUSTOM, amount=self.TACO_AMOUNT)
         except Exception as e:
             self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 
@@ -96,7 +98,7 @@ class BotCommands(commands.Cog):
                 return
 
             reason = f"supporting the channel {channel}"
-            await self.tacos_log.give_user_tacos(ctx.message.channel.name, username, reason, give_type=tacotypes.TacoTypes.CUSTOM, amount=10)
+            await self.tacos_log.give_user_tacos(ctx.message.channel.name, username, reason, give_type=tacotypes.TacoTypes.CUSTOM, amount=self.TACO_AMOUNT)
         except Exception as e:
             self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 
