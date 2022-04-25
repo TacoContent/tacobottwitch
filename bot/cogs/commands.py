@@ -21,7 +21,7 @@ class Commands(commands.Cog):
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
-        self.commands_url = "https://tacocontent.github.io/ourtacobot/"
+        self.commands_url = "https://tacocontent.github.io/ourtacobot/twitch"
         pass
 
     @commands.command(name="commands")
