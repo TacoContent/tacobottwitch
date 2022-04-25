@@ -163,12 +163,12 @@ class MongoDatabase:
             # get the count of all invites
             invite_count = self.connection.invite_codes.count()
             # get a random number between 0 and the count of invites
-            rand_index = random.randint(0, invite_count - 1)
-            # get the invite at the random index
-            result = self.connection.invite_codes.find({"guild_id": self.settings.discord_guild_id}).skip(rand_index).take(1)
+            rand_index = random.randint(0, invite_count)
+            # get the invite at the random index and take 1 item
+            result = self.connection.invite_codes.find({"guild_id": self.settings.discord_guild_id}).skip(rand_index)
 
             if result:
-                return result
+                return result[0]
             else:
                 print(f"Unable to find invite code for bot")
                 return None
