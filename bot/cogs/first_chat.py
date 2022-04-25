@@ -45,15 +45,13 @@ class FirstChatCog(commands.Cog):
                 return
             if message.echo:
                 return
-            if not self.permissions_helper.has_permission(message.author, permissions.PermissionLevel.BOT_OWNER):
-                return
-                
+
             user = utils.clean_channel_name(message.author.name)
             channel = utils.clean_channel_name(message.channel.name)
             message = message.content
             is_first_message = self.db.track_user_message_in_chat(channel, user, message, self.TIME_PERIOD)
             if is_first_message:
-                reason = f"first message today in {channel}'s chat"
+                reason = f"their first message today in {channel}'s chat"
                 await self.tacos_log.give_user_tacos(utils.clean_channel_name(self.settings.bot_name), user, reason, amount=self.TACO_AMOUNT)
         except Exception as e:
             self.log.error(message.channel.name, "first_chat.event_message", str(e), traceback.format_exc())
