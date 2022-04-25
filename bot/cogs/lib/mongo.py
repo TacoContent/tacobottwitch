@@ -1,3 +1,4 @@
+from operator import truediv
 from pymongo import MongoClient
 import traceback
 import json
@@ -252,9 +253,7 @@ class MongoDatabase:
             discord_user_id = self._get_discord_id(username)
             if not discord_user_id:
                 payload = {"twitch_name": username, "link_code": code.strip()}
-                self.connection.twitch_user.update_one(
-                    {"twitch_name": username}, {"$set": payload}, upsert=True
-                )
+                self.connection.twitch_user.update_one({"twitch_name": username}, {"$set": payload}, upsert=True)
                 return True
             else:
                 raise ValueError(f"Twitch user {username} already linked")
@@ -507,6 +506,59 @@ class MongoDatabase:
             for gift in data:
                 total_gifts += gift["count"]
             return total_gifts
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+        finally:
+            if self.connection:
+                self.close()
+
+    def track_user_message_in_chat(self, channel: str, user: str, message: str, timespan_seconds: int = 86400):
+        # if the user has not messaged in the channel in the last timespan_seconds, add them to the database
+        try:
+            if self.connection is None:
+                self.open()
+            timestamp = utils.to_timestamp(datetime.datetime.utcnow())
+            channel = utils.clean_channel_name(channel)
+            user = utils.clean_channel_name(user)
+            data = self.connection.twitch_first_message.find_one(
+                {
+                    "guild_id": self.settings.discord_guild_id,
+                    "channel": channel,
+                    "twitch_name": user
+                })
+            if data is not None:
+                # if timestamp was more than 24 hours ago, add the user to the database
+                if abs(data["timestamp"] - timestamp) > timespan_seconds:
+                    payload = {
+                        "guild_id": self.settings.discord_guild_id,
+                        "channel": channel,
+                        "twitch_name": user,
+                        "timestamp": timestamp,
+                        "message": message
+                    }
+                    self.connection.twitch_first_message.update_one(
+                        {
+                            "guild_id": self.settings.discord_guild_id,
+                            "channel": channel,
+                            "twitch_name": user,
+                        }, { "$set": payload })
+                    return True
+                return False
+            else:
+                # they have never said anything...
+                data = self.connection.twitch_first_message.insert_one(
+                    {
+                        "guild_id": self.settings.discord_guild_id,
+                        "channel": channel,
+                        "twitch_name": user,
+                        "message": message,
+                        "timestamp": timestamp,
+                    }
+                )
+
+                return True
+
         except Exception as ex:
             print(ex)
             traceback.print_exc()
