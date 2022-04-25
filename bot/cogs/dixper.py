@@ -53,6 +53,9 @@ class DixperBroCog(commands.Cog):
 
             sender = utils.clean_channel_name(message.author.name)
             channel = utils.clean_channel_name(message.channel.name)
+            if sender == channel:
+                return
+
             # is the message from the dixper bot?
             if sender == utils.clean_channel_name(self.dixper_user):
                 # if message.content matches purchase regex
