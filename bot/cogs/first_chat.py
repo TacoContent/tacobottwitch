@@ -48,6 +48,9 @@ class FirstChatCog(commands.Cog):
 
             user = utils.clean_channel_name(message.author.name)
             channel = utils.clean_channel_name(message.channel.name)
+            if user == channel:
+                return # don't give tacos to the channel owner
+
             message = message.content
             is_first_message = self.db.track_user_message_in_chat(channel, user, message, self.TIME_PERIOD)
             if is_first_message:
