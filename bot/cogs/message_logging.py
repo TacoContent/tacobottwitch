@@ -8,7 +8,7 @@ from .lib import mongo
 from .lib import settings
 
 
-class TestCog(commands.Cog):
+class MessageLoggingCog(commands.Cog):
     def __init__(self):
         pass
 
@@ -37,4 +37,4 @@ class TestCog(commands.Cog):
 
 
 def prepare(bot):
-    bot.add_cog(TestCog())
+    bot.add_cog(MessageLoggingCog())

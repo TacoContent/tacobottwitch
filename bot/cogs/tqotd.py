@@ -27,18 +27,22 @@ class TacoQuestionOfTheDayCog(commands.Cog):
     async def tqotd(self, ctx):
         if ctx.message.echo:
             return
+        channel = utils.clean_channel_name(ctx.message.channel.name)
         question = self.db.get_tqotd()
         if question:
-            invite_data = self.db.get_invite_for_user(ctx.message.channel.name)
+            invite_data = self.db.get_invite_for_user(channel)
             if not invite_data:
+                self.log.debug(channel, "tqotd.tqotd", "Looking for random invite")
                 invite_data = self.db.get_any_invite()
             if invite_data:
                 await ctx.send(
                     f"TACO Question of the Day: {question} -> Join the discussion: {invite_data['info']['url']}"
                 )
             else:
+                self.log.debug(channel, "tqotd.tqotd", "No invite found. Just sending the question.")
                 await ctx.send(f"TACO Question of the Day: {question}")
         else:
+            self.log.warn(channel, "tqotd.tqotd", "No question found.")
             await ctx.send(f"No TACO Question of the Day found. Check back later.")
 
 
