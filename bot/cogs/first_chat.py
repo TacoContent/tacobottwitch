@@ -50,6 +50,8 @@ class FirstChatCog(commands.Cog):
             channel = utils.clean_channel_name(message.channel.name)
             if user == channel:
                 return # don't give tacos to the channel owner
+            if not self.permissions_helper.has_linked_account(user):
+                return # don't give tacos to users without linked accounts
 
             message = message.content
             is_first_message = self.db.track_user_message_in_chat(channel, user, message, self.TIME_PERIOD)
