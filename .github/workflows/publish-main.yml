@@ -103,5 +103,5 @@ jobs:
       run: |
         curl -X POST https://api.github.com/repos/tacocontent/ourtacobot/dispatches \
           -H 'Accept: application/vnd.github.v3+json' \
-          -u ${{ github.token }} \
+          -u "${{ github.actor }}:${{ github.token }}" \
           --data '{"event_type": "build_documentation", "client_payload": {} }'
