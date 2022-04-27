@@ -113,8 +113,6 @@ class MongoDatabase:
                 {"guild_id": self.settings.discord_guild_id, "channel": twitch_channel}
             )
             if not result:
-                # date = datetime.datetime.utcnow().date()
-                # ts_date = datetime.datetime.combine(date, datetime.time.min)
                 timestamp = utils.to_timestamp(datetime.datetime.utcnow())
                 payload = {
                     "guild_id": self.settings.discord_guild_id,
@@ -159,7 +157,6 @@ class MongoDatabase:
         try:
             if self.connection is None:
                 self.open()
-            # result = self.connection.invite_codes.find_one({"guild_id": self.settings.discord_guild_id}, { "$sort": { "timestamp": -1 } })
             # get the count of all invites
             invite_count = self.connection.invite_codes.count()
             # get a random number between 0 and the count of invites
