@@ -7,7 +7,11 @@
 	"twitch_author": "DarthMinos",
 	"changelog": "changelog.txt",
 	"bot_name": "OurTacoBot",
-	"prefixes": ["!taco ", "#taco ", "?taco "],
+	"prefixes": [
+		"!taco ",
+		"#taco ",
+		"?taco "
+	],
 	"restricted_channels": [
 		"ourtaco",
 		"ourtacobot"
@@ -270,66 +274,66 @@
 						"https://i.imgur.com/hYJKHvj.png"
 					]
 				}
-			},
-			"tqotd": {
-				"description": "Gives you the TACO question of the day.",
-				"usage": "{{prefix}}tqotd",
-				"examples": [
-					"{{prefix}}tqotd"
-				],
-				"cooldown": 30,
-				"permissions": [
-					"everyone"
-				],
-				"arguments": {},
-				"enabled": true,
-				"subcommands": {},
-				"previews": [
-					"https://i.imgur.com/A1MdC8Q.png"
-				]
-			},
-			"link": {
-				"description": "Gives you a command and a code to run in discord to link your twitch with your discord account.",
-				"usage": "{{prefix}}link",
-				"examples": [
-					"{{prefix}}link"
-				],
-				"arguments": {},
-				"cooldown": 30,
-				"permissions": [
-					"everyone"
-				],
-				"enabled": true,
-				"subcommands": {},
-				"previews": [
-					"https://i.imgur.com/opzviIC.png",
-					"https://i.imgur.com/OdqB6vK.png"
-				]
-			},
-			"_link": {
-				"description": "Links your discord account with your twitch account.",
-				"usage": "{{prefix}}link <code>",
-				"examples": [
-					"{{prefix}}link ABC567"
-				],
-				"cooldown": 30,
-				"permissions": [
-					"everyone"
-				],
-				"arguments": {
-					"code": {
-						"type": "string",
-						"description": "The code you received from the link command.",
-						"required": true
-					}
-				},
-				"enabled": true,
-				"subcommands": {},
-				"previews": [
-					"https://i.imgur.com/aZ4rSnO.png",
-					"https://i.imgur.com/OdqB6vK.png"
-				]
 			}
+		},
+		"tqotd": {
+			"description": "Gives you the TACO question of the day.",
+			"usage": "{{prefix}}tqotd",
+			"examples": [
+				"{{prefix}}tqotd"
+			],
+			"cooldown": 30,
+			"permissions": [
+				"everyone"
+			],
+			"arguments": {},
+			"enabled": true,
+			"subcommands": {},
+			"previews": [
+				"https://i.imgur.com/A1MdC8Q.png"
+			]
+		},
+		"link": {
+			"description": "Gives you a command and a code to run in discord to link your twitch with your discord account.",
+			"usage": "{{prefix}}link",
+			"examples": [
+				"{{prefix}}link"
+			],
+			"arguments": {},
+			"cooldown": 30,
+			"permissions": [
+				"everyone"
+			],
+			"enabled": true,
+			"subcommands": {},
+			"previews": [
+				"https://i.imgur.com/opzviIC.png",
+				"https://i.imgur.com/OdqB6vK.png"
+			]
+		},
+		"_link": {
+			"description": "Links your discord account with your twitch account.",
+			"usage": "{{prefix}}link <code>",
+			"examples": [
+				"{{prefix}}link ABC567"
+			],
+			"cooldown": 30,
+			"permissions": [
+				"everyone"
+			],
+			"arguments": {
+				"code": {
+					"type": "string",
+					"description": "The code you received from the link command.",
+					"required": true
+				}
+			},
+			"enabled": true,
+			"subcommands": {},
+			"previews": [
+				"https://i.imgur.com/aZ4rSnO.png",
+				"https://i.imgur.com/OdqB6vK.png"
+			]
 		}
 	}
 }
