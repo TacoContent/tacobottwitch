@@ -6,11 +6,27 @@
 	"author": "DarthMinos#1161",
 	"twitch_author": "DarthMinos",
 	"changelog": "changelog.txt",
+	"bot_name": "OurTacoBot",
+	"prefixes": ["!taco ", "#taco ", "?taco "],
 	"restricted_channels": [
 		"ourtaco",
 		"ourtacobot"
 	],
 	"commands": {
+		"commands": {
+			"description": "Get a url to view documentation for all commands.",
+			"usage": "{{prefix}}commands",
+			"cooldown": 30,
+			"permissions": [
+				"everyone"
+			],
+			"examples": [
+				"{{prefix}}commands"
+			],
+			"enabled": true,
+			"arguments": {},
+			"restricted": []
+		},
 		"discord": {
 			"description": "Promotes the TACO discord using an invite that you have created in the discord.",
 			"usage": "{{prefix}}discord",
@@ -21,9 +37,9 @@
 			"permissions": [
 				"everyone"
 			],
+			"arguments": {},
 			"enabled": true,
 			"subcommands": {},
-			"fields": [],
 			"aliases": [
 				"taco"
 			]
@@ -38,9 +54,9 @@
 			"permissions": [
 				"everyone"
 			],
+			"arguments": {},
 			"enabled": true,
 			"subcommands": {},
-			"fields": [],
 			"aliases": [
 				"inv",
 				"join"
@@ -60,9 +76,9 @@
 			"permissions": [
 				"everyone"
 			],
+			"arguments": {},
 			"enabled": true,
 			"subcommands": {},
-			"fields": [],
 			"aliases": [
 				"part",
 				"remove"
@@ -82,7 +98,6 @@
 			"permissions": [
 				"everyone"
 			],
-			"fields": [],
 			"enabled": true,
 			"subcommands": {
 				"count": {
@@ -95,11 +110,11 @@
 					"permissions": [
 						"everyone"
 					],
+					"arguments": {},
 					"enabled": true,
 					"subcommands": {},
-					"fields": [],
 					"aliases": [
-						"count",
+						"balance",
 						"bal"
 					],
 					"restricted": []
@@ -114,9 +129,15 @@
 					"permissions": [
 						"moderator"
 					],
+					"arguments": {
+						"user": {
+							"type": "string",
+							"description": "The user to get the taco count for.",
+							"required": true
+						}
+					},
 					"enabled": true,
 					"subcommands": {},
-					"fields": [],
 					"aliases": [
 						"balance",
 						"bal"
@@ -124,7 +145,7 @@
 					"restricted": []
 				},
 				"give": {
-					"description": "Give a user tacos.",
+					"description": "Give a user tacos. The maximum amount of tacos that can be given at a time is 10. The maximum amount that can be given to a user in a rolling 24 hour period is 50. The maximum amount that can be given total in a rolling 24 hour period is 500.",
 					"usage": "{{prefix}}tacos give <user> <amount> [reason]",
 					"examples": [
 						"{{prefix}}tacos give @DarthMinos 1 being awesome"
@@ -133,9 +154,28 @@
 					"permissions": [
 						"moderator"
 					],
+					"arguments": {
+						"user": {
+							"type": "string",
+							"description": "The user to give tacos to.",
+							"required": true
+						},
+						"amount": {
+							"type": "number",
+							"description": "The amount of tacos to give.",
+							"required": true,
+							"min": 1,
+							"max": 10
+						},
+						"reason": {
+							"type": "string",
+							"description": "The reason for the giving tacos.",
+							"required": false,
+							"default": "No reason given"
+						}
+					},
 					"enabled": true,
 					"subcommands": {},
-					"fields": [],
 					"aliases": [],
 					"restricted": []
 				},
@@ -149,9 +189,9 @@
 					"permissions": [
 						"everyone"
 					],
+					"arguments": {},
 					"enabled": true,
-					"subcommands": {},
-					"fields": []
+					"subcommands": {}
 				},
 				"take": {
 					"description": "Take tacos from a user.",
@@ -163,14 +203,33 @@
 					"permissions": [
 						"moderator"
 					],
+					"arguments": {
+						"user": {
+							"type": "string",
+							"description": "The user to take tacos from.",
+							"required": true
+						},
+						"amount": {
+							"type": "number",
+							"description": "The amount of tacos to take.",
+							"required": true,
+							"min": 1,
+							"max": 10
+						},
+						"reason": {
+							"type": "string",
+							"description": "The reason for taking the tacos.",
+							"required": false,
+							"default": "No reason given"
+						}
+					},
 					"enabled": true,
 					"subcommands": {},
-					"fields": [],
 					"aliases": [],
 					"restricted": []
 				},
 				"top": {
-					"description": "Get the leaderboard for tacos.",
+					"description": "Get the leader board for users tacos.",
 					"usage": "{{prefix}}tacos top [limit]",
 					"examples": [
 						"{{prefix}}tacos top 5"
@@ -179,9 +238,18 @@
 					"permissions": [
 						"moderator"
 					],
+					"arguments": {
+						"limit": {
+							"type": "number",
+							"description": "The amount of users to show on the leader board.",
+							"required": false,
+							"min": 1,
+							"max": 10,
+							"default": 5
+						}
+					},
 					"enabled": true,
 					"subcommands": {},
-					"fields": [],
 					"aliases": [
 						"leaderboard",
 						"lb"
@@ -199,24 +267,43 @@
 				"permissions": [
 					"everyone"
 				],
+				"arguments": {},
 				"enabled": true,
-				"subcommands": {},
-				"fields": []
+				"subcommands": {}
 			},
 			"link": {
-				"description": "Allows you to link your discord account to your twitch account.",
-				"usage": "{{prefix}}link [code]",
+				"description": "Gives you a command and a code to run in discord to link your twitch with your discord account.",
+				"usage": "{{prefix}}link",
 				"examples": [
-					"{{prefix}}link",
-					"{{prefix}}link 123456"
+					"{{prefix}}link"
 				],
+				"arguments": {},
 				"cooldown": 30,
 				"permissions": [
 					"everyone"
 				],
 				"enabled": true,
-				"subcommands": {},
-				"fields": []
+				"subcommands": {}
+			},
+			"_link": {
+				"description": "Links your discord account with your twitch account.",
+				"usage": "{{prefix}}link <code>",
+				"examples": [
+					"{{prefix}}link ABC567"
+				],
+				"cooldown": 30,
+				"permissions": [
+					"everyone"
+				],
+				"arguments": {
+					"code": {
+						"type": "string",
+						"description": "The code you received from the link command.",
+						"required": true
+					}
+				},
+				"enabled": true,
+				"subcommands": {}
 			}
 		}
 	}
