@@ -25,7 +25,10 @@
 			],
 			"enabled": true,
 			"arguments": {},
-			"restricted": []
+			"restricted": [],
+			"previews": [
+				"https://i.imgur.com/8lx0Ohy.png"
+			]
 		},
 		"discord": {
 			"description": "Promotes the TACO discord using an invite that you have created in the discord.",
@@ -42,6 +45,9 @@
 			"subcommands": {},
 			"aliases": [
 				"taco"
+			],
+			"previews": [
+				"https://i.imgur.com/n0wBukf.png"
 			]
 		},
 		"invite": {
@@ -64,6 +70,9 @@
 			"restricted": [
 				"ourtaco",
 				"ourtacobot"
+			],
+			"previews": [
+				"https://i.imgur.com/vJgtOCj.png"
 			]
 		},
 		"leave": {
@@ -86,6 +95,9 @@
 			"restricted": [
 				"ourtaco",
 				"ourtacobot"
+			],
+			"previews": [
+				"https://i.imgur.com/6mkkHmk.png"
 			]
 		},
 		"tacos": {
@@ -117,7 +129,10 @@
 						"balance",
 						"bal"
 					],
-					"restricted": []
+					"restricted": [],
+					"previews": [
+						"https://i.imgur.com/BHwu2db.png"
+					]
 				},
 				"_count": {
 					"description": "Get the number of tacos for a user",
@@ -142,7 +157,10 @@
 						"balance",
 						"bal"
 					],
-					"restricted": []
+					"restricted": [],
+					"previews": [
+						"https://i.imgur.com/k1wxnVL.png"
+					]
 				},
 				"give": {
 					"description": "Give a user tacos. The maximum amount of tacos that can be given at a time is 10. The maximum amount that can be given to a user in a rolling 24 hour period is 50. The maximum amount that can be given total in a rolling 24 hour period is 500.",
@@ -177,21 +195,10 @@
 					"enabled": true,
 					"subcommands": {},
 					"aliases": [],
-					"restricted": []
-				},
-				"help": {
-					"description": "Shows the help for the tacos subcommands.",
-					"usage": "{{prefix}}tacos help",
-					"examples": [
-						"{{prefix}}tacos help"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"everyone"
-					],
-					"arguments": {},
-					"enabled": true,
-					"subcommands": {}
+					"restricted": [],
+					"previews": [
+						"https://i.imgur.com/IyvB6oq.png"
+					]
 				},
 				"take": {
 					"description": "Take tacos from a user.",
@@ -226,7 +233,10 @@
 					"enabled": true,
 					"subcommands": {},
 					"aliases": [],
-					"restricted": []
+					"restricted": [],
+					"previews": [
+						"https://i.imgur.com/A3PS0Y7.png"
+					]
 				},
 				"top": {
 					"description": "Get the leader board for users tacos.",
@@ -254,7 +264,11 @@
 						"leaderboard",
 						"lb"
 					],
-					"restricted": []
+					"restricted": [],
+					"previews": [
+						"https://i.imgur.com/XY0y4Qc.png",
+						"https://i.imgur.com/hYJKHvj.png"
+					]
 				}
 			},
 			"tqotd": {
@@ -269,7 +283,10 @@
 				],
 				"arguments": {},
 				"enabled": true,
-				"subcommands": {}
+				"subcommands": {},
+				"previews": [
+					"https://i.imgur.com/A1MdC8Q.png"
+				]
 			},
 			"link": {
 				"description": "Gives you a command and a code to run in discord to link your twitch with your discord account.",
@@ -283,7 +300,11 @@
 					"everyone"
 				],
 				"enabled": true,
-				"subcommands": {}
+				"subcommands": {},
+				"previews": [
+					"https://i.imgur.com/opzviIC.png",
+					"https://i.imgur.com/OdqB6vK.png"
+				]
 			},
 			"_link": {
 				"description": "Links your discord account with your twitch account.",
@@ -303,7 +324,11 @@
 					}
 				},
 				"enabled": true,
-				"subcommands": {}
+				"subcommands": {},
+				"previews": [
+					"https://i.imgur.com/aZ4rSnO.png",
+					"https://i.imgur.com/OdqB6vK.png"
+				]
 			}
 		}
 	}
