@@ -17,7 +17,7 @@
 		"arraySpltType": "len",
 		"stream": false,
 		"addname": "",
-		"x": 730,
+		"x": 930,
 		"y": 20,
 		"wires": [
 			[
@@ -66,7 +66,7 @@
 		"initialize": "",
 		"finalize": "",
 		"libs": [],
-		"x": 890,
+		"x": 1070,
 		"y": 20,
 		"wires": [
 			[
@@ -80,7 +80,7 @@
 		"z": "46f750dd0c884772",
 		"config": "",
 		"name": "",
-		"x": 1050,
+		"x": 1210,
 		"y": 20,
 		"wires": [
 			[],
@@ -99,18 +99,6 @@
 			[
 				"a736b6720f4061a3"
 			]
-		]
-	},
-	{
-		"id": "3ee3d9ec754b6cab",
-		"type": "tmi-event-join",
-		"z": "46f750dd0c884772",
-		"config": "",
-		"name": "",
-		"x": 90,
-		"y": 80,
-		"wires": [
-			[]
 		]
 	},
 	{
@@ -251,7 +239,7 @@
 		"name": "",
 		"collection": "",
 		"operation": "find",
-		"x": 580,
+		"x": 800,
 		"y": 20,
 		"wires": [
 			[
@@ -270,7 +258,7 @@
 		"initialize": "",
 		"finalize": "",
 		"libs": [],
-		"x": 330,
+		"x": 610,
 		"y": 20,
 		"wires": [
 			[
@@ -655,7 +643,7 @@
 		"pauseType": "rate",
 		"timeout": "5",
 		"timeoutUnits": "seconds",
-		"rate": "1",
+		"rate": "10",
 		"nbRateUnits": "1",
 		"rateUnits": "second",
 		"randomFirst": "1",
@@ -663,7 +651,7 @@
 		"randomUnits": "seconds",
 		"drop": false,
 		"allowrate": false,
-		"x": 1750,
+		"x": 1760,
 		"y": 280,
 		"wires": [
 			[
@@ -719,7 +707,7 @@
 		"repair": false,
 		"outputs": 1,
 		"x": 590,
-		"y": 520,
+		"y": 500,
 		"wires": [
 			[
 				"e6fd12deccdd2307"
@@ -1169,6 +1157,48 @@
 		"info": "This is https://nodered.bit13.local/ request to trigger a command",
 		"x": 100,
 		"y": 980,
+		"wires": []
+	},
+	{
+		"id": "b7fe330fc6fde8b4",
+		"type": "trigger",
+		"z": "46f750dd0c884772",
+		"name": "",
+		"op1": "{\"message\":\"Trigger Join Channels\"}",
+		"op2": "0",
+		"op1type": "json",
+		"op2type": "str",
+		"duration": "-1",
+		"extend": false,
+		"overrideDelay": false,
+		"units": "hr",
+		"reset": "",
+		"bytopic": "all",
+		"topic": "topic",
+		"outputs": 1,
+		"x": 130,
+		"y": 60,
+		"wires": [
+			[
+				"b7a48f10569cc161",
+				"f3275be8e60ea5b0"
+			]
+		]
+	},
+	{
+		"id": "f3275be8e60ea5b0",
+		"type": "debug",
+		"z": "46f750dd0c884772",
+		"name": "",
+		"active": true,
+		"tosidebar": true,
+		"console": false,
+		"tostatus": false,
+		"complete": "false",
+		"statusVal": "",
+		"statusType": "auto",
+		"x": 570,
+		"y": 60,
 		"wires": []
 	},
 	{

@@ -31,7 +31,7 @@ class StreamElementsBotCog(commands.Cog):
 
         self.streamelements_bot = "streamelements"
         self.tip_regex = re.compile(
-            r"^(?P<user>\w+)\s(just\s)?tipped\s(?P<tip>[¥$₡£¢]?\d{1,}(?:\.\d{1,})?)", re.MULTILINE | re.IGNORECASE
+            r"^(?P<user>\w+)\s(?:just\s)?tipped\s(?P<tip>[¥$₡£¢]?\d{1,}(?:\.\d{1,})?)", re.MULTILINE | re.IGNORECASE
         )
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
@@ -57,10 +57,10 @@ class StreamElementsBotCog(commands.Cog):
 
             # is the message from the bot?
             if sender == utils.clean_channel_name(self.streamelements_bot):
-                # if message.content matches epic regex
-                match = self.epic_regex.match(message.content)
+                # if message.content matches tip regex
+                match = self.tip_regex.match(message.content)
                 if match:
-                    # get the epic name
+                    # get the tip amount
                     tip = match.group("tip")
                     # get the user
                     username = utils.clean_channel_name(match.group("user"))
