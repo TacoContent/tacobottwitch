@@ -36,7 +36,7 @@ class PokemonCommunityGameCog(commands.Cog):
         )
 
         self.no_trainer_regex = re.compile(
-            r"(\@ourtacobot\sYou\sdon't\shave\sa\strainer\spass\syet\s🤨\sEnter\s!pokestart", re.MULTILINE | re.IGNORECASE
+            r"(\@ourtacobot\sYou\sdon\'t\shave\sa\strainer\spass\syet\s🤨\sEnter\s!pokestart", re.MULTILINE | re.IGNORECASE
         )
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
