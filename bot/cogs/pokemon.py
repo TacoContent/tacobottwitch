@@ -53,16 +53,16 @@ class PokemonCommunityGameCog(commands.Cog):
             if sender == channel:
                 return
 
-            # is the message from the dixper bot?
+            # is the message from the pokemon bot?
             if sender == utils.clean_channel_name(self.pokemon_user):
                 # if message.content matches purchase regex
-                match = self.purchase_regex.match(message.content)
+                match = self.pokemon_regex.match(message.content)
                 if match:
                     ctx_channel = self.bot.get_channel(channel)
                     if ctx_channel:
                         await ctx_channel.send("!pokecatch")
         except Exception as e:
-            self.log.error(message.channel.name, "dixper.event_message", str(e), traceback.format_exc())
+            self.log.error(message.channel.name, "pokemon.event_message", str(e), traceback.format_exc())
 
 def prepare(bot):
     bot.add_cog(PokemonCommunityGameCog(bot))
