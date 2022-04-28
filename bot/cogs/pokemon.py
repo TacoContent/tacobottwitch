@@ -64,5 +64,5 @@ class PokemonCommunityGameCog(commands.Cog):
         except Exception as e:
             self.log.error(message.channel.name, "dixper.event_message", str(e), traceback.format_exc())
 
-def prepare_cog(bot):
+def prepare(bot):
     bot.add_cog(PokemonCommunityGameCog(bot))
