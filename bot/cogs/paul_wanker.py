@@ -20,7 +20,7 @@ from .lib import tacotypes
 
 # paul_wanker: !drop
 
-class PokemonCommunityGameCog(commands.Cog):
+class PaulWankerCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
 
         self.bot = bot
