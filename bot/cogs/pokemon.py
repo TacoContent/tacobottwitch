@@ -36,7 +36,7 @@ class PokemonCommunityGameCog(commands.Cog):
         )
 
         self.no_trainer_regex = re.compile(
-            r"(\@ourtacobot\sYou\sdon\'t\shave\sa\strainer\spass\syet\s🤨\sEnter\s!pokestart", re.MULTILINE | re.IGNORECASE
+            r"\@ourtacobot\sYou\sdon\'t\shave\sa\strainer\spass\syet\s🤨\sEnter\s!pokestart", re.MULTILINE | re.IGNORECASE
         )
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
@@ -66,17 +66,20 @@ class PokemonCommunityGameCog(commands.Cog):
                 # if message.content matches purchase regex
                 match = self.pokemon_regex.match(message.content.replace("\u0001ACTION ", ""))
                 if match:
+                    pokemon = match.group("pokemon")
+                    self.log.warn(channel, "pokemon.event_message", f"{channel} attempt to catch {pokemon}")
                     await ctx_channel.send("!pokecatch")
                     return
                 match = self.no_trainer_regex.match(message.content.replace("\u0001ACTION ", ""))
                 if match:
+                    self.log.warn(channel, "pokemon.event_message", "No trainer found, initiating pokestart")
                     await ctx_channel.send("!pokestart")
                     asyncio.sleep(3)
                     await ctx_channel.send("!pokecatch")
                     return
-                self.log.warn(sender, "pokemon.event_message", f"No match -> {message.content}")
+                self.log.warn(channel, "pokemon.event_message", f"No match -> {message.content}")
         except Exception as e:
-            self.log.error(message.channel.name, "pokemon.event_message", str(e), traceback.format_exc())
+            self.log.error(channel, "pokemon.event_message", str(e), traceback.format_exc())
 
 def prepare(bot):
     bot.add_cog(PokemonCommunityGameCog(bot))
