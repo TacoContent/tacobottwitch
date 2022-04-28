@@ -77,7 +77,6 @@ class PokemonCommunityGameCog(commands.Cog):
                     await asyncio.sleep(3)
                     await ctx_channel.send("!pokecatch")
                     return
-                self.log.warn(channel, "pokemon.event_message", f"No match -> {message.content}")
         except Exception as e:
             self.log.error(channel, "pokemon.event_message", str(e), traceback.format_exc())
 

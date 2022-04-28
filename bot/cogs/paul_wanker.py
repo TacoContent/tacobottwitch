@@ -18,8 +18,7 @@ from .lib import command_helper
 from .lib import tacos_log as tacos_log
 from .lib import tacotypes
 
-# PokemonCommunityGameCog: TwitchLit A wild Cacturne appears TwitchLit Catch it using !pokecatch (winners revealed in 90s)
-
+# paul_wanker: !drop
 
 class PokemonCommunityGameCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -66,7 +65,7 @@ class PokemonCommunityGameCog(commands.Cog):
                     await ctx_channel.send("!drop")
                     return
         except Exception as e:
-            self.log.error(channel, "pokemon.event_message", str(e), traceback.format_exc())
+            self.log.error(channel, "paul_wanker.event_message", str(e), traceback.format_exc())
 
 def prepare(bot):
     bot.add_cog(PokemonCommunityGameCog(bot))
