@@ -42,7 +42,7 @@ class DixperBroCog(commands.Cog):
 
         self.log = logger.Log(minimumLogLevel=log_level)
         self.permissions_helper = permissions.Permissions()
-        self.log.debug("NONE", "streamraiders.__init__", "Initialized")
+        self.log.debug("NONE", "dixper.__init__", "Initialized")
 
     @commands.Cog.event()
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
