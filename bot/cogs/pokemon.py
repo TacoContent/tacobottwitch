@@ -56,7 +56,7 @@ class PokemonCommunityGameCog(commands.Cog):
             # is the message from the pokemon bot?
             if sender == utils.clean_channel_name(self.pokemon_user):
                 # if message.content matches purchase regex
-                match = self.pokemon_regex.match(message.content)
+                match = self.pokemon_regex.match(message.content.replace("\u0001ACTION ", ""))
                 if match:
                     ctx_channel = self.bot.get_channel(channel)
                     if ctx_channel:
