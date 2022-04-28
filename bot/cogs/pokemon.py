@@ -74,7 +74,7 @@ class PokemonCommunityGameCog(commands.Cog):
                 if match:
                     self.log.warn(channel, "pokemon.event_message", "No trainer found, initiating pokestart")
                     await ctx_channel.send("!pokestart")
-                    asyncio.sleep(3)
+                    await asyncio.sleep(3)
                     await ctx_channel.send("!pokecatch")
                     return
                 self.log.warn(channel, "pokemon.event_message", f"No match -> {message.content}")
