@@ -30,7 +30,7 @@ class PokemonCommunityGameCog(commands.Cog):
         self.pokemon_user = "pokemoncommunitygame"
 
         self.pokemon_regex = re.compile(
-            r"TwitchLit\sA\swild\s(?P<pokemon>(?:\w\s?)+)\sappears\sTwitchLit\sCatch\sit\susing\s!pokecatch", re.MULTILINE | re.IGNORECASE
+            r"A\swild\s(?P<pokemon>(?:\w\s?)+)\sappears\sTwitchLit\sCatch\sit\susing\s!pokecatch", re.MULTILINE | re.IGNORECASE
         )
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
@@ -61,6 +61,8 @@ class PokemonCommunityGameCog(commands.Cog):
                     ctx_channel = self.bot.get_channel(channel)
                     if ctx_channel:
                         await ctx_channel.send("!pokecatch")
+                else:
+                    self.log.warn(sender, "pokemon.event_message", f"No match -> {message.content}")
         except Exception as e:
             self.log.error(message.channel.name, "pokemon.event_message", str(e), traceback.format_exc())
 
