@@ -6,6 +6,8 @@ import traceback
 import sys
 import json
 import inspect
+import asyncio
+
 from .lib import mongo
 from .lib import settings
 from .lib import utils
@@ -33,6 +35,10 @@ class PokemonCommunityGameCog(commands.Cog):
             r"(?:\u0001ACTION\s)?TwitchLit\sA\swild\s(?P<pokemon>(?:\w\s?)+)\sappears\sTwitchLit\sCatch\sit\susing\s!pokecatch", re.MULTILINE | re.IGNORECASE
         )
 
+        self.no_trainer_regex = re.compile(
+            r"(\@ourtacobot\sYou\sdon't\shave\sa\strainer\spass\syet\s🤨\sEnter\s!pokestart", re.MULTILINE | re.IGNORECASE
+        )
+
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
         if not log_level:
             log_level = loglevel.LogLevel.DEBUG
@@ -50,19 +56,25 @@ class PokemonCommunityGameCog(commands.Cog):
 
             sender = utils.clean_channel_name(message.author.name)
             channel = utils.clean_channel_name(message.channel.name)
-            if sender == channel:
+            ctx_channel = self.bot.get_channel(channel)
+
+            if sender == channel or not ctx_channel:
                 return
 
             # is the message from the pokemon bot?
             if sender == utils.clean_channel_name(self.pokemon_user):
                 # if message.content matches purchase regex
-                match = self.pokemon_regex.match(message.content)
+                match = self.pokemon_regex.match(message.content.replace("\u0001ACTION ", ""))
                 if match:
-                    ctx_channel = self.bot.get_channel(channel)
-                    if ctx_channel:
-                        await ctx_channel.send("!pokecatch")
-                else:
-                    self.log.warn(sender, "pokemon.event_message", f"No match -> {message.content}")
+                    await ctx_channel.send("!pokecatch")
+                    return
+                match = self.no_trainer_regex.match(message.content.replace("\u0001ACTION ", ""))
+                if match:
+                    await ctx_channel.send("!pokestart")
+                    asyncio.sleep(3)
+                    await ctx_channel.send("!pokecatch")
+                    return
+                self.log.warn(sender, "pokemon.event_message", f"No match -> {message.content}")
         except Exception as e:
             self.log.error(message.channel.name, "pokemon.event_message", str(e), traceback.format_exc())
 
