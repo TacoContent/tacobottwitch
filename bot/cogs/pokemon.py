@@ -39,6 +39,10 @@ class PokemonCommunityGameCog(commands.Cog):
             r"\@ourtacobot\sYou\sdon\'t\shave\sa\strainer\spass\syet\s🤨\sEnter\s!pokestart", re.MULTILINE | re.IGNORECASE
         )
 
+        self.no_ball = re.compile(
+            r"\@ourtacobot\sYou don't own that ball. Check the extension to see your items", re.MULTILINE | re.IGNORECASE
+        )
+
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
         if not log_level:
             log_level = loglevel.LogLevel.DEBUG
@@ -76,6 +80,15 @@ class PokemonCommunityGameCog(commands.Cog):
                 if match:
                     self.log.warn(channel, "pokemon.event_message", "No trainer found, initiating pokestart")
                     await ctx_channel.send("!pokestart")
+                    await asyncio.sleep(3)
+                    await ctx_channel.send("!pokecatch")
+                    return
+                match = self.no_ball.match(strip_msg)
+                if match:
+                    self.log.warn(channel, "pokemon.event_message", "No ball found, initiating purchase ball")
+                    await ctx_channel.send("!pokedaily")
+                    await asyncio.sleep(3)
+                    await ctx_channel.send("!pokeball pokeball 1")
                     await asyncio.sleep(3)
                     await ctx_channel.send("!pokecatch")
                     return
