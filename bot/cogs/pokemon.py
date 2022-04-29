@@ -40,11 +40,11 @@ class PokemonCommunityGameCog(commands.Cog):
         )
 
         self.no_ball_regex = re.compile(
-            r"\@ourtacobot\sYou don't own that ball. Check the extension to see your items", re.MULTILINE | re.IGNORECASE
+            r"\@ourtacobot\sYou\sdon\'t\sown\sthat\sball\.\sCheck\sthe\sextension\sto\ssee\syour\sitems", re.MULTILINE | re.IGNORECASE
         )
 
         self.purchase_success_regex = re.compile(
-            r"\@ourtacobot\sPurchase successful!", re.MULTILINE | re.IGNORECASE
+            r"\@ourtacobot\sPurchase\ssuccessful!", re.MULTILINE | re.IGNORECASE
         )
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
