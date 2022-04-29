@@ -29,7 +29,7 @@ class PokemonCommunityGameCog(commands.Cog):
         self.settings = settings.Settings()
         self.tacos_log = tacos_log.TacosLog(self.bot)
 
-        self.pokemon_user = "pokemoncommunitygame"
+        self.bot_user = "pokemoncommunitygame"
 
         self.pokemon_regex = re.compile(
             r"(?:\u0001ACTION\s)?TwitchLit\sA\swild\s(?P<pokemon>(?:\w\s?)+)\sappears\sTwitchLit\sCatch\sit\susing\s!pokecatch", re.MULTILINE | re.IGNORECASE
@@ -61,22 +61,25 @@ class PokemonCommunityGameCog(commands.Cog):
             if sender == channel or not ctx_channel:
                 return
 
+
             # is the message from the pokemon bot?
-            if sender == utils.clean_channel_name(self.pokemon_user):
+            if sender == utils.clean_channel_name(self.bot_user):
+                strip_msg = message.content.replace("\u0001ACTION", "").strip()
                 # if message.content matches purchase regex
-                match = self.pokemon_regex.match(message.content.replace("\u0001ACTION ", ""))
+                match = self.pokemon_regex.match(strip_msg)
                 if match:
                     pokemon = match.group("pokemon")
                     self.log.warn(channel, "pokemon.event_message", f"{channel} attempt to catch {pokemon}")
                     await ctx_channel.send("!pokecatch")
                     return
-                match = self.no_trainer_regex.match(message.content.replace("\u0001ACTION ", ""))
+                match = self.no_trainer_regex.match(strip_msg)
                 if match:
                     self.log.warn(channel, "pokemon.event_message", "No trainer found, initiating pokestart")
                     await ctx_channel.send("!pokestart")
                     await asyncio.sleep(3)
                     await ctx_channel.send("!pokecatch")
                     return
+                self.log.warn(channel, "pokemon.event_message", f"unknown message: {strip_msg}")
         except Exception as e:
             self.log.error(channel, "pokemon.event_message", str(e), traceback.format_exc())
 
