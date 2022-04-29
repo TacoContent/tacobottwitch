@@ -250,6 +250,8 @@ class MongoDatabase:
         else:
             return None
 
+    def update_twitch_user(self, name: str, user_id: str):
+
     def set_twitch_discord_link_code(self, username: str, code: str):
         try:
             if self.connection is None:

@@ -116,6 +116,7 @@ class PokemonCommunityGameCog(commands.Cog):
                 match = self.no_ball_regex.match(strip_msg)
                 if match:
                     self.log.debug(channel, "pokemon.event_message", "No ball found, initiating purchase ball")
+                    await asyncio.sleep(1)
                     await ctx_channel.send("!pokeshop pokeball 1")
                     return
                 match = self.purchase_success_regex.match(strip_msg)
