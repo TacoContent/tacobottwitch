@@ -86,9 +86,7 @@ class PokemonCommunityGameCog(commands.Cog):
                 match = self.no_ball.match(strip_msg)
                 if match:
                     self.log.warn(channel, "pokemon.event_message", "No ball found, initiating purchase ball")
-                    await ctx_channel.send("!pokedaily")
-                    await asyncio.sleep(3)
-                    await ctx_channel.send("!pokeball pokeball 1")
+                    await ctx_channel.send("!pokeshop pokeball 1")
                     await asyncio.sleep(3)
                     await ctx_channel.send("!pokecatch")
                     return
