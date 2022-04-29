@@ -335,5 +335,42 @@
 				"https://i.imgur.com/OdqB6vK.png"
 			]
 		}
+	},
+	"events": {
+		"description": "Here are some events that @ourtacobot will act on.",
+		"triggers": {
+			"first_chat": {
+				"name": "First Chat",
+				"description": "The first time someone chats in your channel, in a rolling 24 hour period, I will give them 1 taco."
+			},
+			"raid": {
+				"name": "Host or Raid",
+				"description": "When an incoming raid/host from a TACO member is detected I will give the raiding channel 5 tacos."
+			},
+			"cheer": {
+				"name": "Cheer",
+				"description": "When a cheer >= 100 bits is detected I will give the person 5 tacos for supporting."
+			},
+			"subscription": {
+				"name": "Subscription",
+				"description": "When a user subscribes, or gifts a subscription to the channel I will give them 5 tacos."
+			},
+			"streamraiders": {
+				"name": "Stream Raiders Epic Placement",
+				"description": "When someone places an Epic on the Battlefield for Stream Raiders, I will give them 2 tacos."
+			},
+			"dixper": {
+				"name": "Dixper",
+				"description": "When someone purchases Dixper packs, I will give them 5 tacos."
+			},
+			"streamelements": {
+				"name": "Stream Elements Tip",
+				"description": "When someone tips through Stream Elements, I will give them 5 tacos."
+			},
+			"pokemon": {
+				"name": "Pokemon Community Game",
+				"description": "If you have the Pokemon Community Game running in your channel, I will try to catch Pokemon in your channel."
+			}
+		}
 	}
 }
