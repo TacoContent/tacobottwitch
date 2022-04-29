@@ -47,6 +47,18 @@ class PokemonCommunityGameCog(commands.Cog):
             r"\@ourtacobot\sPurchase\ssuccessful!", re.MULTILINE | re.IGNORECASE
         )
 
+        self.not_enough_money_regex = re.compile(
+            r"\@ourtacobot\sYou\sdon\'t\shave\senough\sPoké-Dollars.\sYou\sneed:\s\$\d{1,}", re.MULTILINE | re.IGNORECASE
+        )
+
+        self.pokecheck_no_regex = re.compile(
+            r"\@ourtacobot\s(?P<pokemon>(?:\w\s?)+)\sregistered\sin\sPokédex:\s❌", re.MULTILINE | re.IGNORECASE
+        )
+        #@ourtacobot Lopunny registered in Pokédex: ✔
+        self.pokecheck_yes_regex = re.compile(
+            r"\@ourtacobot\s(?P<pokemon>(?:\w\s?)+)\sregistered\sin\sPokédex:\s✔", re.MULTILINE | re.IGNORECASE
+        )
+
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
         if not log_level:
             log_level = loglevel.LogLevel.DEBUG
@@ -77,27 +89,45 @@ class PokemonCommunityGameCog(commands.Cog):
                 match = self.pokemon_regex.match(strip_msg)
                 if match:
                     pokemon = match.group("pokemon")
-                    self.log.warn(channel, "pokemon.event_message", f"{channel} attempt to catch {pokemon}")
-                    await ctx_channel.send("!pokecatch pokeball")
+                    self.log.debug(channel, "pokemon.event_message", f"check if we have a {pokemon}")
+                    await ctx_channel.send(f"!pokecheck")
+                    return
+                match = self.pokecheck_no_regex.match(strip_msg)
+                if match:
+                    pokemon = match.group("pokemon")
+                    self.log.debug(channel, "pokemon.event_message", f"{pokemon} not in Pokédex")
+                    await ctx_channel.send(f"!pokecatch pokeball")
+                    return
+                match = self.pokecheck_yes_regex.match(strip_msg)
+                if match:
+                    pokemon = match.group("pokemon")
+                    self.log.debug(channel, "pokemon.event_message", f"{pokemon} in Pokédex")
+                    # await ctx_channel.send(f"I already have {pokemon} in my Pokédex, so someone else catch it. 😎")
                     return
                 match = self.no_trainer_regex.match(strip_msg)
                 if match:
-                    self.log.warn(channel, "pokemon.event_message", "No trainer found, initiating pokestart")
+                    self.log.debug(channel, "pokemon.event_message", "No trainer found, initiating pokestart")
                     await ctx_channel.send("!pokestart")
                     await asyncio.sleep(3)
                     await ctx_channel.send("!pokecatch pokeball")
                     return
                 match = self.no_ball_regex.match(strip_msg)
                 if match:
-                    self.log.warn(channel, "pokemon.event_message", "No ball found, initiating purchase ball")
+                    self.log.debug(channel, "pokemon.event_message", "No ball found, initiating purchase ball")
                     await ctx_channel.send("!pokeshop pokeball 1")
                     return
                 match = self.purchase_success_regex.match(strip_msg)
                 if match:
-                    self.log.warn(channel, "pokemon.event_message", "Purchase successful, initiating pokecatch")
+                    self.log.debug(channel, "pokemon.event_message", "Purchase successful, initiating pokecatch")
                     await asyncio.sleep(1)
                     await ctx_channel.send("!pokecatch pokeball")
                     return
+                match = self.not_enough_money_regex.match(strip_msg)
+                if match:
+                    self.log.debug(channel, "pokemon.event_message", "Not enough money")
+                    # await ctx_channel.send("I need more money! who is giving me money for pokeballs? 🤔")
+                    return
+
                 self.log.warn(channel, "pokemon.event_message", f"unknown message: {strip_msg}")
         except Exception as e:
             self.log.error(channel, "pokemon.event_message", str(e), traceback.format_exc())
