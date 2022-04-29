@@ -68,4 +68,4 @@ class PaulWankerCog(commands.Cog):
             self.log.error(channel, "paul_wanker.event_message", str(e), traceback.format_exc())
 
 def prepare(bot):
-    bot.add_cog(PokemonCommunityGameCog(bot))
+    bot.add_cog(PaulWankerCog(bot))
