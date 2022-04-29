@@ -90,12 +90,14 @@ class PokemonCommunityGameCog(commands.Cog):
                 if match:
                     pokemon = match.group("pokemon")
                     self.log.debug(channel, "pokemon.event_message", f"check if we have a {pokemon}")
+                    await asyncio.sleep(1)
                     await ctx_channel.send(f"!pokecheck")
                     return
                 match = self.pokecheck_no_regex.match(strip_msg)
                 if match:
                     pokemon = match.group("pokemon")
-                    self.log.debug(channel, "pokemon.event_message", f"{pokemon} not in Pokédex")
+                    self.log.debug(channel, "pokemon.event_message", f"{pokemon} not in Pokédex, lets catch it.")
+                    await asyncio.sleep(1)
                     await ctx_channel.send(f"!pokecatch pokeball")
                     return
                 match = self.pokecheck_yes_regex.match(strip_msg)
@@ -128,7 +130,7 @@ class PokemonCommunityGameCog(commands.Cog):
                     # await ctx_channel.send("I need more money! who is giving me money for pokeballs? 🤔")
                     return
 
-                self.log.warn(channel, "pokemon.event_message", f"unknown message: {strip_msg}")
+                self.log.debug(channel, "pokemon.event_message", f"unknown message: {strip_msg}")
         except Exception as e:
             self.log.error(channel, "pokemon.event_message", str(e), traceback.format_exc())
 
