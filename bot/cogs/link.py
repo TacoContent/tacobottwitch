@@ -29,33 +29,35 @@ class DiscordAccountLinkCog(commands.Cog):
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
         if not log_level:
             log_level = loglevel.LogLevel.DEBUG
-            
+
         self.permissions_helper = permissions.Permissions()
 
         self.log = logger.Log(minimumLogLevel=log_level)
         self.log.debug("NONE", "account_link.__init__", "Initialized")
-    @commands.command(name="update")
-    # @permissions.has_permission(permission=permissions.Permssions.EVERYONE)
-    @commands.cooldown(1, 30, commands.Bucket.channel)
-    # @commands.restrict_channels(channels=["ourtacobot", "ourtaco"])
-    async def update(self, ctx: commands.Context):
-        _method = inspect.stack()[1][3]
-        try:
-            if not self.permissions_helper.in_command_restricted_channel(ctx):
-                self.log.debug(ctx.message.channel.name, _method, f"I am not in one of the required channels. {','.join(self.settings.bot_restricted_channels)}")
-                return
 
-            if channel is not None and channel != "" and self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT):
-                channel = utils.clean_channel_name(channel)
-                self.log.debug(ctx.message.channel.name, _method, f"USER IS BOT OR BOT OWNER. CHANNEL: {channel}")
+    # @commands.command(name="update")
+    # # @permissions.has_permission(permission=permissions.Permssions.EVERYONE)
+    # @commands.cooldown(1, 30, commands.Bucket.channel)
+    # # @commands.restrict_channels(channels=["ourtacobot", "ourtaco"])
+    # async def update(self, ctx: commands.Context):
+    #     _method = inspect.stack()[1][3]
+    #     try:
+    #         if not self.permissions_helper.in_command_restricted_channel(ctx):
+    #             self.log.debug(ctx.message.channel.name, _method, f"I am not in one of the required channels. {','.join(self.settings.bot_restricted_channels)}")
+    #             return
 
-            if channel is None or channel == "":
-                channel = utils.clean_channel_name(ctx.message.author.name)
+    #         if channel is not None and channel != "" and self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT):
+    #             channel = utils.clean_channel_name(channel)
+    #             self.log.debug(ctx.message.channel.name, _method, f"USER IS BOT OR BOT OWNER. CHANNEL: {channel}")
 
-        except ValueError as e:
-            await ctx.reply(f"{ctx.message.author.mention}, {e}")
-        except Exception as e:
-            self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
+    #         if channel is None or channel == "":
+    #             channel = utils.clean_channel_name(ctx.message.author.name)
+
+    #         # TODO
+    #     except ValueError as e:
+    #         await ctx.reply(f"{ctx.message.author.mention}, {e}")
+    #     except Exception as e:
+    #         self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 
     @commands.command(name="link")
     # @permissions.has_permission(permission=permissions.Permssions.EVERYONE)
