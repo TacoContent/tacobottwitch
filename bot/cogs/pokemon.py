@@ -39,8 +39,12 @@ class PokemonCommunityGameCog(commands.Cog):
             r"\@ourtacobot\sYou\sdon\'t\shave\sa\strainer\spass\syet\s🤨\sEnter\s!pokestart", re.MULTILINE | re.IGNORECASE
         )
 
-        self.no_ball = re.compile(
+        self.no_ball_regex = re.compile(
             r"\@ourtacobot\sYou don't own that ball. Check the extension to see your items", re.MULTILINE | re.IGNORECASE
+        )
+
+        self.purchase_success_regex = re.compile(
+            r"\@ourtacobot\sPurchase successful!", re.MULTILINE | re.IGNORECASE
         )
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
@@ -74,21 +78,25 @@ class PokemonCommunityGameCog(commands.Cog):
                 if match:
                     pokemon = match.group("pokemon")
                     self.log.warn(channel, "pokemon.event_message", f"{channel} attempt to catch {pokemon}")
-                    await ctx_channel.send("!pokecatch")
+                    await ctx_channel.send("!pokecatch pokeball")
                     return
                 match = self.no_trainer_regex.match(strip_msg)
                 if match:
                     self.log.warn(channel, "pokemon.event_message", "No trainer found, initiating pokestart")
                     await ctx_channel.send("!pokestart")
                     await asyncio.sleep(3)
-                    await ctx_channel.send("!pokecatch")
+                    await ctx_channel.send("!pokecatch pokeball")
                     return
-                match = self.no_ball.match(strip_msg)
+                match = self.no_ball_regex.match(strip_msg)
                 if match:
                     self.log.warn(channel, "pokemon.event_message", "No ball found, initiating purchase ball")
                     await ctx_channel.send("!pokeshop pokeball 1")
-                    await asyncio.sleep(3)
-                    await ctx_channel.send("!pokecatch")
+                    return
+                match = self.purchase_success_regex.match(strip_msg)
+                if match:
+                    self.log.warn(channel, "pokemon.event_message", "Purchase successful, initiating pokecatch")
+                    await asyncio.sleep(1)
+                    await ctx_channel.send("!pokecatch pokeball")
                     return
                 self.log.warn(channel, "pokemon.event_message", f"unknown message: {strip_msg}")
         except Exception as e:
