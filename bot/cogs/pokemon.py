@@ -7,6 +7,7 @@ import sys
 import json
 import inspect
 import asyncio
+import math
 
 from .lib import mongo
 from .lib import settings
@@ -31,33 +32,42 @@ class PokemonCommunityGameCog(commands.Cog):
 
         self.bot_user = "pokemoncommunitygame"
 
+        self.balance_regex = re.compile(
+            r"^\@ourtacobot\'s\sBalance:\s\$(?P<balance>\d{1,})\s🏹",
+            re.MULTILINE | re.IGNORECASE,
+        )
+
         self.pokemon_regex = re.compile(
-            r"(?:\u0001ACTION\s)?TwitchLit\sA\swild\s(?P<pokemon>(?:\w\s?)+)\sappears\sTwitchLit\sCatch\sit\susing\s!pokecatch", re.MULTILINE | re.IGNORECASE
+            r"(?:\u0001ACTION\s)?TwitchLit\sA\swild\s(?P<pokemon>(?:\w\s?)+)\sappears\sTwitchLit\sCatch\sit\susing\s!pokecatch",
+            re.MULTILINE | re.IGNORECASE,
         )
 
         self.no_trainer_regex = re.compile(
-            r"\@ourtacobot\sYou\sdon\'t\shave\sa\strainer\spass\syet\s🤨\sEnter\s!pokestart", re.MULTILINE | re.IGNORECASE
+            r"\@ourtacobot\sYou\sdon\'t\shave\sa\strainer\spass\syet\s🤨\sEnter\s!pokestart",
+            re.MULTILINE | re.IGNORECASE,
         )
 
         self.no_ball_regex = re.compile(
-            r"\@ourtacobot\sYou\sdon\'t\sown\sthat\sball\.\sCheck\sthe\sextension\sto\ssee\syour\sitems", re.MULTILINE | re.IGNORECASE
+            r"\@ourtacobot\sYou\sdon\'t\sown\sthat\sball\.\sCheck\sthe\sextension\sto\ssee\syour\sitems",
+            re.MULTILINE | re.IGNORECASE,
         )
 
-        self.purchase_success_regex = re.compile(
-            r"\@ourtacobot\sPurchase\ssuccessful!", re.MULTILINE | re.IGNORECASE
-        )
+        self.purchase_success_regex = re.compile(r"\@ourtacobot\sPurchase\ssuccessful!", re.MULTILINE | re.IGNORECASE)
 
         self.not_enough_money_regex = re.compile(
-            r"\@ourtacobot\sYou\sdon\'t\shave\senough\sPoké-Dollars.\sYou\sneed:\s\$\d{1,}", re.MULTILINE | re.IGNORECASE
+            r"\@ourtacobot\sYou\sdon\'t\shave\senough\sPoké-Dollars.\sYou\sneed:\s\$\d{1,}",
+            re.MULTILINE | re.IGNORECASE,
         )
 
         self.pokecheck_no_regex = re.compile(
             r"\@ourtacobot\s(?P<pokemon>(?:\w\s?)+)\sregistered\sin\sPokédex:\s❌", re.MULTILINE | re.IGNORECASE
         )
-        #@ourtacobot Lopunny registered in Pokédex: ✔
+        # @ourtacobot Lopunny registered in Pokédex: ✔
         self.pokecheck_yes_regex = re.compile(
             r"\@ourtacobot\s(?P<pokemon>(?:\w\s?)+)\sregistered\sin\sPokédex:\s✔", re.MULTILINE | re.IGNORECASE
         )
+
+        # try and get the suggested ball to use. then check if we have that ball. if not, try to buy it. if not successful, use a regular pokeball
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
         if not log_level:
@@ -81,7 +91,6 @@ class PokemonCommunityGameCog(commands.Cog):
             if sender == channel or not ctx_channel:
                 return
 
-
             # is the message from the pokemon bot?
             if sender == utils.clean_channel_name(self.bot_user):
                 strip_msg = message.content.replace("\u0001ACTION", "").strip()
@@ -89,7 +98,7 @@ class PokemonCommunityGameCog(commands.Cog):
                 match = self.pokemon_regex.match(strip_msg)
                 if match:
                     pokemon = match.group("pokemon")
-                    self.log.debug(channel, "pokemon.event_message", f"check if we have a {pokemon}")
+                    self.log.debug(channel, "pokemon.event_message", f"check if we have a {pokemon} in the Pokédex.")
                     await asyncio.sleep(1)
                     await ctx_channel.send(f"!pokecheck")
                     return
@@ -115,9 +124,22 @@ class PokemonCommunityGameCog(commands.Cog):
                     return
                 match = self.no_ball_regex.match(strip_msg)
                 if match:
-                    self.log.debug(channel, "pokemon.event_message", "No ball found, initiating purchase ball")
+                    self.log.debug(channel, "pokemon.event_message", "No ball found, initiating check balance")
                     await asyncio.sleep(1)
-                    await ctx_channel.send("!pokeshop pokeball 1")
+                    await ctx_channel.send("!pokepass")
+                    return
+                match = self.balance_regex.match(strip_msg)
+                if match:
+                    balance = match.group("balance")
+                    self.log.debug(channel, "pokemon.event_message", f"Balance: ${balance}")
+                    await asyncio.sleep(1)
+                    if balance.isdigit():
+                        balance = int(balance)
+                        purchase_count = math.floor(balance / 300)
+                        if purchase_count >= 1:
+                            await ctx_channel.send(f"!pokeshop pokeball {purchase_count}")
+                        else:
+                            self.log.debug(channel, "pokemon.event_message", "Not enough money, (${balance}) i'll have to sit this one out...")
                     return
                 match = self.purchase_success_regex.match(strip_msg)
                 if match:
@@ -134,6 +156,7 @@ class PokemonCommunityGameCog(commands.Cog):
                 self.log.debug(channel, "pokemon.event_message", f"unknown message: {strip_msg}")
         except Exception as e:
             self.log.error(channel, "pokemon.event_message", str(e), traceback.format_exc())
+
 
 def prepare(bot):
     bot.add_cog(PokemonCommunityGameCog(bot))
