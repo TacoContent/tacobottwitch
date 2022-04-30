@@ -88,6 +88,11 @@ class PokemonCommunityGameCog(commands.Cog):
             channel = utils.clean_channel_name(message.channel.name)
             ctx_channel = self.bot.get_channel(channel)
 
+            channel_settings = self.settings.get_channel_settings(self.db, channel)
+            game_settings = channel_settings.get(self.bot_user, { "enabled": True })
+            if not game_settings.get("enabled", True):
+                return
+
             if sender == channel or not ctx_channel:
                 return
 

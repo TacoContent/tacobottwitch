@@ -28,7 +28,7 @@ class StreamCaptainBotCog(commands.Cog):
         self.settings = settings.Settings()
         self.tacos_log = tacos_log.TacosLog(self.bot)
         self.TACO_AMOUNT = 2
-        self.stream_captain_bot = "streamcaptainbot"
+        self.bot_user = "streamcaptainbot"
         self.epic_regex = re.compile(
             r"^(?P<user>\w+)\sjust\splaced\san\s(?P<name>Epic\s(?:\w+\s?)+?)\son\sthe\sbattlefield",
             re.MULTILINE | re.IGNORECASE,
@@ -55,11 +55,16 @@ class StreamCaptainBotCog(commands.Cog):
             sender = utils.clean_channel_name(message.author.name)
             channel = utils.clean_channel_name(message.channel.name)
 
+            channel_settings = self.settings.get_channel_settings(self.db, channel)
+            game_settings = channel_settings.get(self.bot_user, { "enabled": True })
+            if not game_settings.get("enabled", True):
+                return
+
             if sender == channel:
                 return
-                
+
             # is the message from the bot?
-            if sender == utils.clean_channel_name(self.stream_captain_bot):
+            if sender == utils.clean_channel_name(self.bot_user):
                 # if message.content matches epic regex
                 match = self.epic_regex.match(message.content)
                 if match:

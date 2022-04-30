@@ -27,7 +27,7 @@ class DixperBroCog(commands.Cog):
         self.settings = settings.Settings()
         self.tacos_log = tacos_log.TacosLog(self.bot)
         self.TACO_AMOUNT = 5
-        self.dixper_user = "dixperbro"
+        self.bot_user = "dixperbro"
 
         self.purchase_regex = re.compile(
             r"^(?P<user>\@?\w+)\shas\sbought\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)", re.MULTILINE | re.IGNORECASE
@@ -53,11 +53,17 @@ class DixperBroCog(commands.Cog):
 
             sender = utils.clean_channel_name(message.author.name)
             channel = utils.clean_channel_name(message.channel.name)
+
+            channel_settings = self.settings.get_channel_settings(self.db, channel)
+            game_settings = channel_settings.get(self.bot_user, { "enabled": True })
+            if not game_settings.get("enabled", True):
+                return
+
             if sender == channel:
                 return
 
             # is the message from the dixper bot?
-            if sender == utils.clean_channel_name(self.dixper_user):
+            if sender == utils.clean_channel_name(self.bot_user):
                 # if message.content matches purchase regex
                 match = self.purchase_regex.match(message.content)
                 if match:
