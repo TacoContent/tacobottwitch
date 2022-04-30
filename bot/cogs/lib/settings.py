@@ -86,10 +86,16 @@ class Settings:
         if result is None:
             db.set_channel_settings(channel, result)
             return self.get_channel_default_settings()
-        return result['settings']
+        settings = result['settings']
+        if settings is None:
+            settings = self.get_channel_default_settings()
+            db.set_channel_settings(channel, settings)
+        return settings
 
 
     def set_channel_settings(self, db, channel: str, settings: dict):
+        if settings is None:
+            settings = self.get_channel_default_settings()
         return db.set_channel_settings(utils.clean_channel_name(channel), settings)
 
     def get_string(self, key: str, *args, **kwargs):
