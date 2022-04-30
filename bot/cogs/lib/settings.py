@@ -74,7 +74,10 @@ class Settings:
             },
             "streamraiders": {
                 "enabled": True
-            }
+            },
+            "marblesonstream": {
+                "enabled": True
+            },
         }
 
     def get_channel_settings(self, db, channel: str):
