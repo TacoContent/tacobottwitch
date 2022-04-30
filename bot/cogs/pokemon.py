@@ -124,7 +124,7 @@ class PokemonCommunityGameCog(commands.Cog):
             self.settings.set_channel_settings(self.db, channel, channel_settings)
 
             await ctx.reply(
-                f"@{ctx.message.author.display_name}, I will no longer participate in the pokemon community game. You can start it again with {prefix}pokemon start"
+                f"@{ctx.message.author.display_name}, I will no longer participate in the pokemon community game. You can start it again with `{prefix}pokemon start`."
             )
         except Exception as e:
             self.log.error(channel, "pokemon.pokemon_stop", str(e), traceback.format_exc())
@@ -156,7 +156,7 @@ class PokemonCommunityGameCog(commands.Cog):
             self.settings.set_channel_settings(self.db, channel, channel_settings)
 
             await ctx.reply(
-                f"@{ctx.message.author.display_name}, I will now participate in the pokemon community game. You can stop it with {prefix}pokemon start"
+                f"@{ctx.message.author.display_name}, I will now participate in the pokemon community game. You can stop it with `{prefix}pokemon stop`."
             )
         except Exception as e:
             self.log.error(channel, "pokemon.pokemon_start", str(e), traceback.format_exc())
