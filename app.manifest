@@ -125,7 +125,9 @@
 					"description": "Enables the bot to participate in the pokemon community game.",
 					"usage": "{{prefix}}pokemon start",
 					"examples": [
-						"{{prefix}}pokemon start"
+						"{{prefix}}pokemon on",
+						"{{prefix}}pokemon start",
+						"{{prefix}}pokemon enable"
 					],
 					"cooldown": 30,
 					"permissions": [
@@ -146,7 +148,9 @@
 					"description": "Disables the bot from participating in the pokemon community game.",
 					"usage": "{{prefix}}pokemon stop",
 					"examples": [
-						"{{prefix}}pokemon stop"
+						"{{prefix}}pokemon off",
+						"{{prefix}}pokemon stop",
+						"{{prefix}}pokemon disable"
 					],
 					"cooldown": 30,
 					"permissions": [
