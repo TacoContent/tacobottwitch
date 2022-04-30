@@ -104,6 +104,67 @@
 				"https://i.imgur.com/6mkkHmk.png"
 			]
 		},
+		"pokemon": {
+			"description": "Allows you to control if the bot will participate in the pokemon community game. If you do not have the pokemon game in your channel, the bot will already not participate.",
+			"usage": "{{prefix}}pokemon <on/off>",
+			"examples": [
+				"{{prefix}}pokemon on",
+				"{{prefix}}pokemon start",
+				"{{prefix}}pokemon enable",
+				"{{prefix}}pokemon off",
+				"{{prefix}}pokemon stop",
+				"{{prefix}}pokemon disable"
+			],
+			"cooldown": 30,
+			"permissions": [
+				"moderator"
+			],
+			"enabled": true,
+			"subcommands": {
+				"start": {
+					"description": "Enables the bot to participate in the pokemon community game.",
+					"usage": "{{prefix}}pokemon start",
+					"examples": [
+						"{{prefix}}pokemon start"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"moderator"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"aliases": [
+						"start",
+						"on",
+						"enable"
+					],
+					"previews": [
+						"https://i.imgur.com/SP3RlsM.png"
+					]
+				},
+				"stop": {
+					"description": "Disables the bot from participating in the pokemon community game.",
+					"usage": "{{prefix}}pokemon stop",
+					"examples": [
+						"{{prefix}}pokemon stop"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"moderator"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"aliases": [
+						"stop",
+						"off",
+						"disable"
+					],
+					"previews": [
+						"https://i.imgur.com/oc6hRpS.png"
+					]
+				}
+			}
+		},
 		"tacos": {
 			"description": "Set of commands to deal with tacos.",
 			"usage": "{{prefix}}tacos help",
