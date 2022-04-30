@@ -81,9 +81,9 @@ class Settings:
         channel = utils.clean_channel_name(channel)
         result = db.get_channel_settings(channel)
         if result is None:
-            result = self.get_channel_default_settings()
             db.set_channel_settings(channel, result)
-        return result
+            return self.get_channel_default_settings()
+        return result['settings']
 
 
     def set_channel_settings(self, db, channel: str, settings: dict):

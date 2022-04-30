@@ -30,6 +30,8 @@ class PokemonCommunityGameCog(commands.Cog):
         self.settings = settings.Settings()
         self.tacos_log = tacos_log.TacosLog(self.bot)
 
+        self.subcommands = ["start", "on", "enable", "stop", "off", "disable"]
+
         self.bot_user = "pokemoncommunitygame"
 
         self.balance_regex = re.compile(
@@ -77,6 +79,88 @@ class PokemonCommunityGameCog(commands.Cog):
         self.permissions_helper = permissions.Permissions()
         self.log.debug("NONE", "pokemon.__init__", "Initialized")
 
+    @commands.command(name="pokemon")
+    async def pokemon(self, ctx: commands.Context, subcommand: str = None, *args):
+        _method = inspect.stack()[1][3]
+
+        if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
+            self.log.debug(
+                ctx.message.channel.name,
+                _method,
+                f"{ctx.message.author.name} does not have permission to use this command.",
+            )
+            return
+
+        if subcommand in self.subcommands:
+            if subcommand.lower() == "stop" or subcommand.lower() == "off" or subcommand.lower() == "disable":
+                await self._pokemon_stop(ctx, args)
+            elif subcommand.lower() == "start" or subcommand.lower() == "on" or subcommand.lower() == "enable":
+                await self._pokemon_start(ctx, args)
+
+    async def _pokemon_stop(self, ctx: commands.Context, args):
+        _method = inspect.stack()[1][3]
+        try:
+            channel = utils.clean_channel_name(ctx.channel.name)
+
+            if channel is None:
+                return
+
+            if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
+                self.log.debug(
+                    channel,
+                    _method,
+                    f"{ctx.message.author.name} does not have permission to use this command.",
+                )
+                return
+
+            self.log.debug(channel, "pokemon.pokemon_stop", f"Stopping event in {channel}")
+            prefixes = self.settings.prefixes
+            if not prefixes:
+                prefixes = ["!taco "]
+            prefix = prefixes[0]
+
+            channel_settings = self.settings.get_channel_settings(self.db, channel)
+            channel_settings[self.bot_user]["enabled"] = False
+            self.settings.set_channel_settings(self.db, channel, channel_settings)
+
+            await ctx.reply(
+                f"@{ctx.message.author.display_name}, I will no longer participate in the pokemon community game. You can start it again with {prefix}pokemon start"
+            )
+        except Exception as e:
+            self.log.error(channel, "pokemon.pokemon_stop", str(e), traceback.format_exc())
+
+    async def _pokemon_start(self, ctx: commands.Context, args):
+        _method = inspect.stack()[1][3]
+        try:
+            channel = utils.clean_channel_name(ctx.message.channel.name)
+
+            if channel is None:
+                return
+
+            if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
+                self.log.debug(
+                    channel,
+                    _method,
+                    f"{ctx.message.author.name} does not have permission to use this command.",
+                )
+                return
+
+            self.log.debug(channel, "pokemon.pokemon_start", f"Starting event in {channel}")
+            prefixes = self.settings.prefixes
+            if not prefixes:
+                prefixes = ["!taco "]
+            prefix = prefixes[0]
+
+            channel_settings = self.settings.get_channel_settings(self.db, channel)
+            channel_settings[self.bot_user]["enabled"] = True
+            self.settings.set_channel_settings(self.db, channel, channel_settings)
+
+            await ctx.reply(
+                f"@{ctx.message.author.display_name}, I will now participate in the pokemon community game. You can stop it with {prefix}pokemon start"
+            )
+        except Exception as e:
+            self.log.error(channel, "pokemon.pokemon_start", str(e), traceback.format_exc())
+
     @commands.Cog.event()
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
     async def event_message(self, message):
@@ -89,7 +173,7 @@ class PokemonCommunityGameCog(commands.Cog):
             ctx_channel = self.bot.get_channel(channel)
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
-            game_settings = channel_settings.get(self.bot_user, { "enabled": True })
+            game_settings = channel_settings.get(self.bot_user, {"enabled": True})
             if not game_settings.get("enabled", True):
                 return
 
@@ -144,7 +228,11 @@ class PokemonCommunityGameCog(commands.Cog):
                         if purchase_count >= 1:
                             await ctx_channel.send(f"!pokeshop pokeball {purchase_count}")
                         else:
-                            self.log.debug(channel, "pokemon.event_message", "Not enough money, (${balance}) i'll have to sit this one out...")
+                            self.log.debug(
+                                channel,
+                                "pokemon.event_message",
+                                "Not enough money, (${balance}) i'll have to sit this one out...",
+                            )
                     return
                 match = self.purchase_success_regex.match(strip_msg)
                 if match:
