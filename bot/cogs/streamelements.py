@@ -29,7 +29,7 @@ class StreamElementsBotCog(commands.Cog):
         self.tacos_log = tacos_log.TacosLog(self.bot)
         self.TACO_AMOUNT = 5
 
-        self.streamelements_bot = "streamelements"
+        self.bot_user = "streamelements"
         self.tip_regex = re.compile(
             r"^(?P<user>\w+)\s(?:just\s)?tipped\s(?P<tip>[¥$₡£¢]?\d{1,}(?:\.\d{1,})?)", re.MULTILINE | re.IGNORECASE
         )
@@ -52,11 +52,16 @@ class StreamElementsBotCog(commands.Cog):
             sender = utils.clean_channel_name(message.author.name)
             channel = utils.clean_channel_name(message.channel.name)
 
+            channel_settings = self.settings.get_channel_settings(self.db, channel)
+            game_settings = channel_settings.get(self.bot_user, { "enabled": True })
+            if not game_settings.get("enabled", True):
+                return
+
             if sender == channel:
                 return
 
             # is the message from the bot?
-            if sender == utils.clean_channel_name(self.streamelements_bot):
+            if sender == utils.clean_channel_name(self.bot_user):
                 # if message.content matches tip regex
                 match = self.tip_regex.match(message.content)
                 if match:

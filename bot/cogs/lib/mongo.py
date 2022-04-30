@@ -64,6 +64,45 @@ class MongoDatabase:
         finally:
             self.close()
 
+    def get_channel_settings(self, channel: str):
+        try:
+            if self.connection is None:
+                self.open()
+            channel = utils.clean_channel_name(channel)
+            result = self.connection.twitch_channel_settings.find_one(
+                {"guild_id": self.settings.discord_guild_id, "channel": channel}
+            )
+            if result:
+                return result
+            else:
+                return None
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+            return None
+        finally:
+            self.close()
+            pass
+
+    def set_channel_settings(self, channel: str, settings: dict):
+        try:
+            if self.connection is None:
+                self.open()
+            channel = utils.clean_channel_name(channel)
+
+            self.connection.twitch_channel_settings.update_one(
+                {"guild_id": self.settings.discord_guild_id, "channel": channel},
+                {"$set": {"settings": settings}},
+                upsert=True,
+            )
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+            raise ex
+        finally:
+            self.close()
+            pass
+
     def get_settings(self, name: str):
         try:
             if self.connection is None:
@@ -530,11 +569,8 @@ class MongoDatabase:
             channel = utils.clean_channel_name(channel)
             user = utils.clean_channel_name(user)
             data = self.connection.twitch_first_message.find_one(
-                {
-                    "guild_id": self.settings.discord_guild_id,
-                    "channel": channel,
-                    "twitch_name": user
-                })
+                {"guild_id": self.settings.discord_guild_id, "channel": channel, "twitch_name": user}
+            )
             if data is not None:
                 # if timestamp was more than 24 hours ago, add the user to the database
                 if abs(data["timestamp"] - timestamp) > timespan_seconds:
@@ -543,14 +579,16 @@ class MongoDatabase:
                         "channel": channel,
                         "twitch_name": user,
                         "timestamp": timestamp,
-                        "message": message
+                        "message": message,
                     }
                     self.connection.twitch_first_message.update_one(
                         {
                             "guild_id": self.settings.discord_guild_id,
                             "channel": channel,
                             "twitch_name": user,
-                        }, { "$set": payload })
+                        },
+                        {"$set": payload},
+                    )
                     return True
                 return False
             else:

@@ -26,8 +26,15 @@ class Settings:
         self.twitch_oauth_token = utils.dict_get(os.environ, "TWITCH_OAUTH_TOKEN", default_value=None)
         self.twitch_team_name = utils.dict_get(os.environ, "TWITCH_TEAM_NAME", default_value="taco")
         self.discord_guild_id = utils.dict_get(os.environ, "DISCORD_GUILD_ID", default_value="935294040386183228")
-        self.discord_tacos_log_webhook_url = utils.dict_get(os.environ, "DISCORD_TACOS_LOG_WEBHOOK_URL", default_value=None)
-        self.bot_restricted_channels = [ f"{c.lower().strip()}" for c in utils.dict_get(os.environ, "BOT_RESTRICTED_CHANNELS", default_value="ourtacobot,ourtaco").split(",") ]
+        self.discord_tacos_log_webhook_url = utils.dict_get(
+            os.environ, "DISCORD_TACOS_LOG_WEBHOOK_URL", default_value=None
+        )
+        self.bot_restricted_channels = [
+            f"{c.lower().strip()}"
+            for c in utils.dict_get(os.environ, "BOT_RESTRICTED_CHANNELS", default_value="ourtacobot,ourtaco").split(
+                ","
+            )
+        ]
         self.bot_prefixes = [
             f"{p.lower().lstrip()}" for p in utils.dict_get(os.environ, "BOT_PREFIXES", default_value="!").split(",")
         ]
@@ -50,6 +57,37 @@ class Settings:
 
     def get_settings(self, db, name: str):
         return db.get_settings(name)
+
+    def get_channel_default_settings(self):
+        return {
+            "pokemoncommunitygame": {
+                "enabled": True,
+            },
+            "paul_wanker": {
+                "enabled": True
+            },
+            "dixperbro": {
+                "enabled": True
+            },
+            "streamelements": {
+                "enabled": True
+            },
+            "streamraiders": {
+                "enabled": True
+            }
+        }
+
+    def get_channel_settings(self, db, channel: str):
+        channel = utils.clean_channel_name(channel)
+        result = db.get_channel_settings(channel)
+        if result is None:
+            result = self.get_channel_default_settings()
+            db.set_channel_settings(channel, result)
+        return result
+
+
+    def set_channel_settings(self, db, channel: str, settings: dict):
+        return db.set_channel_settings(utils.clean_channel_name(channel), settings)
 
     def get_string(self, key: str, *args, **kwargs):
         guild_id = self.discord_guild_id
