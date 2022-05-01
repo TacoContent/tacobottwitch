@@ -54,6 +54,71 @@
 				"https://i.imgur.com/n0wBukf.png"
 			]
 		},
+		"dixper": {
+			"description": "Allows you to control if the bot will give tacos for purchase of dixper packs. If you do not use dixper in your channel, this will not matter.",
+			"usage": "{{prefix}}dixper <on/off>",
+			"examples": [
+				"{{prefix}}dixper on",
+				"{{prefix}}dixper start",
+				"{{prefix}}dixper enable",
+				"{{prefix}}dixper off",
+				"{{prefix}}dixper stop",
+				"{{prefix}}dixper disable"
+			],
+			"cooldown": 30,
+			"permissions": [
+				"moderator"
+			],
+			"enabled": true,
+			"subcommands": {
+				"start": {
+					"description": "Enables the bot to give tacos when people purchase dixper packs.",
+					"usage": "{{prefix}}dixper start",
+					"examples": [
+						"{{prefix}}dixper on",
+						"{{prefix}}dixper start",
+						"{{prefix}}dixper enable"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"moderator"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"aliases": [
+						"start",
+						"on",
+						"enable"
+					],
+					"previews": [
+
+					]
+				},
+				"stop": {
+					"description": "Disabled the bot from giving tacos when people purchase dixper packs.",
+					"usage": "{{prefix}}dixper stop",
+					"examples": [
+						"{{prefix}}dixper off",
+						"{{prefix}}dixper stop",
+						"{{prefix}}dixper disable"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"moderator"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"aliases": [
+						"stop",
+						"off",
+						"disable"
+					],
+					"previews": [
+
+					]
+				}
+			}
+		},
 		"invite": {
 			"description": "Invite OurTacoBot to your twitch channel.",
 			"usage": "{{prefix}}invite",

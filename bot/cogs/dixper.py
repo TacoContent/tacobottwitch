@@ -20,7 +20,7 @@ from .lib import tacotypes
 
 
 class DixperBroCog(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot) -> None:
 
         self.bot = bot
         self.db = mongo.MongoDatabase()
@@ -28,6 +28,8 @@ class DixperBroCog(commands.Cog):
         self.tacos_log = tacos_log.TacosLog(self.bot)
         self.TACO_AMOUNT = 5
         self.bot_user = "dixperbro"
+        self.start_commands = ["start", "on", "enable"]
+        self.stop_commands = ["stop", "off", "disable"]
 
         self.purchase_regex = re.compile(
             r"^(?P<user>\@?\w+)\shas\sbought\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)", re.MULTILINE | re.IGNORECASE
@@ -44,9 +46,94 @@ class DixperBroCog(commands.Cog):
         self.permissions_helper = permissions.Permissions()
         self.log.debug("NONE", "dixper.__init__", "Initialized")
 
+
+    @commands.command(name="dixper")
+    async def dixper(self, ctx: commands.Context, subcommand: str = None, *args) -> None:
+        _method = inspect.stack()[1][3]
+
+        if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
+            self.log.debug(
+                ctx.message.channel.name,
+                _method,
+                f"{ctx.message.author.name} does not have permission to use this command.",
+            )
+            return
+
+        if subcommand in self.subcommands:
+            if subcommand.lower() in self.stop_commands:
+                await self._dixper_stop(ctx, args)
+            elif subcommand.lower() in self.start_commands:
+                await self._dixper_start(ctx, args)
+
+    async def _dixper_stop(self, ctx: commands.Context, args) -> None:
+        _method = inspect.stack()[1][3]
+        try:
+            channel = utils.clean_channel_name(ctx.channel.name)
+
+            if channel is None:
+                return
+
+            if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
+                self.log.debug(
+                    channel,
+                    _method,
+                    f"{ctx.message.author.name} does not have permission to use this command.",
+                )
+                return
+
+            self.log.debug(channel, "dixper.dixper_stop", f"Stopping dixper event in {channel}")
+            prefixes = self.settings.prefixes
+            if not prefixes:
+                prefixes = ["!taco "]
+            prefix = prefixes[0]
+
+            channel_settings = self.settings.get_channel_settings(self.db, channel)
+            channel_settings[self.bot_user]["enabled"] = False
+            self.settings.set_channel_settings(self.db, channel, channel_settings)
+
+            await ctx.reply(
+                f"@{ctx.message.author.display_name}, I will no longer give tacos for people that purchase dixper packs in your channel. You can start it again with `{prefix}dixper start`."
+            )
+        except Exception as e:
+            self.log.error(channel, "dixper.dixper_stop", str(e), traceback.format_exc())
+
+
+    async def _dixper_start(self, ctx: commands.Context, args) -> None:
+        _method = inspect.stack()[1][3]
+        try:
+            channel = utils.clean_channel_name(ctx.message.channel.name)
+
+            if channel is None:
+                return
+
+            if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
+                self.log.debug(
+                    channel,
+                    _method,
+                    f"{ctx.message.author.name} does not have permission to use this command.",
+                )
+                return
+
+            self.log.debug(channel, "dixper.dixper_start", f"Starting dixper event in {channel}")
+            prefixes = self.settings.prefixes
+            if not prefixes:
+                prefixes = ["!taco "]
+            prefix = prefixes[0]
+
+            channel_settings = self.settings.get_channel_settings(self.db, channel)
+            channel_settings[self.bot_user]["enabled"] = True
+            self.settings.set_channel_settings(self.db, channel, channel_settings)
+
+            await ctx.reply(
+                f"@{ctx.message.author.display_name}, I will now give tacos to people that purchase dixper packs in your channel. You can stop it with `{prefix}dixper stop`."
+            )
+        except Exception as e:
+            self.log.error(channel, "dixper.dixper_start", str(e), traceback.format_exc())
+
+
     @commands.Cog.event()
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
-    async def event_message(self, message):
+    async def event_message(self, message) -> None:
         try:
             if message.author is None or message.channel is None:
                 return
@@ -142,5 +229,5 @@ class DixperBroCog(commands.Cog):
             self.log.error(message.channel.name, "dixper.event_message", str(e), traceback.format_exc())
 
 
-def prepare(bot):
+def prepare(bot) -> None:
     bot.add_cog(DixperBroCog(bot))

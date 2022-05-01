@@ -22,7 +22,7 @@ from .lib import logger
 
 
 class DiscordAccountLinkCog(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
@@ -61,7 +61,7 @@ class DiscordAccountLinkCog(commands.Cog):
 
     @commands.command(name="link")
     # @permissions.has_permission(permission=permissions.Permssions.EVERYONE)
-    async def link(self, ctx, code: str = None):
+    async def link(self, ctx, code: str = None) -> None:
         _method = inspect.stack()[1][3]
         if code:
             try:
@@ -115,7 +115,7 @@ class DiscordAccountLinkCog(commands.Cog):
 
     # @commands.Cog.event("cog_command_error")
     # this is not triggered...
-    async def cog_command_error(self, ctx: commands.Context, error: Exception):
+    async def cog_command_error(self, ctx: commands.Context, error: Exception) -> None:
         print(f"Error: {str(error)}")
         if isinstance(error, commands.errors.CommandOnCooldown):
             await ctx.send(str(error))
@@ -123,5 +123,5 @@ class DiscordAccountLinkCog(commands.Cog):
             await ctx.send(f"Error: {error}")
 
 
-def prepare(bot):
+def prepare(bot) -> None:
     bot.add_cog(DiscordAccountLinkCog(bot))

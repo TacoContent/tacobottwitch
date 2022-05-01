@@ -9,16 +9,16 @@ from .lib import settings
 
 
 class MessageLoggingCog(commands.Cog):
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     @commands.Cog.event()
-    async def event_raw_data(self, data):
+    async def event_raw_data(self, data) -> None:
         pass
 
     @commands.Cog.event()
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
-    async def event_message(self, message):
+    async def event_message(self, message) -> None:
         # is the message from the bot?
         if message.echo or message.author is None or message.channel is None:
             return
@@ -26,7 +26,7 @@ class MessageLoggingCog(commands.Cog):
         print(f"{message.channel.name} -> {json.dumps(message.author.badges)} {message.author.name} -> {message.content}")
 
     @commands.Cog.event()
-    async def event_ready(self):
+    async def event_ready(self) -> None:
         # Notify us when everything is ready!
         # We are logged in and ready to chat and use commands...
         print(f"Logged in as | {self.nick}")
@@ -36,5 +36,5 @@ class MessageLoggingCog(commands.Cog):
         # channels = self.db.get_twitch_channels()
 
 
-def prepare(bot):
+def prepare(bot) -> None:
     bot.add_cog(MessageLoggingCog())

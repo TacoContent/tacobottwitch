@@ -21,7 +21,7 @@ from .lib import tacotypes
 
 
 class MarblesOnStreamCog(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot) -> None:
 
         self.bot = bot
         self.db = mongo.MongoDatabase()
@@ -49,7 +49,7 @@ class MarblesOnStreamCog(commands.Cog):
 
     @commands.Cog.event()
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
-    async def event_message(self, message):
+    async def event_message(self, message) -> None:
         try:
             if message.author is None or message.channel is None:
                 return
@@ -100,5 +100,5 @@ class MarblesOnStreamCog(commands.Cog):
             self.log.error(channel, "marbles.event_message", str(e), traceback.format_exc())
 
 
-def prepare(bot):
+def prepare(bot) -> None:
     bot.add_cog(MarblesOnStreamCog(bot))

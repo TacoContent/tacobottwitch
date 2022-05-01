@@ -14,7 +14,7 @@ class Settings:
     APP_VERSION = "1.0.0-snapshot"
     BITRATE_DEFAULT = 64
 
-    def __init__(self):
+    def __init__(self) -> None:
         try:
             with open("app.manifest", encoding="UTF-8") as json_file:
                 self.__dict__.update(json.load(json_file))
@@ -55,50 +55,39 @@ class Settings:
         self.load_language_manifest()
         self.load_strings()
 
-    def get_settings(self, db, name: str):
+    def get_settings(self, db, name: str) -> dict:
         return db.get_settings(name)
 
-    def get_channel_default_settings(self):
+    def get_channel_default_settings(self) -> dict:
         return {
             "pokemoncommunitygame": {
                 "enabled": True,
             },
-            "paul_wanker": {
-                "enabled": True
-            },
-            "dixperbro": {
-                "enabled": True
-            },
-            "streamelements": {
-                "enabled": True
-            },
-            "streamraiders": {
-                "enabled": True
-            },
-            "marblesonstream": {
-                "enabled": True
-            },
+            "paul_wanker": {"enabled": True},
+            "dixperbro": {"enabled": True},
+            "streamelements": {"enabled": True},
+            "streamraiders": {"enabled": True},
+            "marblesonstream": {"enabled": True},
         }
 
-    def get_channel_settings(self, db, channel: str):
+    def get_channel_settings(self, db, channel: str) -> dict:
         channel = utils.clean_channel_name(channel)
         result = db.get_channel_settings(channel)
         if result is None:
             db.set_channel_settings(channel, result)
             return self.get_channel_default_settings()
-        settings = result['settings']
+        settings = result["settings"]
         if settings is None:
             settings = self.get_channel_default_settings()
             db.set_channel_settings(channel, settings)
         return settings
 
-
-    def set_channel_settings(self, db, channel: str, settings: dict):
+    def set_channel_settings(self, db, channel: str, settings: dict) -> dict:
         if settings is None:
             settings = self.get_channel_default_settings()
         return db.set_channel_settings(utils.clean_channel_name(channel), settings)
 
-    def get_string(self, key: str, *args, **kwargs):
+    def get_string(self, key: str, *args, **kwargs) -> str:
         guild_id = self.discord_guild_id
         _method = inspect.stack()[1][3]
         if not key:
@@ -122,7 +111,7 @@ class Settings:
                 print(f"UNKNOWN KEY: LANG: {self.language} - {key}", file=sys.stderr)
                 return utils.str_replace(f"{key}", *args, **kwargs)
 
-    def set_guild_strings(self, lang: str = None):
+    def set_guild_strings(self, lang: str = None) -> None:
         guild_id = self.discord_guild_id
         _method = inspect.stack()[1][3]
         # guild_settings = self.db.get_guild_settings(guildId)
@@ -133,13 +122,13 @@ class Settings:
         self.strings[guild_id] = self.strings[lang]
         # self.log.debug(guildId, _method, f"Guild Language Set: {lang}")
 
-    def get_language(self):
+    def get_language(self) -> str:
         # guild_setting = self.db.get_guild_settings(guildId)
         # if not guild_setting:
         return self.language
         # return guild_setting.language or self.settings.language
 
-    def load_strings(self):
+    def load_strings(self) -> None:
         _method = inspect.stack()[1][3]
         self.strings = {}
 
@@ -163,7 +152,7 @@ class Settings:
                 traceback.print_exc()
                 # self.log.error(0, "settings.load_strings", str(e), traceback.format_exc())
 
-    def load_language_manifest(self):
+    def load_language_manifest(self) -> None:
         lang_manifest = os.path.join(os.path.dirname(__file__), "../../../languages/manifest.json")
         self.languages = {}
         if os.path.exists(lang_manifest):

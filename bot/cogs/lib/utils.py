@@ -12,14 +12,14 @@ import datetime
 import inspect
 
 
-def dict_get(dictionary, key, default_value=None):
+def dict_get(dictionary, key, default_value=None) -> typing.Any:
     if key in dictionary.keys():
         return dictionary[key] or default_value
     else:
         return default_value
 
 
-def get_scalar_result(conn, sql, default_value=None, *args):
+def get_scalar_result(conn, sql, default_value=None, *args) -> typing.Any:
     cursor = conn.cursor()
     try:
         cursor.execute(sql, args)
@@ -29,24 +29,24 @@ def get_scalar_result(conn, sql, default_value=None, *args):
         traceback.print_exc()
         return default_value
 
-def clean_channel_name(channel: str):
+def clean_channel_name(channel: str) -> str:
     return channel.lower().strip().replace("#", "").replace("@", "")
 
-def str2bool(v):
+def str2bool(v) -> bool:
     return v.lower() in ("yes", "true", "yup", "1", "t", "y", "on")
 
 
-def chunk_list(lst, size):
+def chunk_list(lst, size) -> typing.List[typing.List[typing.Any]]:
     # looping till length l
     for i in range(0, len(lst), size):
         yield lst[i : i + size]
 
 
-def get_random_string(length: int = 10):
+def get_random_string(length: int = 10) -> str:
     return "".join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
 
 
-def get_random_name(noun_count=1, adjective_count=1):
+def get_random_name(noun_count=1, adjective_count=1) -> str:
     try:
         adjectives = load_from_gist("adjectives", adjective_count)
         nouns = load_from_gist("nouns", noun_count)
@@ -78,19 +78,19 @@ def get_random_name(noun_count=1, adjective_count=1):
                 return "New Voice Channel"
 
 
-def to_timestamp(date, tz: datetime.timezone = None):
+def to_timestamp(date, tz: datetime.timezone = None) -> float:
     return (date - datetime.datetime(1970, 1, 1, tzinfo=tz)).total_seconds()
 
 
-def from_timestamp(timestamp):
+def from_timestamp(timestamp) -> datetime.datetime:
     return datetime.datetime.fromtimestamp(timestamp)
 
 
-def get_timestamp():
+def get_timestamp() -> float:
     return to_timestamp(datetime.datetime.utcnow())
 
 
-def load_from_gist(type, count):
+def load_from_gist(type, count) -> typing.List[str]:
     types = ["adjectives", "nouns", "verbs"]
     if type not in types:
         type = "nouns"
@@ -106,12 +106,12 @@ def load_from_gist(type, count):
     return random.sample(jdata, count)
 
 
-def get_args_dict(func, args, kwargs):
+def get_args_dict(func, args, kwargs) -> typing.Dict[str, typing.Any]:
     args_names = func.__code__.co_varnames[: func.__code__.co_argcount]
     return {**dict(zip(args_names, args)), **kwargs}
 
 
-def str_replace(input_string: str, *args, **kwargs):
+def str_replace(input_string: str, *args, **kwargs) -> str:
     xargs = get_args_dict(str_replace, args, kwargs)
     result = input_string
     for a in xargs:
@@ -119,7 +119,7 @@ def str_replace(input_string: str, *args, **kwargs):
     return result
 
 
-def get_last_section_in_url(name):
+def get_last_section_in_url(name) -> str:
     if "/" in name:
         # if the name has a slash in it, then it is a url. Remove everything before and including the slash
         name_split = name.rsplit("/", 1)

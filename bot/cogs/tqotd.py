@@ -12,7 +12,7 @@ from .lib import loglevel
 
 
 class TacoQuestionOfTheDayCog(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
@@ -24,7 +24,7 @@ class TacoQuestionOfTheDayCog(commands.Cog):
         self.log.debug("NONE", "toqtd.__init__", "Initialized")
 
     @commands.command(name="tqotd", aliases=["tqod"])
-    async def tqotd(self, ctx):
+    async def tqotd(self, ctx) -> None:
         if ctx.message.echo:
             return
         channel = utils.clean_channel_name(ctx.message.channel.name)
@@ -46,5 +46,5 @@ class TacoQuestionOfTheDayCog(commands.Cog):
             await ctx.send(f"No TACO Question of the Day found. Check back later.")
 
 
-def prepare(bot):
+def prepare(bot) -> None:
     bot.add_cog(TacoQuestionOfTheDayCog(bot))

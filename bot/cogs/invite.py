@@ -17,7 +17,7 @@ from .lib import tacos_log as tacos_log
 from .lib import tacotypes
 
 class TacoInviteCog(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
@@ -35,7 +35,7 @@ class TacoInviteCog(commands.Cog):
 
     @commands.command(name="discord", aliases=["taco"])
     @commands.cooldown(1, 30, commands.Bucket.channel)
-    async def discord(self, ctx):
+    async def discord(self, ctx) -> None:
         _method = inspect.stack()[1][3]
 
         try:
@@ -58,7 +58,7 @@ class TacoInviteCog(commands.Cog):
 
     @commands.command(name="invite", aliases=["inv", "join"])
     # @commands.restrict_channels(channels=["ourtacobot", "ourtaco"])
-    async def invite(self, ctx, channel: str = None):
+    async def invite(self, ctx, channel: str = None) -> None:
         _method = inspect.stack()[1][3]
         try:
             if not self.permissions_helper.in_command_restricted_channel(ctx):
@@ -91,7 +91,7 @@ class TacoInviteCog(commands.Cog):
 
     @commands.command(name="leave", aliases=["part", "remove"])
     # @commands.restrict_channels(channels=["ourtacobot", "ourtaco"])
-    async def leave(self, ctx, channel: str = None):
+    async def leave(self, ctx, channel: str = None) -> None:
         _method = inspect.stack()[1][3]
         try:
             # only allowed in restricted channels
@@ -136,5 +136,5 @@ class TacoInviteCog(commands.Cog):
             await ctx.send(f"Error: {error}")
 
 
-def prepare(bot):
+def prepare(bot) -> None:
     bot.add_cog(TacoInviteCog(bot))
