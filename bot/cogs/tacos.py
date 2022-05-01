@@ -19,7 +19,7 @@ from .lib import utils
 class TacosCog(commands.Cog):
     """Allows the streamer to give a user tacos"""
 
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
@@ -36,7 +36,7 @@ class TacosCog(commands.Cog):
         self.log.debug("NONE", "tacos.__init__", "Initialized")
 
     @commands.command(name="tacos")
-    async def tacos(self, ctx, subcommand: str = None, *args):
+    async def tacos(self, ctx, subcommand: str = None, *args) -> None:
         _method = inspect.stack()[1][3]
 
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
@@ -63,7 +63,7 @@ class TacosCog(commands.Cog):
         else:
             await self._tacos_balance(ctx, args)
 
-    async def _tacos_top(self, ctx, args):
+    async def _tacos_top(self, ctx, args) -> None:
         _method = inspect.stack()[1][3]
         if ctx.message.echo:
             return
@@ -103,7 +103,7 @@ class TacosCog(commands.Cog):
         except Exception as e:
             self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 
-    async def _tacos_balance(self, ctx, args):
+    async def _tacos_balance(self, ctx, args) -> None:
         _method = inspect.stack()[1][3]
         if ctx.message.echo:
             return
@@ -134,7 +134,7 @@ class TacosCog(commands.Cog):
         except Exception as e:
             self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 
-    async def _tacos_balance_for_user(self, ctx, user):
+    async def _tacos_balance_for_user(self, ctx, user) -> None:
         _method = inspect.stack()[1][3]
         if ctx.message.echo:
             return
@@ -159,7 +159,7 @@ class TacosCog(commands.Cog):
         except Exception as e:
             self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 
-    async def _tacos_give(self, ctx, args):
+    async def _tacos_give(self, ctx, args) -> None:
         _method = inspect.stack()[1][3]
         if ctx.message.echo:
             return
@@ -242,7 +242,7 @@ class TacosCog(commands.Cog):
         else:
             await self._tacos_help(ctx, args)
 
-    async def _tacos_take(self, ctx, args):
+    async def _tacos_take(self, ctx, args) -> None:
         _method = inspect.stack()[1][3]
         if ctx.message.echo:
             return
@@ -279,11 +279,11 @@ class TacosCog(commands.Cog):
         else:
             await self._t
 
-    async def _tacos_help(self, ctx, args):
+    async def _tacos_help(self, ctx, args) -> None:
         if ctx.message.echo:
             return
         await ctx.send(f"Usage: !taco tacos [command] [args]. Available Commands: {', '.join(self.subcommands)}")
 
 
-def prepare(bot):
+def prepare(bot) -> None:
     bot.add_cog(TacosCog(bot))

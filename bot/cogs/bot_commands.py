@@ -24,7 +24,7 @@ from .lib import tacotypes
 ###
 
 class BotCommands(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
@@ -42,7 +42,7 @@ class BotCommands(commands.Cog):
 
     @commands.command(name="raid", aliases=["host"])
     # @commands.restrict_channels(channels=["ourtacobot", "ourtaco"])
-    async def raid(self, ctx, source_channel: str, dest_channel: str):
+    async def raid(self, ctx, source_channel: str, dest_channel: str) -> None:
         _method = inspect.stack()[1][3]
         try:
             source_channel = utils.clean_channel_name(source_channel)
@@ -71,7 +71,7 @@ class BotCommands(commands.Cog):
 
     @commands.command(name="support")
     # @commands.restrict_channels(channels=["ourtacobot", "ourtaco"])
-    async def support(self, ctx, username: str, channel: str):
+    async def support(self, ctx, username: str, channel: str) -> None:
         """
         Give a user tacos for supporting a channel.
         This can be subscribing, gifting, or cheer bits >= 100
@@ -102,5 +102,5 @@ class BotCommands(commands.Cog):
         except Exception as e:
             self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 
-def prepare(bot):
+def prepare(bot) -> None:
     bot.add_cog(BotCommands(bot))

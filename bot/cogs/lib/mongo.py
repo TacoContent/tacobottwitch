@@ -13,19 +13,19 @@ from . import loglevel
 
 
 class MongoDatabase:
-    def __init__(self):
+    def __init__(self) -> None:
         self.client = None
         self.connection = None
         self.settings = settings.Settings()
         pass
 
-    def open(self):
+    def open(self) -> None:
         if not self.settings.db_url:
             raise ValueError("MONGODB_URL is not set")
         self.client = MongoClient(self.settings.db_url)
         self.connection = self.client.tacobot
 
-    def close(self):
+    def close(self) -> None:
         try:
             if self.client:
                 self.client.close()
@@ -33,7 +33,7 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
 
-    def insert_log(self, channel: str, level: loglevel.LogLevel, method: str, message: str, stackTrace: str = None):
+    def insert_log(self, channel: str, level: loglevel.LogLevel, method: str, message: str, stackTrace: str = None) -> None:
         try:
             if self.connection is None:
                 self.open()
@@ -52,7 +52,7 @@ class MongoDatabase:
         finally:
             self.close()
 
-    def clear_log(self, channel: str):
+    def clear_log(self, channel: str) -> None:
         try:
             if self.connection is None:
                 self.open()
@@ -64,7 +64,7 @@ class MongoDatabase:
         finally:
             self.close()
 
-    def get_channel_settings(self, channel: str):
+    def get_channel_settings(self, channel: str) -> dict:
         try:
             if self.connection is None:
                 self.open()
@@ -84,7 +84,7 @@ class MongoDatabase:
             self.close()
             pass
 
-    def set_channel_settings(self, channel: str, settings: dict):
+    def set_channel_settings(self, channel: str, settings: dict) -> None:
         try:
             if self.connection is None:
                 self.open()
@@ -103,7 +103,7 @@ class MongoDatabase:
             self.close()
             pass
 
-    def get_settings(self, name: str):
+    def get_settings(self, name: str) -> dict:
         try:
             if self.connection is None:
                 self.open()
@@ -120,7 +120,7 @@ class MongoDatabase:
             if self.connection:
                 self.close()
 
-    def get_bot_twitch_channels(self):
+    def get_bot_twitch_channels(self) -> typing.List[str]:
         try:
             if self.connection is None:
                 self.open()
@@ -143,7 +143,7 @@ class MongoDatabase:
         finally:
             self.close()
 
-    def add_bot_to_channel(self, twitch_channel):
+    def add_bot_to_channel(self, twitch_channel) -> None:
         try:
             if self.connection is None:
                 self.open()
@@ -171,7 +171,7 @@ class MongoDatabase:
         finally:
             self.close()
 
-    def remove_bot_from_channel(self, twitch_channel):
+    def remove_bot_from_channel(self, twitch_channel) -> bool:
         try:
             if self.connection is None:
                 self.open()
@@ -192,7 +192,7 @@ class MongoDatabase:
         finally:
             self.close()
 
-    def get_any_invite(self):
+    def get_any_invite(self) -> dict:
         try:
             if self.connection is None:
                 self.open()
@@ -215,7 +215,7 @@ class MongoDatabase:
         finally:
             self.close()
 
-    def get_invite_for_user(self, twitch_name: str):
+    def get_invite_for_user(self, twitch_name: str) -> dict:
         try:
             if self.connection is None:
                 self.open()
@@ -238,7 +238,7 @@ class MongoDatabase:
         finally:
             self.close()
 
-    def get_discord_id_for_twitch_username(self, username: str):
+    def get_discord_id_for_twitch_username(self, username: str) -> str:
         try:
             return self._get_discord_id(username)
         except Exception as ex:
@@ -248,7 +248,7 @@ class MongoDatabase:
         finally:
             self.close()
 
-    def get_tqotd(self):
+    def get_tqotd(self) -> str:
         try:
             if self.connection is None:
                 self.open()
@@ -279,7 +279,7 @@ class MongoDatabase:
         finally:
             self.close()
 
-    def _get_discord_id(self, username: str):
+    def _get_discord_id(self, username: str) -> str:
         if self.connection is None:
             self.open()
         username = utils.clean_channel_name(username)
@@ -289,10 +289,10 @@ class MongoDatabase:
         else:
             return None
 
-    def update_twitch_user(self, name: str, user_id: str):
+    def update_twitch_user(self, name: str, user_id: str) -> None:
         pass
 
-    def set_twitch_discord_link_code(self, username: str, code: str):
+    def set_twitch_discord_link_code(self, username: str, code: str) -> bool:
         try:
             if self.connection is None:
                 self.open()
@@ -311,7 +311,7 @@ class MongoDatabase:
         finally:
             self.close()
 
-    def link_twitch_to_discord_from_code(self, twitch_name: str, code: str):
+    def link_twitch_to_discord_from_code(self, twitch_name: str, code: str) -> bool:
         try:
             if self.connection is None:
                 self.open()
@@ -340,7 +340,7 @@ class MongoDatabase:
         finally:
             self.close()
 
-    def get_top_tacos_leaderboard(self, limit: int = 10):
+    def get_top_tacos_leaderboard(self, limit: int = 10) -> list:
         try:
             if self.connection is None:
                 self.open()
@@ -372,7 +372,7 @@ class MongoDatabase:
         finally:
             self.close()
 
-    def get_tacos_count(self, twitch_name: str):
+    def get_tacos_count(self, twitch_name: str) -> int:
         try:
             if self.connection is None:
                 self.open()
@@ -397,7 +397,7 @@ class MongoDatabase:
             if self.connection:
                 self.close()
 
-    def add_tacos(self, twitch_name: str, count: int):
+    def add_tacos(self, twitch_name: str, count: int) -> int:
         try:
             if self.connection is None:
                 self.open()
@@ -433,7 +433,7 @@ class MongoDatabase:
             if self.connection:
                 self.close()
 
-    def remove_tacos(self, twitch_name: str, count: int):
+    def remove_tacos(self, twitch_name: str, count: int) -> int:
         try:
             if count < 0:
                 print(f"[DEBUG] [mongo.remove_tacos] [channel:none] Count is less than 0")
@@ -475,7 +475,7 @@ class MongoDatabase:
             if self.connection:
                 self.close()
 
-    def track_taco_gift(self, channel: str, user: str, amount: int, reason: str = None):
+    def track_taco_gift(self, channel: str, user: str, amount: int, reason: str = None) -> None:
         try:
             if self.connection is None:
                 self.open()
@@ -503,7 +503,7 @@ class MongoDatabase:
             if self.connection:
                 self.close()
 
-    def get_total_gifted_tacos(self, channel: str, timespan_seconds: int = 86400):
+    def get_total_gifted_tacos(self, channel: str, timespan_seconds: int = 86400) -> int:
         try:
             if self.connection is None:
                 self.open()
@@ -530,7 +530,7 @@ class MongoDatabase:
             if self.connection:
                 self.close()
 
-    def get_total_gifted_tacos_to_user(self, channel: str, user: str, timespan_seconds: int = 86400):
+    def get_total_gifted_tacos_to_user(self, channel: str, user: str, timespan_seconds: int = 86400) -> int:
         try:
             if self.connection is None:
                 self.open()
@@ -560,7 +560,7 @@ class MongoDatabase:
             if self.connection:
                 self.close()
 
-    def track_user_message_in_chat(self, channel: str, user: str, message: str, timespan_seconds: int = 86400):
+    def track_user_message_in_chat(self, channel: str, user: str, message: str, timespan_seconds: int = 86400) -> bool:
         # if the user has not messaged in the channel in the last timespan_seconds, add them to the database
         try:
             if self.connection is None:

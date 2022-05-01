@@ -23,14 +23,15 @@ from .lib import tacotypes
 
 
 class PokemonCommunityGameCog(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot) -> None:
 
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
         self.tacos_log = tacos_log.TacosLog(self.bot)
 
-        self.subcommands = ["start", "on", "enable", "stop", "off", "disable"]
+        self.start_commands = ["start", "on", "enable"]
+        self.stop_commands = ["stop", "off", "disable"]
 
         self.bot_user = "pokemoncommunitygame"
 
@@ -80,7 +81,7 @@ class PokemonCommunityGameCog(commands.Cog):
         self.log.debug("NONE", "pokemon.__init__", "Initialized")
 
     @commands.command(name="pokemon")
-    async def pokemon(self, ctx: commands.Context, subcommand: str = None, *args):
+    async def pokemon(self, ctx: commands.Context, subcommand: str = None, *args) -> None:
         _method = inspect.stack()[1][3]
 
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
@@ -92,12 +93,12 @@ class PokemonCommunityGameCog(commands.Cog):
             return
 
         if subcommand in self.subcommands:
-            if subcommand.lower() == "stop" or subcommand.lower() == "off" or subcommand.lower() == "disable":
+            if subcommand.lower() in self.stop_commands:
                 await self._pokemon_stop(ctx, args)
-            elif subcommand.lower() == "start" or subcommand.lower() == "on" or subcommand.lower() == "enable":
+            elif subcommand.lower() in self.start_commands:
                 await self._pokemon_start(ctx, args)
 
-    async def _pokemon_stop(self, ctx: commands.Context, args):
+    async def _pokemon_stop(self, ctx: commands.Context, args) -> None:
         _method = inspect.stack()[1][3]
         try:
             channel = utils.clean_channel_name(ctx.channel.name)
@@ -129,7 +130,7 @@ class PokemonCommunityGameCog(commands.Cog):
         except Exception as e:
             self.log.error(channel, "pokemon.pokemon_stop", str(e), traceback.format_exc())
 
-    async def _pokemon_start(self, ctx: commands.Context, args):
+    async def _pokemon_start(self, ctx: commands.Context, args) -> None:
         _method = inspect.stack()[1][3]
         try:
             channel = utils.clean_channel_name(ctx.message.channel.name)
@@ -163,7 +164,7 @@ class PokemonCommunityGameCog(commands.Cog):
 
     @commands.Cog.event()
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
-    async def event_message(self, message):
+    async def event_message(self, message) -> None:
         try:
             if message.author is None or message.channel is None:
                 return
@@ -251,5 +252,5 @@ class PokemonCommunityGameCog(commands.Cog):
             self.log.error(channel, "pokemon.event_message", str(e), traceback.format_exc())
 
 
-def prepare(bot):
+def prepare(bot) -> None:
     bot.add_cog(PokemonCommunityGameCog(bot))

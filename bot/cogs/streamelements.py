@@ -21,7 +21,7 @@ from .lib import tacotypes
 
 
 class StreamElementsBotCog(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot) -> None:
 
         self.bot = bot
         self.db = mongo.MongoDatabase()
@@ -44,7 +44,7 @@ class StreamElementsBotCog(commands.Cog):
 
     @commands.Cog.event()
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
-    async def event_message(self, message):
+    async def event_message(self, message) -> None:
         try:
             if message.author is None or message.channel is None:
                 return
@@ -94,5 +94,6 @@ class StreamElementsBotCog(commands.Cog):
                     return
         except Exception as e:
             self.log.error(message.channel.name, "streamelements.event_message", str(e), traceback.format_exc())
-def prepare(bot):
+            
+def prepare(bot) -> None:
     bot.add_cog(StreamElementsBotCog(bot))

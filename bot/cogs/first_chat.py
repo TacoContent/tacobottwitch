@@ -21,7 +21,7 @@ from .lib import tacotypes
 # give the user tacos for their first chat message in a channel.
 
 class FirstChatCog(commands.Cog):
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
@@ -39,7 +39,7 @@ class FirstChatCog(commands.Cog):
 
     @commands.Cog.event()
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
-    async def event_message(self, message):
+    async def event_message(self, message) -> None:
         try:
             if message.author is None or message.channel is None:
                 return
@@ -61,5 +61,5 @@ class FirstChatCog(commands.Cog):
         except Exception as e:
             self.log.error(message.channel.name, "first_chat.event_message", str(e), traceback.format_exc())
 
-def prepare(bot):
+def prepare(bot) -> None:
     bot.add_cog(FirstChatCog(bot))
