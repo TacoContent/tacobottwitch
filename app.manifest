@@ -266,7 +266,9 @@
 						"on",
 						"enable"
 					],
-					"previews": []
+					"previews": [
+						"https://i.imgur.com/meTuhIQ.png"
+					]
 				},
 				"stop": {
 					"description": "Disables the bot from giving tacos if someone tips through streamelements.",
@@ -287,7 +289,9 @@
 						"off",
 						"disable"
 					],
-					"previews": []
+					"previews": [
+						"https://i.imgur.com/Uzy2O9B.png"
+					]
 				},
 				"tip": {
 					"description": "Sets the streamelements tip message so the bot knows what to look for. Make sure to include the `{user}`, `{currency}`, `{amount}` tags. If you use the default message, you do not need to set this.",
@@ -304,7 +308,9 @@
 					"aliases": [
 						"tip"
 					],
-					"previews": []
+					"previews": [
+						"https://i.imgur.com/X5rOzTo.png"
+					]
 				}
 			}
 		},

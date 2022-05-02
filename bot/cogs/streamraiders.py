@@ -30,6 +30,7 @@ class StreamCaptainBotCog(commands.Cog):
         self.TACO_AMOUNT = 2
         self.bot_user = "streamcaptainbot"
 
+        self.event_name = "streamraiders"
         self.start_commands = ["start", "on", "enable"]
         self.stop_commands = ["stop", "off", "disable"]
 
@@ -90,7 +91,7 @@ class StreamCaptainBotCog(commands.Cog):
             prefix = prefixes[0]
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
-            channel_settings[self.bot_user]["enabled"] = False
+            channel_settings[self.event_name]["enabled"] = False
             self.settings.set_channel_settings(self.db, channel, channel_settings)
 
             await ctx.reply(
@@ -122,7 +123,7 @@ class StreamCaptainBotCog(commands.Cog):
             prefix = prefixes[0]
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
-            channel_settings[self.bot_user]["enabled"] = True
+            channel_settings[self.event_name]["enabled"] = True
             self.settings.set_channel_settings(self.db, channel, channel_settings)
 
             await ctx.reply(
@@ -142,7 +143,7 @@ class StreamCaptainBotCog(commands.Cog):
             channel = utils.clean_channel_name(message.channel.name)
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
-            game_settings = channel_settings.get(self.bot_user, { "enabled": True })
+            game_settings = channel_settings.get(self.event_name, { "enabled": True })
             if not game_settings.get("enabled", True):
                 return
 
