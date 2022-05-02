@@ -65,7 +65,10 @@ class Settings:
             },
             "paul_wanker": {"enabled": True},
             "dixperbro": {"enabled": True},
-            "streamelements": {"enabled": True},
+            "streamelements": {
+                "enabled": True,
+                "tip_message": r"^(?P<user>\w+)\s(?:just\s)?tipped\s(?P<tip>[¥$₡£¢]?\d{1,}(?:\.\d{1,})?)",
+            },
             "streamraiders": {"enabled": True},
             "marblesonstream": {"enabled": True},
         }

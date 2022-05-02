@@ -90,9 +90,7 @@
 						"on",
 						"enable"
 					],
-					"previews": [
-
-					]
+					"previews": []
 				},
 				"stop": {
 					"description": "Disabled the bot from giving tacos when people purchase dixper packs.",
@@ -113,9 +111,7 @@
 						"off",
 						"disable"
 					],
-					"previews": [
-
-					]
+					"previews": []
 				}
 			}
 		},
@@ -231,6 +227,145 @@
 					"previews": [
 						"https://i.imgur.com/oc6hRpS.png"
 					]
+				}
+			}
+		},
+		"streamelements": {
+			"description": "Allows you to control if the bot will give tacos for streamelements tips. If you do not use streamelements  in your channel, this setting doesn't matter.",
+			"usage": "{{prefix}}streamelements <on/off>",
+			"examples": [
+				"{{prefix}}streamelements on",
+				"{{prefix}}streamelements start",
+				"{{prefix}}streamelements enable",
+				"{{prefix}}streamelements off",
+				"{{prefix}}streamelements stop",
+				"{{prefix}}streamelements disable"
+			],
+			"cooldown": 30,
+			"permissions": [
+				"moderator"
+			],
+			"enabled": true,
+			"subcommands": {
+				"start": {
+					"description": "Enables the bot to give tacos if someone tips through streamelements.",
+					"usage": "{{prefix}}streamelements start",
+					"examples": [
+						"{{prefix}}streamelements on",
+						"{{prefix}}streamelements start",
+						"{{prefix}}streamelements enable"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"moderator"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"aliases": [
+						"start",
+						"on",
+						"enable"
+					],
+					"previews": []
+				},
+				"stop": {
+					"description": "Disables the bot from giving tacos if someone tips through streamelements.",
+					"usage": "{{prefix}}streamelements stop",
+					"examples": [
+						"{{prefix}}streamelements off",
+						"{{prefix}}streamelements stop",
+						"{{prefix}}streamelements disable"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"moderator"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"aliases": [
+						"stop",
+						"off",
+						"disable"
+					],
+					"previews": []
+				},
+				"tip": {
+					"description": "Sets the streamelements tip message so the bot knows what to look for. Make sure to include the `{user}`, `{currency}`, `{amount}` tags. If you use the default message, you do not need to set this.",
+					"usage": "{{prefix}}streamelements tip <message>",
+					"examples": [
+						"{{prefix}}streamelements tip {user} just tipped {currency}{amount} PogChamp"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"broadcaster"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"aliases": [
+						"tip"
+					],
+					"previews": []
+				}
+			}
+		},
+		"streamraiders": {
+			"description": "Allows you to control if the bot will give tacos for streamraiders tips. If you do not use streamraiders  in your channel, this setting doesn't matter.",
+			"usage": "{{prefix}}streamraiders <on/off>",
+			"examples": [
+				"{{prefix}}streamraiders on",
+				"{{prefix}}streamraiders start",
+				"{{prefix}}streamraiders enable",
+				"{{prefix}}streamraiders off",
+				"{{prefix}}streamraiders stop",
+				"{{prefix}}streamraiders disable"
+			],
+			"cooldown": 30,
+			"permissions": [
+				"moderator"
+			],
+			"enabled": true,
+			"subcommands": {
+				"start": {
+					"description": "Enables the bot to give tacos if someone Epic on the battlefield in streamraiders.",
+					"usage": "{{prefix}}streamraiders start",
+					"examples": [
+						"{{prefix}}streamraiders on",
+						"{{prefix}}streamraiders start",
+						"{{prefix}}streamraiders enable"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"moderator"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"aliases": [
+						"start",
+						"on",
+						"enable"
+					],
+					"previews": []
+				},
+				"stop": {
+					"description": "Disables the bot from giving tacos if someone places an Epic on the battlefield in streamraiders.",
+					"usage": "{{prefix}}streamraiders stop",
+					"examples": [
+						"{{prefix}}streamraiders off",
+						"{{prefix}}streamraiders stop",
+						"{{prefix}}streamraiders disable"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"moderator"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"aliases": [
+						"stop",
+						"off",
+						"disable"
+					],
+					"previews": []
 				}
 			}
 		},
@@ -474,8 +609,12 @@
 				"description": "The first time someone chats in your channel, in a rolling 24 hour period, I will give them 1 taco."
 			},
 			"raid": {
-				"name": "Host or Raid",
-				"description": "When an incoming raid/host from a TACO member is detected I will give the raiding channel 5 tacos."
+				"name": "Raid",
+				"description": "When an incoming raid from a TACO member is detected I will give the raiding channel 5 tacos."
+			},
+			"host": {
+				"name": "Host",
+				"description": "When an incoming host from a TACO member is detected I will give the raiding channel 5 tacos."
 			},
 			"cheer": {
 				"name": "Cheer",

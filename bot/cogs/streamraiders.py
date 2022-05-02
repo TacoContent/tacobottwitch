@@ -29,6 +29,10 @@ class StreamCaptainBotCog(commands.Cog):
         self.tacos_log = tacos_log.TacosLog(self.bot)
         self.TACO_AMOUNT = 2
         self.bot_user = "streamcaptainbot"
+
+        self.start_commands = ["start", "on", "enable"]
+        self.stop_commands = ["stop", "off", "disable"]
+
         self.epic_regex = re.compile(
             r"^(?P<user>\w+)\sjust\splaced\san\s(?P<name>Epic\s(?:\w+\s?)+?)\son\sthe\sbattlefield",
             re.MULTILINE | re.IGNORECASE,
@@ -44,6 +48,88 @@ class StreamCaptainBotCog(commands.Cog):
         self.log = logger.Log(minimumLogLevel=log_level)
         self.permissions_helper = permissions.Permissions()
         self.log.debug("NONE", "streamraiders.__init__", "Initialized")
+
+    @commands.command(name="streamraiders")
+    async def pokemon(self, ctx: commands.Context, subcommand: str = None, *args) -> None:
+        _method = inspect.stack()[1][3]
+
+        if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
+            self.log.debug(
+                ctx.message.channel.name,
+                _method,
+                f"{ctx.message.author.name} does not have permission to use this command.",
+            )
+            return
+
+        if subcommand is not None:
+            if subcommand.lower() in self.stop_commands:
+                await self._streamraiders_stop(ctx, args)
+            elif subcommand.lower() in self.start_commands:
+                await self._streamraiders_start(ctx, args)
+
+    async def _streamraiders_stop(self, ctx: commands.Context, args) -> None:
+        _method = inspect.stack()[1][3]
+        try:
+            channel = utils.clean_channel_name(ctx.channel.name)
+
+            if channel is None:
+                return
+
+            if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
+                self.log.debug(
+                    channel,
+                    _method,
+                    f"{ctx.message.author.name} does not have permission to use this command.",
+                )
+                return
+
+            self.log.debug(channel, "streamraiders.streamraiders_stop", f"Stopping streamraiders event in {channel}")
+            prefixes = self.settings.prefixes
+            if not prefixes:
+                prefixes = ["!taco "]
+            prefix = prefixes[0]
+
+            channel_settings = self.settings.get_channel_settings(self.db, channel)
+            channel_settings[self.bot_user]["enabled"] = False
+            self.settings.set_channel_settings(self.db, channel, channel_settings)
+
+            await ctx.reply(
+                f"@{ctx.message.author.name}, I will no longer give tacos if someone places an epic on the battlefield in streamraiders. You can start it again with `{prefix}streamraiders start`."
+            )
+        except Exception as e:
+            self.log.error(channel, "streamraiders.streamraiders_stop", str(e), traceback.format_exc())
+
+    async def _streamraiders_start(self, ctx: commands.Context, args) -> None:
+        _method = inspect.stack()[1][3]
+        try:
+            channel = utils.clean_channel_name(ctx.message.channel.name)
+
+            if channel is None:
+                return
+
+            if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
+                self.log.debug(
+                    channel,
+                    _method,
+                    f"{ctx.message.author.name} does not have permission to use this command.",
+                )
+                return
+
+            self.log.debug(channel, "streamraiders.streamraiders_start", f"Starting streamraiders event in {channel}")
+            prefixes = self.settings.prefixes
+            if not prefixes:
+                prefixes = ["!taco "]
+            prefix = prefixes[0]
+
+            channel_settings = self.settings.get_channel_settings(self.db, channel)
+            channel_settings[self.bot_user]["enabled"] = True
+            self.settings.set_channel_settings(self.db, channel, channel_settings)
+
+            await ctx.reply(
+                f"@{ctx.message.author.name}, I will now give tacos if someone places an epic on the battlefield in streamraiders. You can stop it again with `{prefix}streamraiders stop`."
+            )
+        except Exception as e:
+            self.log.error(channel, "streamraiders.streamraiders_start", str(e), traceback.format_exc())
 
     @commands.Cog.event()
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message

@@ -59,7 +59,7 @@ class DixperBroCog(commands.Cog):
             )
             return
 
-        if subcommand in self.subcommands:
+        if subcommand is not None:
             if subcommand.lower() in self.stop_commands:
                 await self._dixper_stop(ctx, args)
             elif subcommand.lower() in self.start_commands:
