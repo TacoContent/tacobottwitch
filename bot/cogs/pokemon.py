@@ -92,7 +92,7 @@ class PokemonCommunityGameCog(commands.Cog):
             )
             return
 
-        if subcommand in self.subcommands:
+        if subcommand is not None:
             if subcommand.lower() in self.stop_commands:
                 await self._pokemon_stop(ctx, args)
             elif subcommand.lower() in self.start_commands:
@@ -114,7 +114,7 @@ class PokemonCommunityGameCog(commands.Cog):
                 )
                 return
 
-            self.log.debug(channel, "pokemon.pokemon_stop", f"Stopping event in {channel}")
+            self.log.debug(channel, "pokemon.pokemon_stop", f"Stopping pokemon event in {channel}")
             prefixes = self.settings.prefixes
             if not prefixes:
                 prefixes = ["!taco "]
@@ -125,7 +125,7 @@ class PokemonCommunityGameCog(commands.Cog):
             self.settings.set_channel_settings(self.db, channel, channel_settings)
 
             await ctx.reply(
-                f"@{ctx.message.author.display_name}, I will no longer participate in the pokemon community game. You can start it again with `{prefix}pokemon start`."
+                f"@{ctx.message.author.name}, I will no longer participate in the pokemon community game. You can start it again with `{prefix}pokemon start`."
             )
         except Exception as e:
             self.log.error(channel, "pokemon.pokemon_stop", str(e), traceback.format_exc())
@@ -146,7 +146,7 @@ class PokemonCommunityGameCog(commands.Cog):
                 )
                 return
 
-            self.log.debug(channel, "pokemon.pokemon_start", f"Starting event in {channel}")
+            self.log.debug(channel, "pokemon.pokemon_start", f"Starting pokemon event in {channel}")
             prefixes = self.settings.prefixes
             if not prefixes:
                 prefixes = ["!taco "]
@@ -157,7 +157,7 @@ class PokemonCommunityGameCog(commands.Cog):
             self.settings.set_channel_settings(self.db, channel, channel_settings)
 
             await ctx.reply(
-                f"@{ctx.message.author.display_name}, I will now participate in the pokemon community game. You can stop it with `{prefix}pokemon stop`."
+                f"@{ctx.message.author.name}, I will now participate in the pokemon community game. You can stop it with `{prefix}pokemon stop`."
             )
         except Exception as e:
             self.log.error(channel, "pokemon.pokemon_start", str(e), traceback.format_exc())
