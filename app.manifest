@@ -90,7 +90,9 @@
 						"on",
 						"enable"
 					],
-					"previews": []
+					"previews": [
+						"https://i.imgur.com/3fkoGdY.png"
+					]
 				},
 				"stop": {
 					"description": "Disabled the bot from giving tacos when people purchase dixper packs.",
@@ -111,7 +113,9 @@
 						"off",
 						"disable"
 					],
-					"previews": []
+					"previews": [
+						"https://i.imgur.com/0a2SjiQ.png"
+					]
 				}
 			}
 		},
