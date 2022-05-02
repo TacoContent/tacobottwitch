@@ -354,7 +354,9 @@
 						"on",
 						"enable"
 					],
-					"previews": []
+					"previews": [
+						"https://i.imgur.com/Fup71Na.png"
+					]
 				},
 				"stop": {
 					"description": "Disables the bot from giving tacos if someone places an Epic on the battlefield in streamraiders.",
@@ -375,7 +377,9 @@
 						"off",
 						"disable"
 					],
-					"previews": []
+					"previews": [
+						"https://i.imgur.com/EJYrl1Y.png"
+					]
 				}
 			}
 		},
