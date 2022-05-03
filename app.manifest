@@ -312,6 +312,14 @@
 					"aliases": [
 						"tip"
 					],
+					"arguments": {
+						"message": {
+							"required": true,
+							"description": "The message to set as the tip message. Make sure to include the `{user}`, `{currency}`, `{amount}` tags.",
+							"type": "string",
+							"default": ""
+						}
+					},
 					"previews": [
 						"https://i.imgur.com/X5rOzTo.png"
 					]
@@ -591,6 +599,7 @@
 			]
 		},
 		"_link": {
+			"label": "link <code>",
 			"description": "Links your discord account with your twitch account.",
 			"usage": "{{prefix}}link <code>",
 			"examples": [
