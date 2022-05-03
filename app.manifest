@@ -317,7 +317,7 @@
 							"required": true,
 							"description": "The message to set as the tip message. Make sure to include the `{user}`, `{currency}`, `{amount}` tags.",
 							"type": "string",
-							"default": ""
+							"default": "\"\""
 						}
 					},
 					"previews": [
