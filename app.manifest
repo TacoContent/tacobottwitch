@@ -599,7 +599,7 @@
 			]
 		},
 		"_link": {
-			"label": "link <code>",
+			"label": "link \\<code\\>",
 			"description": "Links your discord account with your twitch account.",
 			"usage": "{{prefix}}link <code>",
 			"examples": [
