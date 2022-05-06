@@ -184,7 +184,7 @@
 			"permissions": [
 				"moderator"
 			],
-			"enabled": true,
+			"enabled": false,
 			"subcommands": {
 				"start": {
 					"description": "Enables the bot to participate in the pokemon community game.",
@@ -660,6 +660,7 @@
 				"description": "When someone tips through Stream Elements, I will give them 5 tacos."
 			},
 			"pokemon": {
+				"enabled": false,
 				"name": "Pokemon Community Game",
 				"description": "If you have the Pokemon Community Game running in your channel, I will try to catch Pokemon in your channel."
 			}
