@@ -119,6 +119,23 @@
 				}
 			}
 		},
+		"game": {
+			"description": "Shows the name of the game that is currently being offered via the TACO Rewards.",
+			"usage": "{{prefix}}game",
+			"examples": [
+				"{{prefix}}game"
+			],
+			"cooldown": 30,
+			"permissions": [
+				"everyone"
+			],
+			"arguments": {},
+			"enabled": true,
+			"subcommands": {},
+			"previews": [
+				"https://i.imgur.com/9pPPWhz.png"
+			]
+		},
 		"invite": {
 			"description": "Invite OurTacoBot to your twitch channel.",
 			"usage": "{{prefix}}invite",
