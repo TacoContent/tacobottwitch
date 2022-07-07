@@ -7,6 +7,7 @@ import datetime
 import random
 import pytz
 import uuid
+from bson.objectid import ObjectId
 from . import utils
 from . import settings
 from . import loglevel
@@ -605,6 +606,33 @@ class MongoDatabase:
 
                 return True
 
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+        finally:
+            if self.connection:
+                self.close()
+
+    def get_active_game_offer(self):
+        try:
+            if self.connection is None:
+                self.open()
+
+            # get the open offer:
+            offer = self.connection.game_key_offers.find_one( {
+                "guild_id": self.settings.discord_guild_id,
+            })
+            if offer:
+                # get game data
+                game_data = self.connection.game_keys.find_one( {
+                    "_id": ObjectId(str(offer['game_key_id']))
+                })
+                if game_data:
+                    return {
+                        "title": game_data['title']
+                    }
+            else:
+                return None
         except Exception as ex:
             print(ex)
             traceback.print_exc()
