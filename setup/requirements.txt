@@ -1,5 +1,5 @@
 twitchio~=2.3.0
-pymongo==3.12.0
+pymongo==4.2.0
 validators==0.20.0
 python-dotenv==0.20.0
 requests
