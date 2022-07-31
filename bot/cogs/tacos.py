@@ -243,6 +243,8 @@ class TacosCog(commands.Cog):
             await self._tacos_help(ctx, args)
 
     async def _tacos_take(self, ctx, args) -> None:
+        max_take_per_user = 5
+
         _method = inspect.stack()[1][3]
         if ctx.message.echo:
             return
@@ -270,14 +272,19 @@ class TacosCog(commands.Cog):
                 reason = " ".join(args[2:])
             if amount.isdigit():
                 amount = int(amount)
-                if amount > 0:
+                if amount > max_take_per_user:
+                    await ctx.reply(
+                        f"@{ctx.message.author.display_name}, you can only take a maximum of {max_take_per_user} tacos at a time."
+                    )
+                    return
+                if amount > 0 and amount <= max_take_per_user:
                     await self.tacos_log.give_user_tacos(ctx.message.channel.name, user, reason, give_type=tacotypes.TacoTypes.CUSTOM, amount=-(amount))
                 else:
-                    await ctx.send(f"You can't take negative tacos!")
+                    await ctx.send(f"You can't take negative or more than {max_take_per_user} tacos!")
             else:
                 await ctx.send(f"{amount} is not a valid number!")
         else:
-            await self._t
+            await self._tacos_help(ctx, args)
 
     async def _tacos_help(self, ctx, args) -> None:
         if ctx.message.echo:
