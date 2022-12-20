@@ -54,6 +54,10 @@ class TacoBot:
 
     def get_initial_channels(self):
         try:
+            if self.settings.IS_DEBUG:
+                self.log.debug("NONE", "tacobot.get_initial_channels", "debug mode, joining default channels")
+                return self.settings.default_channels
+
             channels = self.db.get_bot_twitch_channels()
             self.log.debug("NONE", "tacobot.get_initial_channels", f"joining channels: {', '.join(channels)}")
 
