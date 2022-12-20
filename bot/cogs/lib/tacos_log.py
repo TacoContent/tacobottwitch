@@ -52,16 +52,19 @@ class TacosLog:
             {"name": "ℹ REASON", "value": reason},
         ]
 
-        embed = {
-            "author": {"name": "@OurTacoBot", "icon_url": "https://i.imgur.com/ejJu8de.png"},
-            "title": "",
-            "color": 0x00FF00,
-            "fields": fields,
-            "type": "rich"
-        }
+        embeds = [
+            {
+                "author": {"name": "@OurTacoBot", "icon_url": "https://i.imgur.com/ejJu8de.png"},
+                "type": "rich",
+                "title": "",
+                "description": "",
+                "color": 0x7289DA,
+                "fields": fields,
+            }
+        ]
 
         # send to discord
-        self.webhook.send(content=None, embed=embed)
+        self.webhook.send(embeds=embeds)
         channels = [utils.clean_channel_name(fromUser)]
         # send to bot channels + the fromUser
         [
