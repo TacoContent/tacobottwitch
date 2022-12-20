@@ -10,11 +10,12 @@ class DiscordWebhook():
         try:
 
             data = {}
-            if content is not None:
-                data['content'] = content
+            data['content'] = content if content is not None else ""
             if embeds is not None:
                 data['embeds'] = embeds
             data['tts'] = False
+
+            print(json.dumps(data, indent=4, sort_keys=True))
 
             r = requests.post(self.webhook_url, data=data)
             if r.status_code != 200 and r.status_code != 204:
