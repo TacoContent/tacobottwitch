@@ -56,7 +56,7 @@ class TacosLog:
             {
                 "author": {"name": "@OurTacoBot", "icon_url": "https://i.imgur.com/ejJu8de.png", "url": "https://twitch.tv/ourtacobot"},
                 "color": 0x7289DA,
-                 "fields": fields,
+                "fields": fields,
                 "footer": {"text": f"{self.settings.name} [Twitch] v{self.settings.APP_VERSION} developed by {self.settings.author}"},
             }
         ]
