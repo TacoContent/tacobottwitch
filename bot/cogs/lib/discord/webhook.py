@@ -8,7 +8,15 @@ class DiscordWebhook():
 
     def send(self, content: typing.Union[str, None] = None, embeds=None):
         try:
-            r = requests.post(self.webhook_url, data={ 'content': content, 'embeds': embeds, 'tts': False })
+
+            data = {}
+            if content is not None:
+                data['content'] = content
+            if embeds is not None:
+                data['embeds'] = embeds
+            data['tts'] = False
+
+            r = requests.post(self.webhook_url, data=data)
             if r.status_code != 200 and r.status_code != 204:
                 print("Error sending webhook: " + str(r.status_code))
         except Exception as ex:
