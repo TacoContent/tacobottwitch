@@ -9,7 +9,8 @@ from .lib import settings
 
 
 class MessageLoggingCog(commands.Cog):
-    def __init__(self) -> None:
+    def __init__(self, bot: commands.bot) -> None:
+        self.bot = bot
         pass
 
     @commands.Cog.event()
@@ -30,12 +31,12 @@ class MessageLoggingCog(commands.Cog):
         pass
         # Notify us when everything is ready!
         # We are logged in and ready to chat and use commands...
-        # print(f"Logged in as | {self.nick}")
-        # print(f"User id is | {self.user_id}")
+        print(f"Logged in as | {self.bot.nick}")
+        print(f"User id is | {self.bot.user_id}")
 
         # get the twitch channels to join from the database
         # channels = self.db.get_twitch_channels()
 
 
 def prepare(bot) -> None:
-    bot.add_cog(MessageLoggingCog())
+    bot.add_cog(MessageLoggingCog(bot))
