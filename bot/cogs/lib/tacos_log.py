@@ -26,7 +26,7 @@ class TacosLog:
     async def _log(self, fromUser: str, toUser: str, amount: int, total_taco_count: int, reason: str = None):
         if amount == 0:
             return
-        action = "given"
+        action = "received"
         action_adverb = "to"
         abs_amount = abs(amount)
         if amount < 0:
@@ -42,10 +42,26 @@ class TacosLog:
         if total_taco_count != 1:
             total_taco_word = "tacos"
 
-        content = f"{fromUser} has {action} {abs_amount} {taco_word} 🌮 {action_adverb} {toUser} for {reason}, giving them {total_taco_count} {total_taco_word} 🌮 total."
+        # content = f"{fromUser} has {action} {abs_amount} {taco_word} 🌮 {action_adverb} {toUser} for {reason}, giving them {total_taco_count} {total_taco_word} 🌮 total."
+
+        fields = [
+            {"name": "▶ TO USER", "value": toUser},
+            {"name": "◀ FROM USER", "value": fromUser},
+            {"name": f"🎬 {action.upper()}", "value": f"{abs_amount} {taco_word}"},
+            {"name": "🌮 TOTAL TACOS", "value": f"{total_taco_count} {total_taco_word}"},
+            {"name": "ℹ REASON", "value": reason},
+        ]
+
+        embed = {
+            "author": {"name": "@OurTacoBot", "icon_url": "https://i.imgur.com/ejJu8de.png"},
+            "title": "",
+            "color": 0x00FF00,
+            "fields": fields,
+            "type": "rich"
+        }
 
         # send to discord
-        self.webhook.send(content)
+        self.webhook.send(content=None, embeds=[embed])
         channels = [utils.clean_channel_name(fromUser)]
         # send to bot channels + the fromUser
         [
@@ -95,7 +111,9 @@ class TacosLog:
             reason_msg = reason if reason else "no reason given"  # self.settings.get_string(fromUser, 'no_reason')
 
             total_taco_count = self.db.add_tacos(toUser, taco_count)
-            self.db.track_taco_gift(utils.clean_channel_name(fromUser), utils.clean_channel_name(toUser), taco_count, reason_msg)
+            self.db.track_taco_gift(
+                utils.clean_channel_name(fromUser), utils.clean_channel_name(toUser), taco_count, reason_msg
+            )
             await self._log(fromUser, toUser, taco_count, total_taco_count, reason_msg)
             return total_taco_count
         except Exception as e:
