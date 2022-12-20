@@ -30,7 +30,7 @@ class TacosLog:
         action_adverb = "to"
         abs_amount = abs(amount)
         if amount < 0:
-            action = "taken"
+            action = "lost"
             action_adverb = "from"
         if reason is None:
             reason = "[no reason given]"
@@ -42,7 +42,7 @@ class TacosLog:
         if total_taco_count != 1:
             total_taco_word = "tacos"
 
-        # content = f"{fromUser} has {action} {abs_amount} {taco_word} 🌮 {action_adverb} {toUser} for {reason}, giving them {total_taco_count} {total_taco_word} 🌮 total."
+        content = f"{toUser} has {action} {abs_amount} {taco_word} 🌮 {action_adverb} from {fromUser} for {reason}, giving them {total_taco_count} {total_taco_word} 🌮 total."
 
         fields = [
             {"name": "▶ TO USER", "value": toUser},
@@ -61,7 +61,7 @@ class TacosLog:
         }
 
         # send to discord
-        self.webhook.send(content=None, embeds=[embed])
+        self.webhook.send(content=None, embed=embed)
         channels = [utils.clean_channel_name(fromUser)]
         # send to bot channels + the fromUser
         [
