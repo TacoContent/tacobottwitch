@@ -6,18 +6,23 @@ class DiscordWebhook():
     def __init__(self, webhook_url):
         self.webhook_url = webhook_url
 
-    def send(self, content: typing.Union[str, None] = None, embeds=None):
+    def send(self, **kwargs):
         try:
 
             data = {}
-            data['content'] = content if content is not None else ""
-            if embeds is not None:
-                data['embeds'] = embeds
-            data['tts'] = False
+            # if content is not None:
+            #     data['content'] = content
+            # if embeds is not None:
+            #     data['embeds'] = embeds
+            # data['tts'] = False
 
-            print(json.dumps(data, indent=4, sort_keys=True))
+            for key, value in kwargs.items():
+                if value is not None:
+                    data[key] = value
 
-            r = requests.post(self.webhook_url, data=data)
+            print(json.dumps(data))
+
+            r = requests.post(self.webhook_url, json=data)
             if r.status_code != 200 and r.status_code != 204:
                 print("Error sending webhook: " + str(r.status_code))
         except Exception as ex:

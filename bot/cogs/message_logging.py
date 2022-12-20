@@ -27,10 +27,11 @@ class MessageLoggingCog(commands.Cog):
 
     @commands.Cog.event()
     async def event_ready(self) -> None:
+        pass
         # Notify us when everything is ready!
         # We are logged in and ready to chat and use commands...
-        print(f"Logged in as | {self.nick}")
-        print(f"User id is | {self.user_id}")
+        # print(f"Logged in as | {self.nick}")
+        # print(f"User id is | {self.user_id}")
 
         # get the twitch channels to join from the database
         # channels = self.db.get_twitch_channels()

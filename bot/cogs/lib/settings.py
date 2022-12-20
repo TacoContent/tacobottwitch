@@ -26,6 +26,7 @@ class Settings:
         self.twitch_oauth_token = utils.dict_get(os.environ, "TWITCH_OAUTH_TOKEN", default_value=None)
         self.twitch_team_name = utils.dict_get(os.environ, "TWITCH_TEAM_NAME", default_value="taco")
         self.discord_guild_id = utils.dict_get(os.environ, "DISCORD_GUILD_ID", default_value="935294040386183228")
+        self.IS_DEBUG = utils.dict_get(os.environ, "DEBUG", default_value="false").upper() == "TRUE"
         self.discord_tacos_log_webhook_url = utils.dict_get(
             os.environ, "DISCORD_TACOS_LOG_WEBHOOK_URL", default_value=None
         )
