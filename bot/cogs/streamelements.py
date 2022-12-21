@@ -30,8 +30,12 @@ class StreamElementsBotCog(commands.Cog):
         self.tacos_log = tacos_log.TacosLog(self.bot)
         self.TACO_AMOUNT = 5
 
-        self.bot_user = "streamelements"
-        self.default_tip_pattern = r"^(?P<user>\w+)\s(?:just\s)?tipped\s(?P<tip>[¥$₡£¢]?\d{1,}(?:\.\d{1,})?)"
+        self.event_name = "streamelements"
+
+        self.default_settings = {
+            "enabled": True,
+            "tip_message": r"^(?P<user>\w+)\s(?:just\s)?tipped\s(?P<tip>[¥$₡£¢]?\d{1,}(?:\.\d{1,})?)",
+        }
 
         self.start_commands = ["start", "on", "enable"]
         self.stop_commands = ["stop", "off", "disable"]
@@ -96,7 +100,10 @@ class StreamElementsBotCog(commands.Cog):
                 return
 
             tip_message = ' '.join(args[0:]).strip()
-            channel_settings[self.bot_user]["tip_message"] = tip_message
+            if self.event_name not in channel_settings:
+                channel_settings[self.event_name] = self.default_settings
+
+            channel_settings[self.event_name]["tip_message"] = tip_message
             self.settings.set_channel_settings(self.db, channel, channel_settings)
             await ctx.reply(f"@{ctx.message.author.name} Your stream elements tip message has been set to '{tip_message}'. Use {prefix}streamelements tip <message> to change it.")
         except Exception as e:
@@ -125,7 +132,9 @@ class StreamElementsBotCog(commands.Cog):
             prefix = prefixes[0]
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
-            channel_settings[self.bot_user]["enabled"] = False
+            if self.event_name not in channel_settings:
+                channel_settings[self.event_name] = self.default_settings
+            channel_settings[self.event_user]["enabled"] = False
             self.settings.set_channel_settings(self.db, channel, channel_settings)
 
             await ctx.reply(
@@ -157,7 +166,9 @@ class StreamElementsBotCog(commands.Cog):
             prefix = prefixes[0]
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
-            channel_settings[self.bot_user]["enabled"] = True
+            if self.event_name not in channel_settings:
+                channel_settings[self.event_name] = self.default_settings
+            channel_settings[self.event_name]["enabled"] = True
             self.settings.set_channel_settings(self.db, channel, channel_settings)
 
             await ctx.reply(
@@ -177,11 +188,11 @@ class StreamElementsBotCog(commands.Cog):
             channel = utils.clean_channel_name(message.channel.name)
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
-            game_settings:dict[str,typing.Any] = channel_settings.get(self.bot_user, { "enabled": True })
+            game_settings:dict[str,typing.Any] = channel_settings.get(self.event_name, self.default_settings)
             if not game_settings.get("enabled", True):
                 return
 
-            tip_pattern:str = game_settings.get("tip_message", self.default_tip_pattern)
+            tip_pattern:str = game_settings.get("tip_message", self.default_settings["tip_message"])
             # replace {currency}{amount} with "(?P<tip>[¥$₡£¢]?\d{1,}(?:\.\d{1,})?)"
             tip_pattern = tip_pattern.replace("{currency}{amount}", r"(?P<tip>[¥$₡£¢]?\\d{1,}(?:\.\d{1,})?)")
             # replace {user} with "(?P<user>\w+)"
@@ -192,7 +203,7 @@ class StreamElementsBotCog(commands.Cog):
                 return
 
             # is the message from the bot?
-            if sender == utils.clean_channel_name(self.bot_user):
+            if sender == utils.clean_channel_name(self.event_name):
                 # if message.content matches tip regex
                 match = tip_regex.match(message.content)
                 if match:
