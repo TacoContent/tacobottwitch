@@ -113,9 +113,86 @@
 						"off",
 						"disable"
 					],
+					"previews": []
+				}
+			}
+		},"rainmaker": {
+			"description": "Allows you to control if the bot will give tacos for retweets notified via rainmaker. If you do not use rainmaker in your channel, this will not matter.",
+			"usage": "{{prefix}}rainmaker <on/off>",
+			"examples": [
+				"{{prefix}}rainmaker on",
+				"{{prefix}}rainmaker start",
+				"{{prefix}}rainmaker enable",
+				"{{prefix}}rainmaker off",
+				"{{prefix}}rainmaker stop",
+				"{{prefix}}rainmaker disable"
+			],
+			"cooldown": 30,
+			"permissions": [
+				"moderator"
+			],
+			"enabled": true,
+			"subcommands": {
+				"start": {
+					"description": "Enables the bot to give tacos when people retweet.",
+					"usage": "{{prefix}}rainmaker start",
+					"examples": [
+						"{{prefix}}rainmaker on",
+						"{{prefix}}rainmaker start",
+						"{{prefix}}rainmaker enable"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"moderator"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"aliases": [
+						"start",
+						"on",
+						"enable"
+					],
 					"previews": [
-						"https://i.imgur.com/0a2SjiQ.png"
+						"https://i.imgur.com/3fkoGdY.png"
 					]
+				},
+				"set": {
+					"description": "Set the retweet message regular expression. By default it is set to match the default rainmaker message. If you have a custom message, you can set it here.",
+					"usage": "{{prefix}}rainmaker set <regex>",
+					"examples": [
+						"{{prefix}}rainmaker set ^Thank you for tweeting out the stream, (?P<user>@?[a-zA-Z0-9-_]+).$"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"moderator"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"aliases": [
+						"set"
+					],
+					"previews": []
+				},
+				"stop": {
+					"description": "Disabled the bot from giving tacos when people retweet.",
+					"usage": "{{prefix}}rainmaker stop",
+					"examples": [
+						"{{prefix}}rainmaker off",
+						"{{prefix}}rainmaker stop",
+						"{{prefix}}rainmaker disable"
+					],
+					"cooldown": 30,
+					"permissions": [
+						"moderator"
+					],
+					"enabled": true,
+					"subcommands": {},
+					"aliases": [
+						"stop",
+						"off",
+						"disable"
+					],
+					"previews": []
 				}
 			}
 		},
@@ -671,6 +748,10 @@
 			"dixper": {
 				"name": "Dixper",
 				"description": "When someone purchases Dixper packs, I will give them 5 tacos."
+			},
+			"rainmaker": {
+				"name": "Rainmaker",
+				"description": "When someone retweets the stream, and rainmaker notifies the chat of the retweet, I will give them 5 tacos."
 			},
 			"streamelements": {
 				"name": "Stream Elements Tip",

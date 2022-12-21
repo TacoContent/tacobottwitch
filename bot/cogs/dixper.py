@@ -31,13 +31,12 @@ class DixperBroCog(commands.Cog):
         self.start_commands = ["start", "on", "enable"]
         self.stop_commands = ["stop", "off", "disable"]
 
-        self.purchase_regex = re.compile(
-            r"^(?P<user>\@?\w+)\shas\sbought\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)", re.MULTILINE | re.IGNORECASE
-        )
-        self.gift_regex = re.compile(
-            r"^(?P<user>\@?\w+)\shas\sgifted\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)(?:\sto\s(?P<gifted>\@?\w+))$",
-            re.MULTILINE | re.IGNORECASE,
-        )
+        self.default_settings = {
+            "enabled": True,
+            "purchase_regex": r"^(?P<user>\@?\w+)\shas\sbought\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)",
+            "gift_regex": r"^(?P<user>\@?\w+)\shas\sgifted\s(?P<amount>\d{1,})\s(?P<crate>(?:\w+\s?)+)(?:\sto\s(?P<gifted>\@?\w+))$"
+        }
+
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
         if not log_level:
             log_level = loglevel.LogLevel.DEBUG
@@ -88,6 +87,9 @@ class DixperBroCog(commands.Cog):
             prefix = prefixes[0]
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
+            if self.bot_user not in channel_settings:
+                channel_settings[self.bot_user] = self.default_settings
+
             channel_settings[self.bot_user]["enabled"] = False
             self.settings.set_channel_settings(self.db, channel, channel_settings)
 
@@ -121,6 +123,8 @@ class DixperBroCog(commands.Cog):
             prefix = prefixes[0]
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
+            if self.bot_user not in channel_settings:
+                channel_settings[self.bot_user] = self.default_settings
             channel_settings[self.bot_user]["enabled"] = True
             self.settings.set_channel_settings(self.db, channel, channel_settings)
 
@@ -142,7 +146,11 @@ class DixperBroCog(commands.Cog):
             channel = utils.clean_channel_name(message.channel.name)
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
-            game_settings = channel_settings.get(self.bot_user, { "enabled": True })
+            if self.bot_user not in channel_settings:
+                channel_settings[self.bot_user] = self.default_settings
+                self.settings.set_channel_settings(self.db, channel, channel_settings)
+
+            game_settings = channel_settings.get(self.bot_user, self.default_settings)
             if not game_settings.get("enabled", True):
                 return
 
@@ -152,7 +160,8 @@ class DixperBroCog(commands.Cog):
             # is the message from the dixper bot?
             if sender == utils.clean_channel_name(self.bot_user):
                 # if message.content matches purchase regex
-                match = self.purchase_regex.match(message.content)
+                purchase_regex = re.compile(game_settings.get("purchase_regex", self.default_settings["purchase_regex"]), re.IGNORECASE| re.MULTILINE)
+                match = purchase_regex.match(message.content)
                 if match:
                     # get the crate name
                     crate_name = match.group("crate")
@@ -188,7 +197,8 @@ class DixperBroCog(commands.Cog):
                     return
 
                 # if message.content matches gift regex
-                match = self.gift_regex.match(message.content)
+                gift_regex = re.compile(game_settings.get("gift_regex", self.default_settings["gift_regex"]), re.IGNORECASE| re.MULTILINE)
+                match = gift_regex.match(message.content)
                 if match:
                     # get the crate name
                     crate_name = match.group("crate")

@@ -72,6 +72,10 @@ class Settings:
             },
             "streamraiders": {"enabled": True},
             "marblesonstream": {"enabled": True},
+            "rainmaker": {
+                "enabled": True,
+                "action_message": r"^Thank you for tweeting out the stream, (?P<user>@?[a-zA-Z0-9-_]+).$"
+            }
         }
 
     def get_channel_settings(self, db, channel: str) -> dict:
