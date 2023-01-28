@@ -74,7 +74,8 @@ class TacosLog:
         for c in channels:
             channel = self.bot.get_channel(c)
             if channel:
-                await channel.send(content)
+                if content:
+                    await channel.send(content)
 
     async def give_user_tacos(
         self,
