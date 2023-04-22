@@ -43,9 +43,9 @@ class JoinErrorCog(commands.Cog):
 
     @commands.Cog.event()
     async def event_channel_joined(self, channel) -> None:
-        self.log.debug(channel, "join_error.event_channel_join", f"Joined channel '{channel}'")
-        if channel in self.channel_attempts:
-            del self.channel_attempts[channel]
+        self.log.debug(channel.name, "join_error.event_channel_join", f"Joined channel '{channel.name}'")
+        if channel.name in self.channel_attempts:
+            del self.channel_attempts[channel.name]
 
     @commands.Cog.event()
     async def event_channel_join_failure(self, channel) -> None:
