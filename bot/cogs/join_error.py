@@ -35,9 +35,30 @@ class JoinErrorCog(commands.Cog):
         self.permissions_helper = permissions.Permissions()
         self.log.debug("NONE", "join_error.__init__", "Initialized")
 
+        self.channel_attempts = {}
+
+    @commands.Cog.event()
+    async def event_ready(self) -> None:
+        self.log.debug("NONE", "join_error.event_ready", "Ready")
+
+    @commands.Cog.event()
+    async def event_channel_joined(self, channel) -> None:
+        self.log.debug(channel, "join_error.event_channel_join", f"Joined channel '{channel}'")
+        if channel in self.channel_attempts:
+            del self.channel_attempts[channel]
+
     @commands.Cog.event()
     async def event_channel_join_failure(self, channel) -> None:
         try:
+            if channel in self.channel_attempts:
+                self.channel_attempts[channel] += 1
+            else:
+                self.channel_attempts[channel] = 1
+
+            if self.channel_attempts[channel] > 3:
+                self.log.error(channel, "join_error.event_channel_join_failure", f"Failed to join channel '{channel}' after 3 attempts. Giving up.", traceback.format_exc())
+                return
+
             self.log.warn(channel, "join_error.event_channel_join_failure", f"Failed to join channel '{channel}'. Attempting Rejoin.", traceback.format_exc())
             await self.bot.join_channels([channel])
         except Exception as e:
