@@ -221,7 +221,7 @@ class RainmakerCog(commands.Cog):
                         utils.clean_channel_name(self.settings.bot_name),
                         username,
                         reason,
-                        give_type=tacotypes.TacoTypes.CUSTOM,
+                        give_type=tacotypes.TacoTypes.TWITCH,
                         amount=self.TACO_AMOUNT,
                     )
                     return
