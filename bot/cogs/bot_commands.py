@@ -65,7 +65,7 @@ class BotCommands(commands.Cog):
                 return
 
             reason = f"raiding the channel {dest_channel}"
-            await self.tacos_log.give_user_tacos(ctx.message.channel.name, source_channel, reason, give_type=tacotypes.TacoTypes.TWITCH, amount=self.TACO_AMOUNT)
+            await self.tacos_log.give_user_tacos(ctx.message.channel.name, source_channel, reason, give_type=tacotypes.TacoTypes.TWITCH_CUSTOM, amount=self.TACO_AMOUNT)
         except Exception as e:
             self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 
@@ -98,7 +98,7 @@ class BotCommands(commands.Cog):
                 return
 
             reason = f"supporting the channel {channel}"
-            await self.tacos_log.give_user_tacos(ctx.message.channel.name, username, reason, give_type=tacotypes.TacoTypes.TWITCH, amount=self.TACO_AMOUNT)
+            await self.tacos_log.give_user_tacos(ctx.message.channel.name, username, reason, give_type=tacotypes.TacoTypes.TWITCH_CUSTOM, amount=self.TACO_AMOUNT)
         except Exception as e:
             self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 
