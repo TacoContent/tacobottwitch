@@ -191,7 +191,7 @@ class DixperBroCog(commands.Cog):
                         utils.clean_channel_name(self.settings.bot_name),
                         username,
                         reason,
-                        give_type=tacotypes.TacoTypes.TWITCH,
+                        give_type=tacotypes.TacoTypes.TWITCH_CUSTOM,
                         amount=self.TACO_AMOUNT,
                     )
                     return
@@ -230,7 +230,7 @@ class DixperBroCog(commands.Cog):
                         utils.clean_channel_name(self.settings.bot_name),
                         username,
                         reason,
-                        give_type=tacotypes.TacoTypes.TWITCH,
+                        give_type=tacotypes.TacoTypes.TWITCH_CUSTOM,
                         amount=self.TACO_AMOUNT,
                     )
                     return
