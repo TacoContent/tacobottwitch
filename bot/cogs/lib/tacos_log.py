@@ -85,8 +85,8 @@ class TacosLog:
         give_type: tacotypes.TacoTypes = tacotypes.TacoTypes.CUSTOM,
         amount: int = 1,
     ):
+        _method = inspect.stack()[0][3]
         try:
-            _method = inspect.stack()[0][3]
             # get taco settings
             taco_settings = self.settings.get_settings(self.db, "tacos")
             if not taco_settings:
@@ -116,6 +116,14 @@ class TacosLog:
             self.db.track_taco_gift(
                 utils.clean_channel_name(fromUser), utils.clean_channel_name(toUser), taco_count, reason_msg
             )
+
+            self.db.track_tacos_log(
+                channel=utils.clean_channel_name(fromUser),
+                user=utils.clean_channel_name(toUser),
+                count=taco_count,
+                type=tacotypes.TacoTypes.get_db_type_from_taco_type(give_type),
+                reason=reason_msg)
+
             await self._log(fromUser, toUser, taco_count, total_taco_count, reason_msg)
             return total_taco_count
         except Exception as e:

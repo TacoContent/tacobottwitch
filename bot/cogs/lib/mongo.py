@@ -639,3 +639,34 @@ class MongoDatabase:
         finally:
             if self.connection:
                 self.close()
+
+    def track_tacos_log(self, channel: str, user: str, count: int, type: str, reason: str):
+        try:
+            if self.connection is None:
+                self.open()
+            date = datetime.datetime.utcnow()
+            timestamp = utils.to_timestamp(date)
+            channel = utils.clean_channel_name(channel)
+            user = utils.clean_channel_name(user)
+
+            from_discord_user_id = self._get_discord_id(channel)
+            to_discord_user_id = self._get_discord_id(user)
+
+
+            payload = {
+                "guild_id": self.settings.discord_guild_id,
+                "from_user_id": str(from_discord_user_id),
+                "to_user_id": str(from_discord_user_id),
+                "count": count,
+                "type": type,
+                "reason": reason,
+                "timestamp": timestamp
+            }
+
+            self.connection.tacos_log.insert_one(payload)
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+        finally:
+            if self.connection:
+                self.close()
