@@ -82,7 +82,7 @@ class TacosLog:
         fromUser: str,
         toUser: str,
         reason: str = None,
-        give_type: tacotypes.TacoTypes = tacotypes.TacoTypes.CUSTOM,
+        give_type: tacotypes.TacoTypes = tacotypes.TacoTypes.TWITCH,
         amount: int = 1,
     ):
         _method = inspect.stack()[0][3]
@@ -97,16 +97,16 @@ class TacosLog:
                 return
             taco_count = amount
 
-            if give_type != tacotypes.TacoTypes.CUSTOM:
+            if give_type != tacotypes.TacoTypes.CUSTOM and give_type != tacotypes.TacoTypes.TWITCH:
                 taco_count = taco_settings[tacotypes.TacoTypes.get_string_from_taco_type(give_type)]
-            elif give_type == tacotypes.TacoTypes.CUSTOM:
+            elif give_type == tacotypes.TacoTypes.CUSTOM or give_type == tacotypes.TacoTypes.TWITCH:
                 taco_count = amount
             else:
                 self.log.warn(fromUser, "tacos.on_message", f"Invalid taco type {give_type}")
                 return
 
             # only reject <= 0 tacos if it is not custom type
-            if taco_count <= 0 and give_type != tacotypes.TacoTypes.CUSTOM:
+            if taco_count <= 0 and (give_type != tacotypes.TacoTypes.CUSTOM and give_type != tacotypes.TacoTypes.TWITCH):
                 self.log.warn(fromUser, "tacos.on_message", f"Invalid taco count {taco_count}")
                 return
 
