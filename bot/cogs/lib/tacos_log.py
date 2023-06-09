@@ -97,18 +97,17 @@ class TacosLog:
                 return
             taco_count = amount
 
-            if give_type != tacotypes.TacoTypes.CUSTOM and give_type != tacotypes.TacoTypes.TWITCH_CUSTOM:
-                taco_count = taco_settings[tacotypes.TacoTypes.get_string_from_taco_type(give_type)]
-            elif give_type == tacotypes.TacoTypes.CUSTOM or give_type == tacotypes.TacoTypes.TWITCH_CUSTOM:
-                taco_count = amount
+            taco_type_key = tacotypes.TacoTypes.get_string_from_taco_type(give_type)
+            if taco_type_key not in taco_settings:
+                self.log.debug(fromUser, _method, f"Key {taco_type_key} not found in taco settings. Using taco_amount ({amount}) as taco count")
+                taco_count = taco_count
             else:
-                self.log.warn(fromUser, "tacos.on_message", f"Invalid taco type {give_type}")
-                return
+                taco_count = taco_settings[tacotypes.TacoTypes.get_string_from_taco_type(give_type)]
 
             # only reject <= 0 tacos if it is not custom type
-            if taco_count <= 0 and (give_type != tacotypes.TacoTypes.CUSTOM and give_type != tacotypes.TacoTypes.TWITCH_CUSTOM):
-                self.log.warn(fromUser, "tacos.on_message", f"Invalid taco count {taco_count}")
-                return
+            # if taco_count <= 0 and (give_type != tacotypes.TacoTypes.CUSTOM and give_type != tacotypes.TacoTypes.TWITCH_CUSTOM):
+            #     self.log.warn(fromUser, "tacos.on_message", f"Invalid taco count {taco_count}")
+            #     return
 
             reason_msg = reason if reason else "no reason given"  # self.settings.get_string(fromUser, 'no_reason')
 

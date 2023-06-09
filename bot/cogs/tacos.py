@@ -234,7 +234,12 @@ class TacosCog(commands.Cog):
                     return
 
                 if amount > 0:
-                    await self.tacos_log.give_user_tacos(ctx.message.channel.name, user, reason, give_type=tacotypes.TacoTypes.TWITCH_CUSTOM, amount=amount)
+                    await self.tacos_log.give_user_tacos(
+                        ctx.message.channel.name,
+                        user,
+                        reason,
+                        give_type=tacotypes.TacoTypes.TWITCH_CUSTOM,
+                        amount=amount)
                 else:
                     await ctx.send(f"You can't give negative tacos!")
             else:
@@ -278,7 +283,12 @@ class TacosCog(commands.Cog):
                     )
                     return
                 if amount > 0 and amount <= max_take_per_user:
-                    await self.tacos_log.give_user_tacos(ctx.message.channel.name, user, reason, give_type=tacotypes.TacoTypes.TWITCH_CUSTOM, amount=-(amount))
+                    await self.tacos_log.give_user_tacos(
+                        ctx.message.channel.name,
+                        user,
+                        reason,
+                        give_type=tacotypes.TacoTypes.TWITCH_CUSTOM,
+                        amount=-(amount))
                 else:
                     await ctx.send(f"You can't take negative or more than {max_take_per_user} tacos!")
             else:
