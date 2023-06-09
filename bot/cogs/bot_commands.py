@@ -65,16 +65,16 @@ class BotCommands(commands.Cog):
                 return
 
             reason = f"raiding the channel {dest_channel}"
-            await self.tacos_log.give_user_tacos(ctx.message.channel.name, source_channel, reason, give_type=tacotypes.TacoTypes.TWITCH_CUSTOM, amount=self.TACO_AMOUNT)
+            await self.tacos_log.give_user_tacos(ctx.message.channel.name, source_channel, reason, give_type=tacotypes.TacoTypes.TWITCH_RAID, amount=self.TACO_AMOUNT)
         except Exception as e:
             self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 
-    @commands.command(name="support")
+    @commands.command(name="subscribe")
     # @commands.restrict_channels(channels=["ourtacobot", "ourtaco"])
-    async def support(self, ctx, username: str, channel: str) -> None:
+    async def subscribe(self, ctx, username: str, channel: str) -> None:
         """
         Give a user tacos for supporting a channel.
-        This can be subscribing, gifting, or cheer bits >= 100
+        This can be subscribing, gifting a sub, resubscribing... etc.
         """
         _method = inspect.stack()[1][3]
         try:
@@ -97,8 +97,41 @@ class BotCommands(commands.Cog):
                 self.log.debug(ctx.message.channel.name, _method, f"Destination channel {channel} is not a known taco user.")
                 return
 
-            reason = f"supporting the channel {channel}"
-            await self.tacos_log.give_user_tacos(ctx.message.channel.name, username, reason, give_type=tacotypes.TacoTypes.TWITCH_CUSTOM, amount=self.TACO_AMOUNT)
+            reason = f"supporting the channel {channel} with a subscription"
+            await self.tacos_log.give_user_tacos(ctx.message.channel.name, username, reason, give_type=tacotypes.TacoTypes.TWITCH_SUB, amount=25)
+        except Exception as e:
+            self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
+
+    @commands.command(name="cheer")
+    # @commands.restrict_channels(channels=["ourtacobot", "ourtaco"])
+    async def cheer(self, ctx, username: str, channel: str) -> None:
+        """
+        Give a user tacos for supporting a channel with bits >= 100.
+        """
+        _method = inspect.stack()[1][3]
+        try:
+            username = utils.clean_channel_name(username)
+            channel = utils.clean_channel_name(channel)
+
+            if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT):
+                # ONLY action if THIS account called the command
+                return
+            if not self.permissions_helper.in_command_restricted_channel(ctx):
+                self.log.debug(ctx.message.channel.name, _method, f"We are not in one of the restricted channels. we are in {ctx.message.channel.name}.")
+                return
+
+            # check the source channel is a channel that is a taco channel (this should never be false)
+            if not self.permissions_helper.has_linked_account(username):
+                self.log.debug(ctx.message.channel.name, _method, f"Source channel {username} is not a known taco user.")
+                return
+            # check if the destination channel is a channel that is a "taco" channel
+            if not self.permissions_helper.has_linked_account(channel):
+                self.log.debug(ctx.message.channel.name, _method, f"Destination channel {channel} is not a known taco user.")
+                return
+
+            reason = f"supporting the channel {channel} with bits"
+            # maybe we should make this a percentage of the bits?
+            await self.tacos_log.give_user_tacos(ctx.message.channel.name, username, reason, give_type=tacotypes.TacoTypes.TWITCH_BITS, amount=10)
         except Exception as e:
             self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
 

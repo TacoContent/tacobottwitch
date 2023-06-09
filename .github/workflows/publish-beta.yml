@@ -1,8 +1,9 @@
-name: TacoBot Publish
+name: TacoBot Beta Publish
 on:
   push:
     branches:
-      - develop
+      - 'beta/*'
+      - 'topic/*'
 jobs:
   docker:
     runs-on: ubuntu-latest
