@@ -56,7 +56,7 @@ class StreamElementsBotCog(commands.Cog):
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
             self.log.debug(
                 ctx.message.channel.name,
-                _method,
+                f"streamelements.{_method}",
                 f"{ctx.message.author.name} does not have permission to use this command.",
             )
             return
@@ -80,7 +80,7 @@ class StreamElementsBotCog(commands.Cog):
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BROADCASTER):
                 self.log.debug(
                     channel,
-                    _method,
+                    f"streamelements.{_method}",
                     f"{ctx.message.author.name} does not have permission to use this command.",
                 )
                 return
@@ -93,10 +93,10 @@ class StreamElementsBotCog(commands.Cog):
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
             if channel_settings is None:
-                self.log.error(channel, _method, f"No streamelements settings found for {channel}")
+                self.log.error(channel, f"streamelements.{_method}", f"No streamelements settings found for {channel}")
                 return
             if args is None or len(args) == 0:
-                self.log.error(channel, _method, f"No arguments provided for {channel}")
+                self.log.error(channel, f"streamelements.{_method}", f"No arguments provided for {channel}")
                 return
 
             tip_message = ' '.join(args[0:]).strip()
@@ -120,7 +120,7 @@ class StreamElementsBotCog(commands.Cog):
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
                 self.log.debug(
                     channel,
-                    _method,
+                    f"streamelements.{_method}",
                     f"{ctx.message.author.name} does not have permission to use this command.",
                 )
                 return
@@ -154,7 +154,7 @@ class StreamElementsBotCog(commands.Cog):
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
                 self.log.debug(
                     channel,
-                    _method,
+                    f"streamelements.{_method}",
                     f"{ctx.message.author.name} does not have permission to use this command.",
                 )
                 return

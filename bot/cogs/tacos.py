@@ -42,7 +42,7 @@ class TacosCog(commands.Cog):
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
             self.log.debug(
                 ctx.message.channel.name,
-                _method,
+                f"tacos.{_method}",
                 f"{ctx.message.author.name} does not have permission to use this command.",
             )
             return
@@ -81,7 +81,7 @@ class TacosCog(commands.Cog):
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
                 self.log.debug(
                     ctx.message.channel.name,
-                    _method,
+                    f"tacos.{_method}",
                     f"{ctx.message.author.name} does not have permission to use this command.",
                 )
                 return
@@ -101,7 +101,7 @@ class TacosCog(commands.Cog):
                 index_position = index_position + 1
             await ctx.reply(message_out)
         except Exception as e:
-            self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
+            self.log.error(ctx.message.channel.name, f"tacos.{_method}", str(e), traceback.format_exc())
 
     async def _tacos_balance(self, ctx, args) -> None:
         _method = inspect.stack()[1][3]
@@ -115,7 +115,7 @@ class TacosCog(commands.Cog):
                 ):
                     self.log.debug(
                         ctx.message.channel.name,
-                        _method,
+                        f"tacos.{_method}",
                         f"{ctx.message.author.name} does not have permission to use this command.",
                     )
                     return
@@ -126,13 +126,13 @@ class TacosCog(commands.Cog):
                 if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
                     self.log.debug(
                         ctx.message.channel.name,
-                        _method,
+                        f"tacos.{_method}",
                         f"{ctx.message.author.name} does not have permission to use this command.",
                     )
                     return
                 await self._tacos_balance_for_user(ctx, ctx.message.author.name)
         except Exception as e:
-            self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
+            self.log.error(ctx.message.channel.name, f"tacos.{_method}", str(e), traceback.format_exc())
 
     async def _tacos_balance_for_user(self, ctx, user) -> None:
         _method = inspect.stack()[1][3]
@@ -157,7 +157,7 @@ class TacosCog(commands.Cog):
             else:
                 await ctx.reply(f"@{ctx.message.author.display_name}, {response_user} {response_has} no tacos 🌮.")
         except Exception as e:
-            self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
+            self.log.error(ctx.message.channel.name, f"tacos.{_method}", str(e), traceback.format_exc())
 
     async def _tacos_give(self, ctx, args) -> None:
         _method = inspect.stack()[1][3]
@@ -175,14 +175,14 @@ class TacosCog(commands.Cog):
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
             self.log.debug(
                 ctx.message.channel.name,
-                _method,
+                f"tacos.{_method}",
                 f"{ctx.message.author.name} does not have permission to use this command.",
             )
             return
 
         channel = self.bot.get_channel(ctx.message.channel.name)
         if not channel:
-            self.log.debug(ctx.message.channel.name, _method, f"Channel {ctx.message.channel.name} not found.")
+            self.log.debug(ctx.message.channel.name, f"tacos.{_method}", f"Channel {ctx.message.channel.name} not found.")
             return
 
         if len(args) >= 2:
@@ -257,14 +257,14 @@ class TacosCog(commands.Cog):
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
             self.log.debug(
                 ctx.message.channel.name,
-                _method,
+                f"tacos.{_method}",
                 f"{ctx.message.author.name} does not have permission to use this command.",
             )
             return
 
         channel = self.bot.get_channel(ctx.message.channel.name)
         if not channel:
-            self.log.debug(ctx.message.channel.name, _method, f"Channel {ctx.message.channel.name} not found.")
+            self.log.debug(ctx.message.channel.name, f"tacos.{_method}", f"Channel {ctx.message.channel.name} not found.")
             return
 
         if len(args) >= 2:

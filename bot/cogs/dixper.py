@@ -53,7 +53,7 @@ class DixperBroCog(commands.Cog):
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
             self.log.debug(
                 ctx.message.channel.name,
-                _method,
+                f"dixper.{_method}",
                 f"{ctx.message.author.name} does not have permission to use this command.",
             )
             return
@@ -75,7 +75,7 @@ class DixperBroCog(commands.Cog):
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
                 self.log.debug(
                     channel,
-                    _method,
+                    f"dixper.{_method}",
                     f"{ctx.message.author.name} does not have permission to use this command.",
                 )
                 return
@@ -111,7 +111,7 @@ class DixperBroCog(commands.Cog):
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
                 self.log.debug(
                     channel,
-                    _method,
+                    f"dixper.{_method}",
                     f"{ctx.message.author.name} does not have permission to use this command.",
                 )
                 return
