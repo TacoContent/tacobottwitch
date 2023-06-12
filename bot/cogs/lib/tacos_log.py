@@ -44,6 +44,7 @@ class TacosLog:
 
         content = f"{toUser} has {action} {abs_amount} {taco_word} 🌮 {action_adverb} from {fromUser} for {reason}, giving them {total_taco_count} {total_taco_word} 🌮 total."
 
+        # TODO use a defined type for this instead of a list of dicts
         fields = [
             {"name": "▶ TO USER", "value": toUser},
             {"name": "◀ FROM USER", "value": fromUser},
