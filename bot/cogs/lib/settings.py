@@ -53,6 +53,9 @@ class Settings:
         self.timezone = utils.dict_get(os.environ, "TIMEZONE", default_value="America/Chicago")
         self.discord_guild_id = utils.dict_get(os.environ, "DISCORD_GUILD_ID", default_value="")
 
+        self.eventsub_callback_url = utils.dict_get(os.environ, "EVENTSUB_CALLBACK_URL", default_value="")
+        self.eventsub_secret = utils.dict_get(os.environ, "EVENTSUB_WEBHOOK_SECRET", default_value="")
+
         self.load_language_manifest()
         self.load_strings()
 

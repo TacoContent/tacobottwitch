@@ -6,6 +6,8 @@ import bot.tacobot as bot
 
 def main():
     tacobot = bot.TacoBot()
+    # tacobot.loop.run_until_complete(tacobot.__ainit__())
+    tacobot.run()
 
 
 if __name__ == "__main__":
