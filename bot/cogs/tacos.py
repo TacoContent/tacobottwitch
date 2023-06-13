@@ -238,9 +238,8 @@ class TacosCog(commands.Cog):
                         fromUser=ctx.message.channel.name,
                         toUser=user,
                         reason=reason,
-                        give_type=tacotypes.TacoTypes.TWITCH_CUSTOM,
-                        amount=amount,
-                        notify=True)
+                        give_type=tacotypes.TacoTypes.TWITCH_RECEIVE_TACOS,
+                        amount=amount)
 
                 if ctx.message.author.is_mod or ctx.message.author.is_broadcaster:
                     # give the broadcaster 5 tacos for using the command.
