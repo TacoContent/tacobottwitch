@@ -8,7 +8,7 @@ from . import utils
 
 import traceback
 import inspect
-
+import typing
 
 class TacosLog:
     def __init__(self, bot):
@@ -84,10 +84,10 @@ class TacosLog:
         self,
         fromUser: str,
         toUser: str,
-        reason: str = None,
+        reason: typing.Optional[str] = None,
         give_type: tacotypes.TacoTypes = tacotypes.TacoTypes.TWITCH_CUSTOM,
         amount: int = 1,
-        notify: bool = True,
+        notify: typing.Optional[bool] = True,
     ):
         _method = inspect.stack()[0][3]
         try:
