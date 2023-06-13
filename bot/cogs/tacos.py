@@ -240,6 +240,12 @@ class TacosCog(commands.Cog):
                         reason,
                         give_type=tacotypes.TacoTypes.TWITCH_CUSTOM,
                         amount=amount)
+
+                if ctx.message.author.is_mod or ctx.message.author.is_broadcaster:
+                    # give the broadcaster 5 tacos for using the command.
+                    taco_word = "taco" if amount == 1 else "tacos"
+                    await self.tacos_log.give_user_tacos(ctx.message.channel.name, ctx.message.author.name, f"giving {user} {amount} {taco_word} 🌮", tacotypes.TacoTypes.TWITCH_GIVE_TACOS, amount)
+
                 else:
                     await ctx.send(f"You can't give negative tacos!")
             else:
@@ -301,6 +307,11 @@ class TacosCog(commands.Cog):
             return
         await ctx.send(f"Usage: !taco tacos [command] [args]. Available Commands: {', '.join(self.subcommands)}")
 
+    def get_tacos_settings(self) -> dict:
+        cog_settings = self.settings.get_settings(self.db, "tacos")
+        if not cog_settings:
+            raise Exception(f"No tacos settings found for guild {self.settings.discord_guild_id}")
+        return cog_settings
 
 def prepare(bot) -> None:
     bot.add_cog(TacosCog(bot))

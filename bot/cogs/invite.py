@@ -23,6 +23,7 @@ class TacoInviteCog(commands.Cog):
         self.settings = settings.Settings()
         self.tacos_log = tacos_log.TacosLog(self.bot)
 
+
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
         if not log_level:
             log_level = loglevel.LogLevel.DEBUG
@@ -52,6 +53,13 @@ class TacoInviteCog(commands.Cog):
             else:
                 url = invite_data["info"]["url"]
                 msg = utils.str_replace(self.invite_message, url=url, team=self.settings.twitch_team_name)
+
+                if ctx.message.author.is_mod or ctx.message.author.is_broadcaster:
+                    # give the broadcaster 5 tacos for using the command.
+                    taco_settings = self.get_tacos_settings()
+                    promote_taco_amount = taco_settings.get(tacotypes.TacoTypes.get_string_from_taco_type(tacotypes.TacoTypes.TWITCH_PROMOTE), 10)
+                    await self.tacos_log.give_user_tacos(ctx.message.channel.name, ctx.message.author.name, "promoting TACO discord", tacotypes.TacoTypes.TWITCH_PROMOTE, promote_taco_amount)
+
                 await ctx.send(msg)
         except Exception as e:
             self.log.error(ctx.message.channel.name, f"invite.{_method}", str(e), traceback.format_exc())
@@ -135,6 +143,11 @@ class TacoInviteCog(commands.Cog):
         else:
             await ctx.send(f"Error: {error}")
 
+    def get_tacos_settings(self) -> dict:
+        cog_settings = self.settings.get_settings(self.db, "tacos")
+        if not cog_settings:
+            raise Exception(f"No tacos settings found for guild {self.settings.discord_guild_id}")
+        return cog_settings
 
 def prepare(bot) -> None:
     bot.add_cog(TacoInviteCog(bot))
