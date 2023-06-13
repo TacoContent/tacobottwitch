@@ -58,13 +58,14 @@ class TacoInviteCog(commands.Cog):
                     # give the broadcaster 5 tacos for using the command.
                     taco_settings = self.get_tacos_settings()
                     promote_taco_amount = taco_settings.get(tacotypes.TacoTypes.get_string_from_taco_type(tacotypes.TacoTypes.TWITCH_PROMOTE), 10)
+
+                    # give to the broadcaster from the bot. no notification in broadcaster channel.
                     await self.tacos_log.give_user_tacos(
-                        fromUser=ctx.message.channel.name,
-                        toUser=ctx.message.author.name,
+                        fromUser=utils.clean_channel_name(self.settings.bot_name),
+                        toUser=utils.clean_channel_name(ctx.message.channel.name),
                         reason="promoting TACO discord",
                         give_type=tacotypes.TacoTypes.TWITCH_PROMOTE,
-                        amount=promote_taco_amount,
-                        notify=False)
+                        amount=promote_taco_amount)
 
                 await ctx.send(msg)
         except Exception as e:

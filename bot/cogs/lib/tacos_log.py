@@ -23,7 +23,7 @@ class TacosLog:
 
         self.log = logger.Log(minimumLogLevel=log_level)
 
-    async def _log(self, fromUser: str, toUser: str, amount: int, total_taco_count: int, reason: str = None, notify: bool = True) -> None:
+    async def _log(self, fromUser: str, toUser: str, amount: int, total_taco_count: int, reason: str = None,) -> None:
         if amount == 0:
             return
         action = "received"
@@ -64,9 +64,7 @@ class TacosLog:
 
         # send to discord
         self.webhook.send(embeds=embeds)
-        channels = []
-        if notify:
-            channels.append(utils.clean_channel_name(fromUser))
+        channels = [utils.clean_channel_name(fromUser)]
         # send to bot channels + the fromUser
         [
             channels.append(f"{utils.clean_channel_name(x)}")
@@ -87,7 +85,6 @@ class TacosLog:
         reason: typing.Optional[str] = None,
         give_type: tacotypes.TacoTypes = tacotypes.TacoTypes.TWITCH_CUSTOM,
         amount: int = 1,
-        notify: typing.Optional[bool] = True,
     ):
         _method = inspect.stack()[0][3]
         try:
@@ -127,7 +124,7 @@ class TacosLog:
                 type=tacotypes.TacoTypes.get_db_type_from_taco_type(give_type),
                 reason=reason_msg)
 
-            await self._log(fromUser, toUser, taco_count, total_taco_count, reason_msg, notify)
+            await self._log(fromUser, toUser, taco_count, total_taco_count, reason_msg)
             return total_taco_count
         except Exception as e:
             self.log.error(fromUser, f"tacos_log.{_method}", str(e), traceback.format_exc())
