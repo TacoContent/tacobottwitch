@@ -241,16 +241,16 @@ class TacosCog(commands.Cog):
                         give_type=tacotypes.TacoTypes.TWITCH_RECEIVE_TACOS,
                         amount=amount)
 
-                if ctx.message.author.is_mod or ctx.message.author.is_broadcaster:
-                    # give the broadcaster 5 tacos for using the command.
-                    taco_word = "taco" if amount == 1 else "tacos"
+                    if self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
+                        # give the broadcaster 5 tacos for using the command.
+                        taco_word = "taco" if amount == 1 else "tacos"
 
-                    await self.tacos_log.give_user_tacos(
-                        fromUser=utils.clean_channel_name(self.settings.bot_name),
-                        toUser=utils.clean_channel_name(ctx.message.channel.name),
-                        reason=f"giving {user} {amount} {taco_word} 🌮",
-                        give_type=tacotypes.TacoTypes.TWITCH_GIVE_TACOS,
-                        amount=amount,)
+                        await self.tacos_log.give_user_tacos(
+                            fromUser=utils.clean_channel_name(self.settings.bot_name),
+                            toUser=utils.clean_channel_name(ctx.message.channel.name),
+                            reason=f"giving {user} {amount} {taco_word} 🌮",
+                            give_type=tacotypes.TacoTypes.TWITCH_GIVE_TACOS,
+                            amount=amount,)
 
                 else:
                     await ctx.send(f"You can't give negative tacos!")
