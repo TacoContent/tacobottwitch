@@ -1,5 +1,4 @@
-from twitchio.ext import commands, eventsub
-import twitchio
+from twitchio.ext import commands
 import os
 import traceback
 import sys
