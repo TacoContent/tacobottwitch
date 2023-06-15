@@ -29,7 +29,10 @@ def get_scalar_result(conn, sql, default_value=None, *args) -> typing.Any:
         traceback.print_exc()
         return default_value
 
-def clean_channel_name(channel: str) -> str:
+def clean_channel_name(channel: typing.Optional[str]) -> str:
+    if channel is None:
+        return ""
+    
     return channel.lower().strip().replace("#", "").replace("@", "")
 
 def str2bool(v) -> bool:

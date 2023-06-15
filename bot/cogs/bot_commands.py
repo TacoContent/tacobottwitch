@@ -135,5 +135,36 @@ class BotCommands(commands.Cog):
         except Exception as e:
             self.log.error(ctx.message.channel.name, f"bot_commands.{_method}", str(e), traceback.format_exc())
 
+    @commands.command(name="follow")
+    async def follow(self, ctx, username: str, channel: str) -> None:
+        """
+        Give a user tacos for following a channel.
+        """
+        _method = inspect.stack()[1][3]
+        try:
+            username = utils.clean_channel_name(username)
+            channel = utils.clean_channel_name(channel)
+
+            if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT):
+                # ONLY action if THIS account called the command
+                return
+            if not self.permissions_helper.in_command_restricted_channel(ctx):
+                self.log.debug(ctx.message.channel.name, f"bot_commands.{_method}", f"We are not in one of the restricted channels. we are in {ctx.message.channel.name}.")
+                return
+
+            # check the source channel is a channel that is a taco channel (this should never be false)
+            if not self.permissions_helper.has_linked_account(username):
+                self.log.debug(ctx.message.channel.name, f"bot_commands.{_method}", f"Source channel {username} is not a known taco user.")
+                return
+            # check if the destination channel is a channel that is a "taco" channel
+            if not self.permissions_helper.has_linked_account(channel):
+                self.log.debug(ctx.message.channel.name, f"bot_commands.{_method}", f"Destination channel {channel} is not a known taco user.")
+                return
+
+            reason = f"supporting the channel {channel} with a follow"
+            await self.tacos_log.give_user_tacos(ctx.message.channel.name, username, reason, give_type=tacotypes.TacoTypes.TWITCH_FOLLOW, amount=10)
+        except Exception as e:
+            self.log.error(ctx.message.channel.name, f"bot_commands.{_method}", str(e), traceback.format_exc())
+
 def prepare(bot) -> None:
     bot.add_cog(BotCommands(bot))
