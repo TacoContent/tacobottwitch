@@ -1,5 +1,4 @@
-from twitchio.ext import commands, eventsub
-import twitchio
+from twitchio.ext import commands
 import os
 import traceback
 import sys
@@ -71,6 +70,8 @@ class TacoBot(commands.Bot):
 
         # print(f"starting bot")
         self.log.debug("NONE", "tacobot.__init__", "Starting bot")
+        self.run()
+
 
     # async def __ainit__(self) -> None:
     #     self.loop.create_task(self.esclient.listen(port=4000))

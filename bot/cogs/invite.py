@@ -54,7 +54,8 @@ class TacoInviteCog(commands.Cog):
                 url = invite_data["info"]["url"]
                 msg = utils.str_replace(self.invite_message, url=url, team=self.settings.twitch_team_name)
 
-                if ctx.message.author.is_mod or ctx.message.author.is_broadcaster:
+                # if the user is a moderator, give the broadcaster tacos for using the command.
+                if self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
                     # give the broadcaster 5 tacos for using the command.
                     taco_settings = self.get_tacos_settings()
                     promote_taco_amount = taco_settings.get(tacotypes.TacoTypes.get_string_from_taco_type(tacotypes.TacoTypes.TWITCH_PROMOTE), 10)

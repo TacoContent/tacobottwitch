@@ -241,7 +241,8 @@ class TacosCog(commands.Cog):
                         give_type=tacotypes.TacoTypes.TWITCH_RECEIVE_TACOS,
                         amount=amount)
 
-                if ctx.message.author.is_mod or ctx.message.author.is_broadcaster:
+                    # don't need to check if the user has permissions, since we do that above.
+
                     # give the broadcaster 5 tacos for using the command.
                     taco_word = "taco" if amount == 1 else "tacos"
 
