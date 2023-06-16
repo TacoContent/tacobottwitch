@@ -57,7 +57,13 @@ class FirstChatCog(commands.Cog):
             is_first_message = self.db.track_user_message_in_chat(channel, user, message, self.TIME_PERIOD)
             if is_first_message:
                 reason = f"their first message today in {channel}'s chat"
-                await self.tacos_log.give_user_tacos(utils.clean_channel_name(self.settings.bot_name), user, reason, give_type=tacotypes.TacoTypes.TWITCH_FIRST_MESSAGE, amount=self.TACO_AMOUNT)
+                await self.tacos_log.give_user_tacos(
+                    utils.clean_channel_name(self.settings.bot_name),
+                    user,
+                    reason,
+                    give_type=tacotypes.TacoTypes.TWITCH_FIRST_MESSAGE,
+                    amount=self.TACO_AMOUNT,
+                    )
         except Exception as e:
             self.log.error(message.channel.name, "first_chat.event_message", str(e), traceback.format_exc())
 

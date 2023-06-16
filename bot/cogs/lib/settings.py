@@ -53,6 +53,9 @@ class Settings:
         self.timezone = utils.dict_get(os.environ, "TIMEZONE", default_value="America/Chicago")
         self.discord_guild_id = utils.dict_get(os.environ, "DISCORD_GUILD_ID", default_value="")
 
+        self.eventsub_callback_url = utils.dict_get(os.environ, "EVENTSUB_CALLBACK_URL", default_value="")
+        self.eventsub_secret = utils.dict_get(os.environ, "EVENTSUB_WEBHOOK_SECRET", default_value="")
+
         self.load_language_manifest()
         self.load_strings()
 
@@ -99,24 +102,18 @@ class Settings:
         guild_id = self.discord_guild_id
         _method = inspect.stack()[1][3]
         if not key:
-            # self.log.debug(guildId, _method, f"KEY WAS EMPTY")
             return ""
         if guild_id in self.strings:
             if key in self.strings[guild_id]:
                 return utils.str_replace(self.strings[guild_id][key], *args, **kwargs)
             elif key in self.strings[self.language]:
-                # self.log.debug(guildId, _method, f"Unable to find key in defined language. Falling back to {self.language}")
                 return utils.str_replace(self.strings[self.language][key], *args, **kwargs)
             else:
-                # self.log.warn(guildId, _method, f"UNKNOWN STRING KEY: {key}")
-                print(f"UNKNOWN KEY: LANG: {self.language} - {key}", file=sys.stderr)
                 return utils.str_replace(f"{key}", *args, **kwargs)
         else:
             if key in self.strings[self.language]:
                 return utils.str_replace(self.strings[self.language][key], *args, **kwargs)
             else:
-                # self.log.warn(guildId, _method, f"UNKNOWN STRING KEY: {key}")
-                print(f"UNKNOWN KEY: LANG: {self.language} - {key}", file=sys.stderr)
                 return utils.str_replace(f"{key}", *args, **kwargs)
 
     def set_guild_strings(self, lang: str = None) -> None:
@@ -128,7 +125,6 @@ class Settings:
         # if guild_settings:
         #     lang = guild_settings.language
         self.strings[guild_id] = self.strings[lang]
-        # self.log.debug(guildId, _method, f"Guild Language Set: {lang}")
 
     def get_language(self) -> str:
         # guild_setting = self.db.get_guild_settings(guildId)

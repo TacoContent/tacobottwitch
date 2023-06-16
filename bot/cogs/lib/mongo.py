@@ -121,6 +121,9 @@ class MongoDatabase:
             if self.connection:
                 self.close()
 
+    def get_channels(self) -> typing.List[str]:
+        return self.get_bot_twitch_channels()
+
     def get_bot_twitch_channels(self) -> typing.List[str]:
         try:
             if self.connection is None:

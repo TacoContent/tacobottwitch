@@ -8,7 +8,7 @@ class TacoTypes(Enum):
     BOOST = 2
     REACT_REWARD = 3
     SUGGEST = 4
-    INVITE = 5
+    USER_INVITE = 5
     REACTION = 6
     REPLY = 7
     TQOTD = 8
@@ -34,6 +34,10 @@ class TacoTypes(Enum):
     TWITCH_SUB = 28
     TWITCH_BITS = 29
     TWITCH_FIRST_MESSAGE = 30
+    TWITCH_PROMOTE = 31
+    TWITCH_GIVE_TACOS = 32
+    TWITCH_RECEIVE_TACOS = 33
+    TWITCH_FOLLOW = 34 # not yet implemented until i can figure out how to get the event from eventsub
 
     PURGE = 9996
     LEAVE_SERVER = 9997
@@ -52,7 +56,7 @@ class TacoTypes(Enum):
         elif taco_type_string == "suggest_count":
             return TacoTypes.SUGGEST
         elif taco_type_string == "invite_count":
-            return TacoTypes.INVITE
+            return TacoTypes.USER_INVITE
         elif taco_type_string == "reaction_count":
             return TacoTypes.REACTION
         elif taco_type_string == "reply_count":
@@ -107,6 +111,14 @@ class TacoTypes(Enum):
             return TacoTypes.TWITCH_BITS
         elif taco_type_string == "twitch_first_message_count":
             return TacoTypes.TWITCH_FIRST_MESSAGE
+        elif taco_type_string == "twitch_promote_count":
+            return TacoTypes.TWITCH_PROMOTE
+        elif taco_type_string == "twitch_give_tacos":  # this property is not saved in settings, as it should be the amount they give
+            return TacoTypes.TWITCH_GIVE_TACOS
+        elif taco_type_string == "twitch_receive_tacos":  # this property is not saved in settings, as it should be the amount they receive
+            return TacoTypes.TWITCH_RECEIVE_TACOS
+        elif taco_type_string == "twitch_follow_count":
+            return TacoTypes.TWITCH_FOLLOW
         elif taco_type_string == "twitch_custom":
             return TacoTypes.TWITCH_CUSTOM
         else:
@@ -122,8 +134,8 @@ class TacoTypes(Enum):
             return "REACT_REWARD"
         elif taco_type == TacoTypes.SUGGEST:
             return "SUGGEST"
-        elif taco_type == TacoTypes.INVITE:
-            return "INVITE"
+        elif taco_type == TacoTypes.USER_INVITE:
+            return "USER_INVITE"
         elif taco_type == TacoTypes.REACTION:
             return "REACTION"
         elif taco_type == TacoTypes.REPLY:
@@ -178,6 +190,14 @@ class TacoTypes(Enum):
             return "TWITCH_BITS"
         elif taco_type == TacoTypes.TWITCH_FIRST_MESSAGE:
             return "TWITCH_FIRST_MESSAGE"
+        elif taco_type == TacoTypes.TWITCH_PROMOTE:
+            return "TWITCH_PROMOTE"
+        elif taco_type == TacoTypes.TWITCH_GIVE_TACOS:
+            return "TWITCH_GIVE_TACOS"
+        elif taco_type == TacoTypes.TWITCH_RECEIVE_TACOS:
+            return "TWITCH_RECEIVE_TACOS"
+        elif taco_type == TacoTypes.TWITCH_FOLLOW:
+            return "TWITCH_FOLLOW"
         elif taco_type == TacoTypes.TWITCH_CUSTOM:
             return "TWITCH_CUSTOM"
         else:
@@ -193,7 +213,7 @@ class TacoTypes(Enum):
             return "reaction_reward_count"
         elif taco_type == TacoTypes.SUGGEST:
             return "suggest_count"
-        elif taco_type == TacoTypes.INVITE:
+        elif taco_type == TacoTypes.USER_INVITE:
             return "invite_count"
         elif taco_type == TacoTypes.REACTION:
             return "reaction_count"
@@ -249,6 +269,14 @@ class TacoTypes(Enum):
             return "twitch_bits_count"
         elif taco_type == TacoTypes.TWITCH_FIRST_MESSAGE:
             return "twitch_first_message_count"
+        elif taco_type == TacoTypes.TWITCH_PROMOTE:
+            return "twitch_promote_count"
+        elif taco_type == TacoTypes.TWITCH_GIVE_TACOS:
+            return "twitch_give_tacos" # this property is not saved in settings, as it should be the amount they give
+        elif taco_type == TacoTypes.TWITCH_RECEIVE_TACOS:
+            return "twitch_receive_tacos" # this property is not saved in settings, as it should be the amount they give
+        elif taco_type == TacoTypes.TWITCH_FOLLOW:
+            return "twitch_follow_count"
         elif taco_type == TacoTypes.TWITCH_CUSTOM:
             return "twitch_custom"
         else:

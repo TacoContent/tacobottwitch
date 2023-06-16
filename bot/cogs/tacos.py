@@ -42,7 +42,7 @@ class TacosCog(commands.Cog):
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
             self.log.debug(
                 ctx.message.channel.name,
-                _method,
+                f"tacos.{_method}",
                 f"{ctx.message.author.name} does not have permission to use this command.",
             )
             return
@@ -81,7 +81,7 @@ class TacosCog(commands.Cog):
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
                 self.log.debug(
                     ctx.message.channel.name,
-                    _method,
+                    f"tacos.{_method}",
                     f"{ctx.message.author.name} does not have permission to use this command.",
                 )
                 return
@@ -101,7 +101,7 @@ class TacosCog(commands.Cog):
                 index_position = index_position + 1
             await ctx.reply(message_out)
         except Exception as e:
-            self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
+            self.log.error(ctx.message.channel.name, f"tacos.{_method}", str(e), traceback.format_exc())
 
     async def _tacos_balance(self, ctx, args) -> None:
         _method = inspect.stack()[1][3]
@@ -115,7 +115,7 @@ class TacosCog(commands.Cog):
                 ):
                     self.log.debug(
                         ctx.message.channel.name,
-                        _method,
+                        f"tacos.{_method}",
                         f"{ctx.message.author.name} does not have permission to use this command.",
                     )
                     return
@@ -126,13 +126,13 @@ class TacosCog(commands.Cog):
                 if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
                     self.log.debug(
                         ctx.message.channel.name,
-                        _method,
+                        f"tacos.{_method}",
                         f"{ctx.message.author.name} does not have permission to use this command.",
                     )
                     return
                 await self._tacos_balance_for_user(ctx, ctx.message.author.name)
         except Exception as e:
-            self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
+            self.log.error(ctx.message.channel.name, f"tacos.{_method}", str(e), traceback.format_exc())
 
     async def _tacos_balance_for_user(self, ctx, user) -> None:
         _method = inspect.stack()[1][3]
@@ -157,7 +157,7 @@ class TacosCog(commands.Cog):
             else:
                 await ctx.reply(f"@{ctx.message.author.display_name}, {response_user} {response_has} no tacos 🌮.")
         except Exception as e:
-            self.log.error(ctx.message.channel.name, _method, str(e), traceback.format_exc())
+            self.log.error(ctx.message.channel.name, f"tacos.{_method}", str(e), traceback.format_exc())
 
     async def _tacos_give(self, ctx, args) -> None:
         _method = inspect.stack()[1][3]
@@ -175,14 +175,14 @@ class TacosCog(commands.Cog):
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
             self.log.debug(
                 ctx.message.channel.name,
-                _method,
+                f"tacos.{_method}",
                 f"{ctx.message.author.name} does not have permission to use this command.",
             )
             return
 
         channel = self.bot.get_channel(ctx.message.channel.name)
         if not channel:
-            self.log.debug(ctx.message.channel.name, _method, f"Channel {ctx.message.channel.name} not found.")
+            self.log.debug(ctx.message.channel.name, f"tacos.{_method}", f"Channel {ctx.message.channel.name} not found.")
             return
 
         if len(args) >= 2:
@@ -235,11 +235,24 @@ class TacosCog(commands.Cog):
 
                 if amount > 0:
                     await self.tacos_log.give_user_tacos(
-                        ctx.message.channel.name,
-                        user,
-                        reason,
-                        give_type=tacotypes.TacoTypes.TWITCH_CUSTOM,
+                        fromUser=ctx.message.channel.name,
+                        toUser=user,
+                        reason=reason,
+                        give_type=tacotypes.TacoTypes.TWITCH_RECEIVE_TACOS,
                         amount=amount)
+
+                    # don't need to check if the user has permissions, since we do that above.
+
+                    # give the broadcaster 5 tacos for using the command.
+                    taco_word = "taco" if amount == 1 else "tacos"
+
+                    await self.tacos_log.give_user_tacos(
+                        fromUser=utils.clean_channel_name(self.settings.bot_name),
+                        toUser=utils.clean_channel_name(ctx.message.channel.name),
+                        reason=f"giving {user} {amount} {taco_word} 🌮",
+                        give_type=tacotypes.TacoTypes.TWITCH_GIVE_TACOS,
+                        amount=amount,)
+
                 else:
                     await ctx.send(f"You can't give negative tacos!")
             else:
@@ -257,14 +270,14 @@ class TacosCog(commands.Cog):
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
             self.log.debug(
                 ctx.message.channel.name,
-                _method,
+                f"tacos.{_method}",
                 f"{ctx.message.author.name} does not have permission to use this command.",
             )
             return
 
         channel = self.bot.get_channel(ctx.message.channel.name)
         if not channel:
-            self.log.debug(ctx.message.channel.name, _method, f"Channel {ctx.message.channel.name} not found.")
+            self.log.debug(ctx.message.channel.name, f"tacos.{_method}", f"Channel {ctx.message.channel.name} not found.")
             return
 
         if len(args) >= 2:
@@ -301,6 +314,11 @@ class TacosCog(commands.Cog):
             return
         await ctx.send(f"Usage: !taco tacos [command] [args]. Available Commands: {', '.join(self.subcommands)}")
 
+    def get_tacos_settings(self) -> dict:
+        cog_settings = self.settings.get_settings(self.db, "tacos")
+        if not cog_settings:
+            raise Exception(f"No tacos settings found for guild {self.settings.discord_guild_id}")
+        return cog_settings
 
 def prepare(bot) -> None:
     bot.add_cog(TacosCog(bot))
