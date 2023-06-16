@@ -22,7 +22,7 @@ class Permissions:
         self.settings = settings.Settings()
         self.db = mongo.MongoDatabase()
 
-    def has_linked_account(self, user: typing.Union[twitchio.Chatter,str] = None):
+    def has_linked_account(self, user: typing.Optional[typing.Union[twitchio.Chatter,str]] = None):
         if isinstance(user, twitchio.Chatter):
             user = user.name
         user = utils.clean_channel_name(user)

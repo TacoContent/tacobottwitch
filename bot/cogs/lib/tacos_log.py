@@ -8,7 +8,7 @@ from . import utils
 
 import traceback
 import inspect
-
+import typing
 
 class TacosLog:
     def __init__(self, bot):
@@ -23,7 +23,7 @@ class TacosLog:
 
         self.log = logger.Log(minimumLogLevel=log_level)
 
-    async def _log(self, fromUser: str, toUser: str, amount: int, total_taco_count: int, reason: str = None):
+    async def _log(self, fromUser: str, toUser: str, amount: int, total_taco_count: int, reason: str = None,) -> None:
         if amount == 0:
             return
         action = "received"
@@ -42,8 +42,9 @@ class TacosLog:
         if total_taco_count != 1:
             total_taco_word = "tacos"
 
-        content = f"{toUser} has {action} {abs_amount} {taco_word} 🌮 {action_adverb} from {fromUser} for {reason}, giving them {total_taco_count} {total_taco_word} 🌮 total."
+        content = f"{toUser} has {action} {abs_amount} {taco_word} 🌮 {action_adverb} {fromUser} for {reason}, giving them {total_taco_count} {total_taco_word} 🌮 total."
 
+        # TODO use a defined type for this instead of a list of dicts
         fields = [
             {"name": "▶ TO USER", "value": toUser},
             {"name": "◀ FROM USER", "value": fromUser},
@@ -81,7 +82,7 @@ class TacosLog:
         self,
         fromUser: str,
         toUser: str,
-        reason: str = None,
+        reason: typing.Optional[str] = None,
         give_type: tacotypes.TacoTypes = tacotypes.TacoTypes.TWITCH_CUSTOM,
         amount: int = 1,
     ):
@@ -99,7 +100,7 @@ class TacosLog:
 
             taco_type_key = tacotypes.TacoTypes.get_string_from_taco_type(give_type)
             if taco_type_key not in taco_settings:
-                self.log.debug(fromUser, _method, f"Key {taco_type_key} not found in taco settings. Using taco_amount ({amount}) as taco count")
+                self.log.debug(fromUser, f"tacos_log.{_method}", f"Key {taco_type_key} not found in taco settings. Using taco_amount ({amount}) as taco count")
                 taco_count = taco_count
             else:
                 taco_count = taco_settings[tacotypes.TacoTypes.get_string_from_taco_type(give_type)]
@@ -126,4 +127,4 @@ class TacosLog:
             await self._log(fromUser, toUser, taco_count, total_taco_count, reason_msg)
             return total_taco_count
         except Exception as e:
-            self.log.error(fromUser, _method, str(e), traceback.format_exc())
+            self.log.error(fromUser, f"tacos_log.{_method}", str(e), traceback.format_exc())

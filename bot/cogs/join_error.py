@@ -59,6 +59,14 @@ class JoinErrorCog(commands.Cog):
                 self.log.error(channel, "join_error.event_channel_join_failure", f"Failed to join channel '{channel}' after 3 attempts. Giving up.", traceback.format_exc())
                 return
 
+            # get the number of channel attempted joins, and sum of the total number of attempts across all channels.
+            total_attempts = sum(self.channel_attempts.values())
+            if total_attempts > 20:
+                self.log.error(channel, "join_error.event_channel_join_failure", f"Failed to join channel '{channel}' after 20 attempts. Giving up.", traceback.format_exc())
+                # exit the bot.
+                raise SystemExit(1)
+
+
             self.log.warn(channel, "join_error.event_channel_join_failure", f"Failed to join channel '{channel}'. Attempting Rejoin.", traceback.format_exc())
             await self.bot.join_channels([channel])
         except Exception as e:
