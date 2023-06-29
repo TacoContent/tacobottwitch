@@ -79,6 +79,7 @@ class DiscordAccountLinkCog(commands.Cog):
         else:
             try:
                 # generate code
+                # link this invite to the channel
                 invite_data = self.db.get_invite_for_user(utils.clean_channel_name(ctx.message.channel.name))
                 if invite_data:
                     self.log.debug(
