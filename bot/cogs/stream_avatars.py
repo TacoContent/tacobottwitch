@@ -31,7 +31,7 @@ class StreamAvatars(commands.Cog):
 
         self.default_settings = {
           "enabled": True,
-          "action_message": r"^(?P<user>@?[a-zA-Z0-9-_]) Has Challenged @OurTacoBot To A Duel with a buyin of \d{1,}. Type !accept or !decline within 30 seconds$"
+          "action_message": r"^(?P<challenger>@?[a-zA-Z0-9-_]+) Has Challenged (?P<challenged>@?[a-zA-Z0-9-_]+) To A Duel with a buyin of \d{1,}. Type \!accept or \!decline within \d{1,} seconds$"
         }
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
@@ -59,28 +59,36 @@ class StreamAvatars(commands.Cog):
 
             game_settings = channel_settings.get(self.event_name, self.default_settings)
             if not game_settings.get("enabled", True):
+                self.log.debug(channel, "stream_avatars.event_message", "Event disabled")
+                return
+            pattern = game_settings.get("action_message", self.default_settings['action_message'])
+
+            match_regex = re.compile(pattern, re.IGNORECASE| re.MULTILINE )
+
+            if sender != channel:
                 return
 
-            match_regex = re.compile(game_settings.get("action_message", self.default_settings['action_message']), re.IGNORECASE | re.MULTILINE)
+            # if message.content matches epic regex
+            match = match_regex.match(message.content)
+            if match:
+                # get the user
+                challenged = utils.clean_channel_name(match.group("challenged"))
+                challenger = utils.clean_channel_name(match.group("challenger"))
 
-            if sender == channel:
+                if challenged != utils.clean_channel_name(self.bot.nick):
+                    self.log.debug(channel, "stream_avatars.event_message", "Challenged is not the bot")
+                    return
+                # if the user is a known taco user, give tacos
+                if not self.permissions_helper.has_linked_account(challenger):
+                    await message.channel.send("!decline")
+                    return
+
+                else:
+                    await message.channel.send("!accept")
+                    return
+            else:
+                self.log.debug(channel, "stream_avatars.event_message", "Message did not match regex")
                 return
-
-            # is the message from the bot?
-            if sender == utils.clean_channel_name(channel):
-                # if message.content matches epic regex
-                match = match_regex.match(message.content)
-                if match:
-                    # get the user
-                    username = utils.clean_channel_name(match.group("user"))
-                    # if the user is a known taco user, give tacos
-                    if not self.permissions_helper.has_linked_account(username):
-                        await message.channel.send("!decline")
-                        return
-
-                    else:
-                        await message.channel.send("!accept")
-                        return
 
         except Exception as e:
             self.log.error(message.channel.name, "rainmaker.event_message", str(e), traceback.format_exc())
