@@ -23,6 +23,9 @@ from .lib import logger
 
 class DiscordAccountLinkCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
+        _method = inspect.stack()[0][3]
+        # get the file name without the extension and without the directory
+        self._module = os.path.basename(__file__)[:-3]
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
@@ -33,7 +36,7 @@ class DiscordAccountLinkCog(commands.Cog):
         self.permissions_helper = permissions.Permissions()
 
         self.log = logger.Log(minimumLogLevel=log_level)
-        self.log.debug("NONE", "account_link.__init__", "Initialized")
+        self.log.debug("NONE", f"{self._module}.{_method}", "Initialized")
 
     # @commands.command(name="update")
     # # @permissions.has_permission(permission=permissions.Permssions.EVERYONE)
@@ -84,7 +87,7 @@ class DiscordAccountLinkCog(commands.Cog):
                 if invite_data:
                     self.log.debug(
                         ctx.message.channel.name,
-                        "account_link.link",
+                        f"{self._module}.{_method}",
                         f"Found invite data for {ctx.message.channel.name}",
                     )
                     discord_invite = invite_data["info"]["url"]
@@ -93,7 +96,7 @@ class DiscordAccountLinkCog(commands.Cog):
                     if invite_data:
                         self.log.debug(
                             ctx.message.channel.name,
-                            "account_link.link",
+                            f"{self._module}.{_method}",
                             f"Found random invite data for {ctx.message.channel.name}",
                         )
                         discord_invite = invite_data["info"]["url"]
@@ -117,10 +120,16 @@ class DiscordAccountLinkCog(commands.Cog):
     # @commands.Cog.event("cog_command_error")
     # this is not triggered...
     async def cog_command_error(self, ctx: commands.Context, error: Exception) -> None:
-        print(f"Error: {str(error)}")
+        _method = inspect.stack()[1][3]
         if isinstance(error, commands.errors.CommandOnCooldown):
             await ctx.send(str(error))
         else:
+            self.log.error(
+                ctx.message.channel.name,
+                f"{self._module}.{_method}",
+                str(error),
+                traceback.format_exc(),
+            )
             await ctx.send(f"Error: {error}")
 
 

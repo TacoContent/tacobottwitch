@@ -4,6 +4,7 @@ import os
 import traceback
 import sys
 import json
+import inspect
 from .lib import mongo
 from .lib import settings
 from .lib import utils
@@ -13,6 +14,9 @@ from .lib import loglevel
 
 class TacoQuestionOfTheDayCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
+        _method = inspect.stack()[0][3]
+        # get the file name without the extension and without the directory
+        self._module = os.path.basename(__file__)[:-3]
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
@@ -21,10 +25,11 @@ class TacoQuestionOfTheDayCog(commands.Cog):
             log_level = loglevel.LogLevel.DEBUG
 
         self.log = logger.Log(minimumLogLevel=log_level)
-        self.log.debug("NONE", "toqtd.__init__", "Initialized")
+        self.log.debug("NONE", f"{self._module}.{_method}", "Initialized")
 
     @commands.command(name="tqotd", aliases=["tqod"])
     async def tqotd(self, ctx) -> None:
+        _method = inspect.stack()[0][3]
         if ctx.message.echo:
             return
         channel = utils.clean_channel_name(ctx.message.channel.name)
@@ -32,17 +37,17 @@ class TacoQuestionOfTheDayCog(commands.Cog):
         if question:
             invite_data = self.db.get_invite_for_user(channel)
             if not invite_data:
-                self.log.debug(channel, "tqotd.tqotd", "Looking for random invite")
+                self.log.debug(channel, f"{self._module}.{_method}", "Looking for random invite")
                 invite_data = self.db.get_any_invite()
             if invite_data:
                 await ctx.send(
                     f"TACO Question of the Day: {question} -> Join the discussion: {invite_data['info']['url']}"
                 )
             else:
-                self.log.debug(channel, "tqotd.tqotd", "No invite found. Just sending the question.")
+                self.log.debug(channel, f"{self._module}.{_method}", "No invite found. Just sending the question.")
                 await ctx.send(f"TACO Question of the Day: {question}")
         else:
-            self.log.warn(channel, "tqotd.tqotd", "No question found.")
+            self.log.warn(channel, f"{self._module}.{_method}", "No question found.")
             await ctx.send(f"No TACO Question of the Day found. Check back later.")
 
 

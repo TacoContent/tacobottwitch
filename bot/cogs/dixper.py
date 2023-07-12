@@ -21,6 +21,9 @@ from .lib import tacotypes
 
 class DixperBroCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
+        _method = inspect.stack()[0][3]
+        # get the file name without the extension and without the directory
+        self._module = os.path.basename(__file__)[:-3]
 
         self.bot = bot
         self.db = mongo.MongoDatabase()
@@ -43,7 +46,7 @@ class DixperBroCog(commands.Cog):
 
         self.log = logger.Log(minimumLogLevel=log_level)
         self.permissions_helper = permissions.Permissions()
-        self.log.debug("NONE", "dixper.__init__", "Initialized")
+        self.log.debug("NONE", f"{self._module}.{_method}", "Initialized")
 
 
     @commands.command(name="dixper")
@@ -53,7 +56,7 @@ class DixperBroCog(commands.Cog):
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
             self.log.debug(
                 ctx.message.channel.name,
-                f"dixper.{_method}",
+                f"{self._module}.{_method}",
                 f"{ctx.message.author.name} does not have permission to use this command.",
             )
             return
@@ -75,12 +78,12 @@ class DixperBroCog(commands.Cog):
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
                 self.log.debug(
                     channel,
-                    f"dixper.{_method}",
+                    f"{self._module}.{_method}",
                     f"{ctx.message.author.name} does not have permission to use this command.",
                 )
                 return
 
-            self.log.debug(channel, "dixper.dixper_stop", f"Stopping dixper event in {channel}")
+            self.log.debug(channel, f"{self._module}.{_method}", f"Stopping dixper event in {channel}")
             prefixes = self.settings.prefixes
             if not prefixes:
                 prefixes = ["!taco "]
@@ -97,7 +100,7 @@ class DixperBroCog(commands.Cog):
                 f"@{ctx.message.author.display_name}, I will no longer give tacos for people that purchase dixper packs in your channel. You can start it again with `{prefix}dixper start`."
             )
         except Exception as e:
-            self.log.error(channel, "dixper.dixper_stop", str(e), traceback.format_exc())
+            self.log.error(channel, f"{self._module}.{_method}", str(e), traceback.format_exc())
 
 
     async def _dixper_start(self, ctx: commands.Context, args) -> None:
@@ -111,12 +114,12 @@ class DixperBroCog(commands.Cog):
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
                 self.log.debug(
                     channel,
-                    f"dixper.{_method}",
+                    f"{self._module}.{_method}",
                     f"{ctx.message.author.name} does not have permission to use this command.",
                 )
                 return
 
-            self.log.debug(channel, "dixper.dixper_start", f"Starting dixper event in {channel}")
+            self.log.debug(channel, f"{self._module}.{_method}", f"Starting dixper event in {channel}")
             prefixes = self.settings.prefixes
             if not prefixes:
                 prefixes = ["!taco "]
@@ -132,12 +135,13 @@ class DixperBroCog(commands.Cog):
                 f"@{ctx.message.author.display_name}, I will now give tacos to people that purchase dixper packs in your channel. You can stop it with `{prefix}dixper stop`."
             )
         except Exception as e:
-            self.log.error(channel, "dixper.dixper_start", str(e), traceback.format_exc())
+            self.log.error(channel, f"{self._module}.{_method}", str(e), traceback.format_exc())
 
 
     @commands.Cog.event()
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
     async def event_message(self, message) -> None:
+        _method = inspect.stack()[1][3]
         try:
             if message.author is None or message.channel is None:
                 return
@@ -176,7 +180,7 @@ class DixperBroCog(commands.Cog):
                     if not self.permissions_helper.has_linked_account(username):
                         self.log.debug(
                             channel,
-                            "dixper.event_message",
+                            f"{self._module}.{_method}",
                             f"NON-TACO: {username} purchased {amount} {crate_name} dixper {crate_word} in {channel}'s channel",
                         )
                         return
@@ -184,7 +188,7 @@ class DixperBroCog(commands.Cog):
                     reason = f"purchasing {amount} {crate_name} dixper {crate_word} in {channel}'s channel"
                     self.log.debug(
                         channel,
-                        "dixper.event_message",
+                        f"{self._module}.{_method}",
                         f"{username} {reason}",
                     )
                     await self.tacos_log.give_user_tacos(
@@ -215,7 +219,7 @@ class DixperBroCog(commands.Cog):
                     if not self.permissions_helper.has_linked_account(username):
                         self.log.debug(
                             channel,
-                            "dixper.event_message",
+                            f"{self._module}.{_method}",
                             f"NON-TACO: {username} gifted {amount} {crate_name} dixper {crate_word} to {gifted} in {channel}'s channel",
                         )
                         return
@@ -223,7 +227,7 @@ class DixperBroCog(commands.Cog):
                     reason = f"gifted {amount} {crate_name} dixper {crate_word} to {gifted} in {channel}'s channel"
                     self.log.debug(
                         channel,
-                        "dixper.event_message",
+                        f"{self._module}.{_method}",
                         f"{username} {reason}",
                     )
                     await self.tacos_log.give_user_tacos(
@@ -236,7 +240,7 @@ class DixperBroCog(commands.Cog):
                     return
 
         except Exception as e:
-            self.log.error(message.channel.name, "dixper.event_message", str(e), traceback.format_exc())
+            self.log.error(message.channel.name, f"{self._module}.{_method}", str(e), traceback.format_exc())
 
 
 def prepare(bot) -> None:

@@ -3,7 +3,7 @@ import twitchio
 from . import permissions
 import typing
 
-async def check_linked_account(ctx, user: typing.Union[twitchio.Chatter, str] = None):
+async def check_linked_account(ctx, user: typing.Union[twitchio.Chatter, str] = None) -> bool:
     perm = permissions.Permissions()
     if user is None:
         user = ctx.message.author

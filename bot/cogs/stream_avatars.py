@@ -18,6 +18,9 @@ from .lib import tacotypes
 
 class StreamAvatars(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
+        _method = inspect.stack()[0][3]
+        # get the file name without the extension and without the directory
+        self._module = os.path.basename(__file__)[:-3]
 
         self.bot = bot
         self.db = mongo.MongoDatabase()
@@ -40,7 +43,7 @@ class StreamAvatars(commands.Cog):
 
         self.log = logger.Log(minimumLogLevel=log_level)
         self.permissions_helper = permissions.Permissions()
-        self.log.debug("NONE", "stream_avatars.__init__", "Initialized")
+        self.log.debug("NONE", f"{self._module}.{_method}", "Initialized")
 
     @commands.Cog.event()
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
@@ -59,7 +62,7 @@ class StreamAvatars(commands.Cog):
 
             game_settings = channel_settings.get(self.event_name, self.default_settings)
             if not game_settings.get("enabled", True):
-                self.log.debug(channel, "stream_avatars.event_message", "Event disabled")
+                self.log.debug(channel, f"{self._module}.{_method}", "Event disabled")
                 return
             pattern = game_settings.get("action_message", self.default_settings['action_message'])
 
@@ -76,7 +79,7 @@ class StreamAvatars(commands.Cog):
                 challenger = utils.clean_channel_name(match.group("challenger"))
 
                 if challenged != utils.clean_channel_name(self.bot.nick):
-                    self.log.debug(channel, "stream_avatars.event_message", "Challenged is not the bot")
+                    self.log.debug(channel, f"{self._module}.{_method}", "Challenged is not the bot")
                     return
                 # if the user is a known taco user, give tacos
                 if not self.permissions_helper.has_linked_account(challenger):
@@ -87,10 +90,10 @@ class StreamAvatars(commands.Cog):
                     await message.channel.send("!accept")
                     return
             else:
-                self.log.debug(channel, "stream_avatars.event_message", "Message did not match regex")
+                self.log.debug(channel, f"{self._module}.{_method}", "Message did not match regex")
                 return
 
         except Exception as e:
-            self.log.error(message.channel.name, "rainmaker.event_message", str(e), traceback.format_exc())
+            self.log.error(message.channel.name, f"{self._module}.{_method}", str(e), traceback.format_exc())
 def prepare(bot) -> None:
     bot.add_cog(StreamAvatars(bot))

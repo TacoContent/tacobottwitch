@@ -22,6 +22,9 @@ from .lib import tacotypes
 
 class JoinErrorCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
+        _method = inspect.stack()[0][3]
+        # get the file name without the extension and without the directory
+        self._module = os.path.basename(__file__)[:-3]
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
@@ -33,22 +36,25 @@ class JoinErrorCog(commands.Cog):
 
         self.log = logger.Log(minimumLogLevel=log_level)
         self.permissions_helper = permissions.Permissions()
-        self.log.debug("NONE", "join_error.__init__", "Initialized")
+        self.log.debug("NONE", f"{self._module}.{_method}", "Initialized")
 
         self.channel_attempts = {}
 
     @commands.Cog.event()
     async def event_ready(self) -> None:
-        self.log.debug("NONE", "join_error.event_ready", "Ready")
+        _method = inspect.stack()[0][3]
+        self.log.debug("NONE", f"{self._module}.{_method}", "Ready")
 
     @commands.Cog.event()
     async def event_channel_joined(self, channel) -> None:
-        self.log.debug(channel.name, "join_error.event_channel_join", f"Joined channel '{channel.name}'")
+        _method = inspect.stack()[0][3]
+        self.log.debug(channel.name, f"{self._module}.{_method}", f"Joined channel '{channel.name}'")
         if channel.name in self.channel_attempts:
             del self.channel_attempts[channel.name]
 
     @commands.Cog.event()
     async def event_channel_join_failure(self, channel) -> None:
+        _method = inspect.stack()[0][3]
         try:
             if channel in self.channel_attempts:
                 self.channel_attempts[channel] += 1
@@ -56,21 +62,21 @@ class JoinErrorCog(commands.Cog):
                 self.channel_attempts[channel] = 1
 
             if self.channel_attempts[channel] > 3:
-                self.log.error(channel, "join_error.event_channel_join_failure", f"Failed to join channel '{channel}' after 3 attempts. Giving up.", traceback.format_exc())
+                self.log.error(channel, f"{self._module}.{_method}", f"Failed to join channel '{channel}' after 3 attempts. Giving up.", traceback.format_exc())
                 return
 
             # get the number of channel attempted joins, and sum of the total number of attempts across all channels.
             total_attempts = sum(self.channel_attempts.values())
             if total_attempts > 20:
-                self.log.error(channel, "join_error.event_channel_join_failure", f"Failed to join channel '{channel}' after 20 attempts. Giving up.", traceback.format_exc())
+                self.log.error(channel, f"{self._module}.{_method}", f"Failed to join channel '{channel}' after 20 attempts. Giving up.", traceback.format_exc())
                 # exit the bot.
                 raise SystemExit(1)
 
 
-            self.log.warn(channel, "join_error.event_channel_join_failure", f"Failed to join channel '{channel}'. Attempting Rejoin.", traceback.format_exc())
+            self.log.warn(channel, f"{self._module}.{_method}", f"Failed to join channel '{channel}'. Attempting Rejoin.", traceback.format_exc())
             await self.bot.join_channels([channel])
         except Exception as e:
-            self.log.error(channel, "join_error.event_channel_join_failure", str(e), traceback.format_exc())
+            self.log.error(channel, f"{self._module}.{_method}", str(e), traceback.format_exc())
 
 def prepare(bot) -> None:
     bot.add_cog(JoinErrorCog(bot))

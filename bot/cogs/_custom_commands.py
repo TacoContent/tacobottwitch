@@ -18,6 +18,9 @@ from .lib import tacotypes
 
 class CustomCommandCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
+        _method = inspect.stack()[0][3]
+        # get the file name without the extension and without the directory
+        self._module = os.path.basename(__file__)[:-3]
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()

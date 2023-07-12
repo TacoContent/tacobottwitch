@@ -40,6 +40,7 @@ class MongoDatabase:
                 self.open()
             payload = {
                 "channel: ": utils.clean_channel_name(channel),
+                "guild_id": self.settings.discord_guild_id,
                 "timestamp": utils.get_timestamp(),
                 "level": level.name,
                 "method": method,

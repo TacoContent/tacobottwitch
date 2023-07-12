@@ -22,6 +22,9 @@ from .lib import tacotypes
 
 class FirstChatCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
+        _method = inspect.stack()[0][3]
+        # get the file name without the extension and without the directory
+        self._module = os.path.basename(__file__)[:-3]
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
@@ -35,11 +38,12 @@ class FirstChatCog(commands.Cog):
 
         self.log = logger.Log(minimumLogLevel=log_level)
         self.permissions_helper = permissions.Permissions()
-        self.log.debug("NONE", "first_chat.__init__", "Initialized")
+        self.log.debug("NONE", f"{self._module}.{_method}", "Initialized")
 
     @commands.Cog.event()
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
     async def event_message(self, message) -> None:
+        _method = inspect.stack()[0][3]
         try:
             if message.author is None or message.channel is None:
                 return
@@ -65,7 +69,7 @@ class FirstChatCog(commands.Cog):
                     amount=self.TACO_AMOUNT,
                     )
         except Exception as e:
-            self.log.error(message.channel.name, "first_chat.event_message", str(e), traceback.format_exc())
+            self.log.error(message.channel.name, f"{self._module}.{_method}", str(e), traceback.format_exc())
 
 def prepare(bot) -> None:
     bot.add_cog(FirstChatCog(bot))

@@ -18,10 +18,18 @@ from .lib import tacotypes
 
 class Commands(commands.Cog):
     def __init__(self, bot) -> None:
+        _method = inspect.stack()[0][3]
+        # get the file name without the extension and without the directory
+        self._module = os.path.basename(__file__)[:-3]
         self.bot = bot
         self.db = mongo.MongoDatabase()
         self.settings = settings.Settings()
         self.commands_url = "https://tacocontent.github.io/ourtacobot/twitch"
+        log_level = loglevel.LogLevel[self.settings.log_level.upper()]
+        if not log_level:
+            log_level = loglevel.LogLevel.DEBUG
+        self.log = logger.Log(minimumLogLevel=log_level)
+        self.log.debug("NONE", f"{self._module}.{_method}", "Initialized")
 
     @commands.command(name="commands")
     @commands.cooldown(1, 30, commands.Bucket.channel)
