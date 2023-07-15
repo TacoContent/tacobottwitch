@@ -48,6 +48,7 @@ class StreamAvatars(commands.Cog):
     @commands.Cog.event()
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
     async def event_message(self, message) -> None:
+        _method = inspect.stack()[0][3]
         try:
             if message.author is None or message.channel is None:
                 return

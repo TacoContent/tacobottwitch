@@ -6,12 +6,16 @@ from . import tacotypes
 from . import mongo
 from . import utils
 
+import os
 import traceback
 import inspect
 import typing
 
 class TacosLog:
     def __init__(self, bot):
+        _method = inspect.stack()[0][3]
+        # get the file name without the extension and without the directory
+        self._module = os.path.basename(__file__)[:-3]
         self.settings = settings.Settings()
         self.bot = bot
         self.webhook = discord_webhook.DiscordWebhook(self.settings.discord_tacos_log_webhook_url)
@@ -93,14 +97,14 @@ class TacosLog:
             if not taco_settings:
                 # raise exception if there are no tacos settings
                 self.log.error(
-                    fromUser, "tacos.on_message", f"No tacos settings found for guild {self.settings.discord_guild_id}"
+                    fromUser, f"{self._module}.{_method}", f"No tacos settings found for guild {self.settings.discord_guild_id}"
                 )
                 return
             taco_count = amount
 
             taco_type_key = tacotypes.TacoTypes.get_string_from_taco_type(give_type)
             if taco_type_key not in taco_settings:
-                self.log.debug(fromUser, f"tacos_log.{_method}", f"Key {taco_type_key} not found in taco settings. Using taco_amount ({amount}) as taco count")
+                self.log.debug(fromUser, f"{self._module}.{_method}", f"Key {taco_type_key} not found in taco settings. Using taco_amount ({amount}) as taco count")
                 taco_count = taco_count
             else:
                 taco_count = taco_settings[tacotypes.TacoTypes.get_string_from_taco_type(give_type)]
@@ -127,4 +131,4 @@ class TacosLog:
             await self._log(fromUser, toUser, taco_count, total_taco_count, reason_msg)
             return total_taco_count
         except Exception as e:
-            self.log.error(fromUser, f"tacos_log.{_method}", str(e), traceback.format_exc())
+            self.log.error(fromUser, f"{self._module}.{_method}", str(e), traceback.format_exc())
