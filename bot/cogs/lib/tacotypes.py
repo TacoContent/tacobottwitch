@@ -45,6 +45,7 @@ class TacoTypes(Enum):
     TWITCH_GIVE_TACOS = 32
     TWITCH_RECEIVE_TACOS = 1006
     TWITCH_FOLLOW = 1007 # not yet implemented until i can figure out how to get the event from eventsub
+    TWITCH_STREAM_AVATARS = 1008
 
     PURGE = 9996
     LEAVE_SERVER = 9997
@@ -136,13 +137,20 @@ class TacoTypes(Enum):
             return TacoTypes.TWITCH_RECEIVE_TACOS
         elif taco_type_string == "twitch_follow_count":
             return TacoTypes.TWITCH_FOLLOW
+        elif taco_type_string == "twitch_stream_avatars_count":
+            return TacoTypes.TWITCH_STREAM_AVATARS
         elif taco_type_string == "twitch_custom":
             return TacoTypes.TWITCH_CUSTOM
         else:
             return TacoTypes.CUSTOM
 
+    def __str__(self):
+        return str(self.name)
+
     @staticmethod
     def get_db_type_from_taco_type(taco_type):
+        return str(taco_type)
+
         if taco_type == TacoTypes.JOIN_SERVER:
             return "JOIN_SERVER"
         elif taco_type == TacoTypes.BOOST:
@@ -225,6 +233,8 @@ class TacoTypes(Enum):
             return "TWITCH_RECEIVE_TACOS"
         elif taco_type == TacoTypes.TWITCH_FOLLOW:
             return "TWITCH_FOLLOW"
+        elif taco_type == TacoTypes.TWITCH_STREAM_AVATARS:
+            return "TWITCH_STREAM_AVATARS"
         elif taco_type == TacoTypes.TWITCH_CUSTOM:
             return "TWITCH_CUSTOM"
         else:
@@ -314,6 +324,8 @@ class TacoTypes(Enum):
             return "twitch_receive_tacos" # this property is not saved in settings, as it should be the amount they give
         elif taco_type == TacoTypes.TWITCH_FOLLOW:
             return "twitch_follow_count"
+        elif taco_type == TacoTypes.TWITCH_STREAM_AVATARS:
+            return "twitch_stream_avatars_count"
         elif taco_type == TacoTypes.TWITCH_CUSTOM:
             return "twitch_custom"
         else:

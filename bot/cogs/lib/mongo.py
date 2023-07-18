@@ -11,6 +11,7 @@ from bson.objectid import ObjectId
 from . import utils
 from . import settings
 from . import loglevel
+from .sa_types import StreamAvatarTypes
 
 
 class MongoDatabase:
@@ -668,6 +669,155 @@ class MongoDatabase:
             }
 
             self.connection.tacos_log.insert_one(payload)
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+        finally:
+            if self.connection:
+                self.close()
+
+    def track_twitch_stream_avatar_duel(self, channel: str, challenger: typing.Optional[str], opponent: typing.Optional[str], count: typing.Optional[int], winner: typing.Optional[str], type: StreamAvatarTypes):
+        try:
+            if self.connection is None:
+                self.open()
+            date = datetime.datetime.utcnow()
+            timestamp = utils.to_timestamp(date)
+            channel = utils.clean_channel_name(channel)
+            challenger = utils.clean_channel_name(challenger)
+            opponent = utils.clean_channel_name(opponent)
+            winner = utils.clean_channel_name(winner)
+
+            channel_discord_user_id = self._get_discord_id(channel)
+            challenger_discord_user_id = self._get_discord_id(challenger)
+            opponent_discord_user_id = self._get_discord_id(opponent)
+            winner_discord_user_id = None
+            if winner:
+                winner_discord_user_id = self._get_discord_id(winner)
+
+            payload = {
+                "guild_id": self.settings.discord_guild_id,
+                "channel_user_id": str(channel_discord_user_id),
+                "channel": channel,
+                "challenger_user_id": str(challenger_discord_user_id),
+                "challenger": challenger,
+                "opponent": opponent,
+                "opponent_user_id": str(opponent_discord_user_id),
+                "winner": winner,
+                "winner_user_id": str(winner_discord_user_id),
+                "count": count,
+                "type": str(type),
+                "timestamp": timestamp
+            }
+
+            if count is None:
+                del payload['count']
+            if winner is None:
+                del payload['winner']
+                del payload['winner_user_id']
+
+            if challenger is None:
+                del payload['challenger']
+                del payload['challenger_user_id']
+
+            if opponent is None:
+                del payload['opponent']
+                del payload['opponent_user_id']
+
+
+            self.connection.twitch_stream_avatar_duel.update_one( {
+                "guild_id": self.settings.discord_guild_id,
+                "$or": [
+                    {
+                        "channel_user_id": str(channel_discord_user_id),
+                        "opponent_user_id": str(opponent_discord_user_id),
+                    },
+                    {
+                        "channel_user_id": str(channel_discord_user_id),
+                        "challenger_user_id": str(opponent_discord_user_id),
+                    }
+                ]
+            }, {"$set": payload}, upsert=True)
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+        finally:
+            if self.connection:
+                self.close()
+
+    def get_twitch_stream_avatar_duel_from_challenger_opponent(
+            self,
+            channel: str,
+            challenger: str,
+            opponent: str,
+            type: StreamAvatarTypes = StreamAvatarTypes.ACCEPTED
+    ):
+        try:
+
+            if self.connection is None:
+                self.open()
+
+            # find the open duel from the channel, (challenger or opponent) where the type is START and the timestamp is within the last 5 minutes
+            date = datetime.datetime.utcnow()
+            timestamp = utils.to_timestamp(date)
+            # 5 minutes ago
+            timestamp_5_minutes_ago = timestamp - (5 * 60)
+
+            channel = utils.clean_channel_name(channel)
+            challenger = utils.clean_channel_name(challenger)
+            opponent = utils.clean_channel_name(opponent)
+
+            channel_discord_user_id = self._get_discord_id(channel)
+            challenger_discord_user_id = self._get_discord_id(challenger)
+            opponent_discord_user_id = self._get_discord_id(opponent)
+
+            return self.connection.twitch_stream_avatar_duel.find_one( {
+                "guild_id": self.settings.discord_guild_id,
+                "channel_user_id": str(channel_discord_user_id),
+                "challenger_user_id": str(challenger_discord_user_id),
+                "opponent_user_id": str(opponent_discord_user_id),
+                "type": str(type),
+                "timestamp": {"$gte": timestamp_5_minutes_ago}
+            })
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+
+    def get_twitch_stream_avatar_duel_from_user(self, channel: str, user: str, type: StreamAvatarTypes = StreamAvatarTypes.ACCEPTED):
+        try:
+            if self.connection is None:
+                self.open()
+
+            # find the open duel from the channel, (challenger or opponent) where the type is START and the timestamp is within the last 5 minutes
+            date = datetime.datetime.utcnow()
+            timestamp = utils.to_timestamp(date)
+            # 5 minutes ago
+            timestamp_5_minutes_ago = timestamp - (5 * 60)
+
+            channel = utils.clean_channel_name(channel)
+            user = utils.clean_channel_name(user)
+
+            channel_discord_user_id = self._get_discord_id(channel)
+            user_discord_user_id = self._get_discord_id(user)
+
+            return self.connection.twitch_stream_avatar_duel.find_one( {
+                "guild_id": self.settings.discord_guild_id,
+                "$or": [
+                    {
+                        "channel_user_id": str(channel_discord_user_id),
+                        "opponent_user_id": str(user_discord_user_id),
+                        "type": str(type),
+                        "timestamp": {"$gte": timestamp_5_minutes_ago},
+                        "winner_user_id": None
+                    },
+                    {
+                        "channel_user_id": str(channel_discord_user_id),
+                        "challenger_user_id": str(user_discord_user_id),
+                        "type": str(type),
+                        "timestamp": {"$gte": timestamp_5_minutes_ago},
+                        "winner_user_id": None
+                    }
+                ]
+            })
         except Exception as ex:
             print(ex)
             traceback.print_exc()
