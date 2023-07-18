@@ -685,14 +685,19 @@ class MongoDatabase:
             channel = utils.clean_channel_name(channel)
             challenger = utils.clean_channel_name(challenger)
             opponent = utils.clean_channel_name(opponent)
-            winner = utils.clean_channel_name(winner)
+            if winner:
+                winner = utils.clean_channel_name(winner)
+
 
             channel_discord_user_id = self._get_discord_id(channel)
             challenger_discord_user_id = self._get_discord_id(challenger)
             opponent_discord_user_id = self._get_discord_id(opponent)
             winner_discord_user_id = None
-            if winner:
+            if winner and winner != '':
                 winner_discord_user_id = self._get_discord_id(winner)
+            else:
+                winner_discord_user_id = None
+                winner = None
 
             payload = {
                 "guild_id": self.settings.discord_guild_id,
@@ -702,8 +707,6 @@ class MongoDatabase:
                 "challenger": challenger,
                 "opponent": opponent,
                 "opponent_user_id": str(opponent_discord_user_id),
-                "winner": winner,
-                "winner_user_id": str(winner_discord_user_id),
                 "count": count,
                 "type": str(type),
                 "timestamp": timestamp
@@ -711,9 +714,14 @@ class MongoDatabase:
 
             if count is None:
                 del payload['count']
-            if winner is None:
-                del payload['winner']
-                del payload['winner_user_id']
+            # if winner is None or winner == '' or winner == 'None' or winner_discord_user_id is None or winner_discord_user_id == '' or winner_discord_user_id == 'None':
+            #     # payload['winner'] = None
+            #     # payload['winner_user_id'] = None
+            #     del payload['winner']
+            #     del payload['winner_user_id']
+            # else:
+            #     payload['winner'] = winner
+            #     payload['winner_user_id'] = str(winner_discord_user_id)
 
             if challenger is None:
                 del payload['challenger']
@@ -723,20 +731,21 @@ class MongoDatabase:
                 del payload['opponent']
                 del payload['opponent_user_id']
 
+            print (payload)
 
-            self.connection.twitch_stream_avatar_duel.update_one( {
-                "guild_id": self.settings.discord_guild_id,
-                "$or": [
-                    {
-                        "channel_user_id": str(channel_discord_user_id),
-                        "opponent_user_id": str(opponent_discord_user_id),
-                    },
-                    {
-                        "channel_user_id": str(channel_discord_user_id),
-                        "challenger_user_id": str(opponent_discord_user_id),
-                    }
-                ]
-            }, {"$set": payload}, upsert=True)
+            # self.connection.twitch_stream_avatar_duel.update_one( {
+            #     "guild_id": self.settings.discord_guild_id,
+            #     "$or": [
+            #         {
+            #             "channel_user_id": str(channel_discord_user_id),
+            #             "opponent_user_id": str(opponent_discord_user_id),
+            #         },
+            #         {
+            #             "channel_user_id": str(channel_discord_user_id),
+            #             "challenger_user_id": str(challenger_discord_user_id),
+            #         }
+            #     ]
+            # }, {"$set": payload}, upsert=True)
         except Exception as ex:
             print(ex)
             traceback.print_exc()
@@ -801,19 +810,20 @@ class MongoDatabase:
 
             return self.connection.twitch_stream_avatar_duel.find_one( {
                 "guild_id": self.settings.discord_guild_id,
+                "channel": channel,
                 "$or": [
                     {
                         "channel_user_id": str(channel_discord_user_id),
                         "opponent_user_id": str(user_discord_user_id),
                         "type": str(type),
-                        "timestamp": {"$gte": timestamp_5_minutes_ago},
+                        # "timestamp": {"$gte": timestamp_5_minutes_ago},
                         "winner_user_id": None
                     },
                     {
                         "channel_user_id": str(channel_discord_user_id),
                         "challenger_user_id": str(user_discord_user_id),
                         "type": str(type),
-                        "timestamp": {"$gte": timestamp_5_minutes_ago},
+                        # "timestamp": {"$gte": timestamp_5_minutes_ago},
                         "winner_user_id": None
                     }
                 ]

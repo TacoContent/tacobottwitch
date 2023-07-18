@@ -62,9 +62,9 @@ class StreamAvatars(commands.Cog):
                 return
 
             winner = utils.clean_channel_name(winner)
-            opponent = utils.clean_channel_name(duel.opponent)
-            challenger = utils.clean_channel_name(duel.challenger)
-            buyin = duel.count
+            opponent = utils.clean_channel_name(duel['opponent'])
+            challenger = utils.clean_channel_name(duel['challenger'])
+            buyin = duel['count']
 
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
@@ -141,6 +141,9 @@ class StreamAvatars(commands.Cog):
                 self.log.debug(channel, f"{self._module}.{_method}", "Event disabled")
                 return
 
+            print(f"opponent: {opponent}")
+            print(f"challenger: {challenger}")
+
             self.db.track_twitch_stream_avatar_duel(
                 channel=channel,
                 challenger=challenger,
@@ -176,10 +179,10 @@ class StreamAvatars(commands.Cog):
         _method = inspect.stack()[0][3]
         try:
             self.db.track_twitch_stream_avatar_duel(
-                channel=duel.channel,
-                challenger=duel.challenger,
-                opponent=duel.opponent,
-                count=duel.count,
+                channel=duel['channel'],
+                challenger=duel['challenger'],
+                opponent=duel['opponent'],
+                count=duel['count'],
                 winner=None,
                 type=StreamAvatarTypes.ACCEPTED
             )
@@ -190,10 +193,10 @@ class StreamAvatars(commands.Cog):
         _method = inspect.stack()[0][3]
         try:
             self.db.track_twitch_stream_avatar_duel(
-                channel=duel.channel,
-                challenger=duel.challenger,
-                opponent=duel.opponent,
-                count=duel.count,
+                channel=duel['channel'],
+                challenger=duel['challenger'],
+                opponent=duel['opponent'],
+                count=duel['count'],
                 winner=None,
                 type=StreamAvatarTypes.DECLINED
             )
@@ -257,16 +260,17 @@ class StreamAvatars(commands.Cog):
             decline_match = decline_match_regex.match(message.content)
             winner_match = winner_match_regex.match(message.content)
 
-            if start_match_regex.match(message.content):
+            if start_duel_match:
+                print(f"named groups: {start_duel_match.groupdict()}")
                 self.log.debug(channel, f"{self._module}.{_method}", "Message matched to start duel")
-                opponent = start_duel_match.group("opponent")
-                challenger = start_duel_match.group("challenger")
+                opponent = utils.clean_channel_name(start_duel_match.group("opponent"))
+                challenger = utils.clean_channel_name(start_duel_match.group("challenger"))
                 buyin = int(start_duel_match.group("buyin"))
                 await self.start_duel(message, opponent, challenger, buyin)
                 return
             elif accept_match:
-                opponent = accept_match.group("opponent")
-                challenger = accept_match.group("challenger")
+                opponent = utils.clean_channel_name(accept_match.group("opponent"))
+                challenger = utils.clean_channel_name(accept_match.group("challenger"))
                 duel = self.db.get_twitch_stream_avatar_duel_from_challenger_opponent(
                     channel=channel,
                     challenger=challenger,
@@ -277,7 +281,7 @@ class StreamAvatars(commands.Cog):
                     return
                 await self.duel_accepted(message, duel)
             elif decline_match:
-                opponent = decline_match.group("opponent")
+                opponent = utils.clean_channel_name(decline_match.group("opponent"))
                 duel = self.db.get_twitch_stream_avatar_duel_from_user(channel=channel, user=opponent, type=StreamAvatarTypes.REQUESTED)
                 if duel is None:
                     self.log.debug(channel, f"{self._module}.{_method}", f"Could not find duel for opponent: {opponent}")
@@ -286,7 +290,7 @@ class StreamAvatars(commands.Cog):
                 await self.duel_declined(message, duel)
             elif winner_match:
                 self.log.debug(channel, f"{self._module}.{_method}", "Message matched for winner")
-                winner = winner_match.group("winner")
+                winner = utils.clean_channel_name(winner_match.group("winner"))
                 buyin = int(winner_match.group("buyin"))
 
                 duel = self.db.get_twitch_stream_avatar_duel_from_user(channel=channel, user=winner, type=StreamAvatarTypes.ACCEPTED)
@@ -294,11 +298,11 @@ class StreamAvatars(commands.Cog):
                     self.log.debug(channel, f"{self._module}.{_method}", f"Could not find duel for winner: {winner}")
                     return
 
-                challenger = duel.challenger
-                opponent = duel.opponent
-                buyin = duel.count
+                challenger = duel['challenger']
+                opponent = duel['opponent']
+                buyin = duel['count']
 
-                self.log.debug(channel, f"{self._module}.{_method}", f"Found duel between: {duel.challenger} and {duel.opponent} with a buyin of {duel.count}")
+                self.log.debug(channel, f"{self._module}.{_method}", f"Found duel between: {duel['challenger']} and {duel['opponent']} with a buyin of {duel['count']}")
 
                 await self.end_duel(
                     message=message,
