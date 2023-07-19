@@ -304,10 +304,6 @@ class StreamAvatars(commands.Cog):
 
         game_settings = channel_settings.get(self.event_name, self.default_settings)
 
-        if "only_bot" not in game_settings:
-            channel_settings[self.event_name]["only_bot"] = self.default_settings['only_bot']
-            self.settings.set_channel_settings(self.db, channel, channel_settings)
-
         if "action_message" not in game_settings:
             channel_settings[self.event_name]["action_message"] = self.default_settings['action_message']
             self.settings.set_channel_settings(self.db, channel, channel_settings)
