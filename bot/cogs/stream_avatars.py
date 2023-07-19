@@ -39,6 +39,7 @@ class StreamAvatars(commands.Cog):
           "winner_message": r"^Congratulations to (?P<winner>@?[a-zA-Z0-9-_]+) for winning the duel! \+(?P<buyin>\d{1,})$",
           "accept_message": r"^(?P<opponent>@?[a-zA-Z0-9-_]+) has accepted the duel against (?P<challenger>@?[a-zA-Z0-9-_]+)!$",
           "decline_message": r"^(?P<opponent>@?[a-zA-Z0-9-_]+) has declined the duel$",
+          "error_message": r"^Could not find target (?P<opponent>@?[a-zA-Z0-9-_]+)$",
         }
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
@@ -318,6 +319,10 @@ class StreamAvatars(commands.Cog):
 
         if "decline_message" not in game_settings:
             channel_settings[self.event_name]["decline_message"] = self.default_settings['decline_message']
+            self.settings.set_channel_settings(self.db, channel, channel_settings)
+
+        if "error_message" not in game_settings:
+            channel_settings[self.event_name]["error_message"] = self.default_settings['error_message']
             self.settings.set_channel_settings(self.db, channel, channel_settings)
 
 def prepare(bot) -> None:
