@@ -31,11 +31,10 @@ class TacosLog:
         if amount == 0:
             return
         action = "received"
-        action_adverb = "to"
+        action_adverb = "from"
         abs_amount = abs(amount)
         if amount < 0:
             action = "lost"
-            action_adverb = "from"
         if reason is None:
             reason = "[no reason given]"
         taco_word = "taco"

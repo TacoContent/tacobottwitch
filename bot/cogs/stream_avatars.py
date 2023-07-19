@@ -97,27 +97,19 @@ class StreamAvatars(commands.Cog):
                 return
 
             # if the user is a known taco user, give tacos
-            if not self.permissions_helper.has_linked_account(challenger) or buyin <= 0:
+            if not self.permissions_helper.has_linked_account(winner) or buyin <= 0:
                 # not linked account, or no buyin, so no tacos to give
                 return
 
             # give the winner tacos
             await self.tacos_log.give_user_tacos(
-                fromUser=channel,
+                fromUser=utils.clean_channel_name(self.bot.nick),
                 toUser=winner,
                 reason=f"Winning a Stream Avatars Duel against {opponent} in {channel}'s channel",
                 give_type=tacotypes.TacoTypes.TWITCH_STREAM_AVATARS,
                 amount=self.TACO_AMOUNT
             )
 
-            self.db.track_twitch_stream_avatar_duel(
-                channel=channel,
-                challenger=challenger,
-                opponent=opponent,
-                count=buyin,
-                winner=winner,
-                type=StreamAvatarTypes.COMPLETE
-            )
         except Exception as e:
             raise e
 
@@ -167,7 +159,6 @@ class StreamAvatars(commands.Cog):
                 await message.channel.send("!decline")
                 # will be tracked by the !decline listener
                 return
-
             else:
                 await message.channel.send("!accept")
                 # will be tracked by the !accept listener
@@ -225,32 +216,20 @@ class StreamAvatars(commands.Cog):
                 return
 
             # make sure the settings are in the channel settings for each property
+            self.init_channel_settings(channel)
+
             action_pattern = game_settings.get("action_message", self.default_settings['action_message'])
-            if "action_message" not in game_settings:
-                channel_settings[self.event_name]["action_message"] = self.default_settings['action_message']
-                self.settings.set_channel_settings(self.db, channel, channel_settings)
-
             winner_pattern = game_settings.get("winner_message", self.default_settings['winner_message'])
-            if "winner_message" not in game_settings:
-                channel_settings[self.event_name]["winner_message"] = self.default_settings['winner_message']
-                self.settings.set_channel_settings(self.db, channel, channel_settings)
-
             accept_pattern = game_settings.get("accept_message", self.default_settings['accept_message'])
-            if "accept_message" not in game_settings:
-                channel_settings[self.event_name]["accept_message"] = self.default_settings['accept_message']
-                self.settings.set_channel_settings(self.db, channel, channel_settings)
-
             decline_pattern = game_settings.get("decline_message", self.default_settings['decline_message'])
-            if "decline_message" not in game_settings:
-                channel_settings[self.event_name]["decline_message"] = self.default_settings['decline_message']
-                self.settings.set_channel_settings(self.db, channel, channel_settings)
 
             start_match_regex = re.compile(action_pattern, re.IGNORECASE| re.MULTILINE )
             winner_match_regex = re.compile(winner_pattern, re.IGNORECASE| re.MULTILINE )
             accept_match_regex = re.compile(accept_pattern, re.IGNORECASE| re.MULTILINE )
             decline_match_regex = re.compile(decline_pattern, re.IGNORECASE| re.MULTILINE )
 
-
+            # close any unknown, open duels
+            self.db.close_twitch_stream_avatar_open_duels(channel)
 
             if sender != channel:
                 return
@@ -316,5 +295,34 @@ class StreamAvatars(commands.Cog):
 
         except Exception as e:
             self.log.error(message.channel.name, f"{self._module}.{_method}", str(e), traceback.format_exc())
+
+    def init_channel_settings(self, channel: str) -> None:
+        channel_settings = self.settings.get_channel_settings(self.db, channel)
+        if self.event_name not in channel_settings:
+            channel_settings[self.event_name] = self.default_settings
+            self.settings.set_channel_settings(self.db, channel, channel_settings)
+
+        game_settings = channel_settings.get(self.event_name, self.default_settings)
+
+        if "only_bot" not in game_settings:
+            channel_settings[self.event_name]["only_bot"] = self.default_settings['only_bot']
+            self.settings.set_channel_settings(self.db, channel, channel_settings)
+
+        if "action_message" not in game_settings:
+            channel_settings[self.event_name]["action_message"] = self.default_settings['action_message']
+            self.settings.set_channel_settings(self.db, channel, channel_settings)
+
+        if "winner_message" not in game_settings:
+            channel_settings[self.event_name]["winner_message"] = self.default_settings['winner_message']
+            self.settings.set_channel_settings(self.db, channel, channel_settings)
+
+        if "accept_message" not in game_settings:
+            channel_settings[self.event_name]["accept_message"] = self.default_settings['accept_message']
+            self.settings.set_channel_settings(self.db, channel, channel_settings)
+
+        if "decline_message" not in game_settings:
+            channel_settings[self.event_name]["decline_message"] = self.default_settings['decline_message']
+            self.settings.set_channel_settings(self.db, channel, channel_settings)
+
 def prepare(bot) -> None:
     bot.add_cog(StreamAvatars(bot))

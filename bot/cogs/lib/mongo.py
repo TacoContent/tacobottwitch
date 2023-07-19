@@ -676,7 +676,7 @@ class MongoDatabase:
             if self.connection:
                 self.close()
 
-    def track_twitch_stream_avatar_duel(self, channel: str, challenger: typing.Optional[str], opponent: typing.Optional[str], count: typing.Optional[int], winner: typing.Optional[str], type: StreamAvatarTypes):
+    def track_twitch_stream_avatar_duel(self, channel: str, challenger: typing.Optional[str], opponent: typing.Optional[str], count: typing.Optional[int], winner: typing.Optional[str], type: StreamAvatarTypes, ignore_closed: bool = False):
         try:
             if self.connection is None:
                 self.open()
@@ -709,19 +709,22 @@ class MongoDatabase:
                 "opponent_user_id": str(opponent_discord_user_id),
                 "count": count,
                 "type": str(type),
-                "timestamp": timestamp
+                "timestamp": timestamp,
+                "winner": winner if winner else None,
+                "winner_user_id": str(winner_discord_user_id) if winner_discord_user_id else None,
+
             }
 
             if count is None:
                 del payload['count']
-            # if winner is None or winner == '' or winner == 'None' or winner_discord_user_id is None or winner_discord_user_id == '' or winner_discord_user_id == 'None':
-            #     # payload['winner'] = None
-            #     # payload['winner_user_id'] = None
-            #     del payload['winner']
-            #     del payload['winner_user_id']
-            # else:
-            #     payload['winner'] = winner
-            #     payload['winner_user_id'] = str(winner_discord_user_id)
+            if winner is None or winner == '' or winner == 'None' or winner_discord_user_id is None or winner_discord_user_id == '' or winner_discord_user_id == 'None':
+                # payload['winner'] = None
+                # payload['winner_user_id'] = None
+                del payload['winner']
+                del payload['winner_user_id']
+            else:
+                payload['winner'] = winner
+                payload['winner_user_id'] = str(winner_discord_user_id)
 
             if challenger is None:
                 del payload['challenger']
@@ -733,19 +736,40 @@ class MongoDatabase:
 
             print (payload)
 
-            # self.connection.twitch_stream_avatar_duel.update_one( {
-            #     "guild_id": self.settings.discord_guild_id,
-            #     "$or": [
-            #         {
-            #             "channel_user_id": str(channel_discord_user_id),
-            #             "opponent_user_id": str(opponent_discord_user_id),
-            #         },
-            #         {
-            #             "channel_user_id": str(channel_discord_user_id),
-            #             "challenger_user_id": str(challenger_discord_user_id),
-            #         }
-            #     ]
-            # }, {"$set": payload}, upsert=True)
+            # timestamp within 2 minutes
+            timestamp_2_minutes_ago = timestamp - (2 * 60)
+
+            # if
+
+            self.connection.twitch_stream_avatar_duel.update_one( {
+                "guild_id": self.settings.discord_guild_id,
+                "$or": [
+                    {
+                        "channel_user_id": str(channel_discord_user_id),
+                        "opponent_user_id": str(opponent_discord_user_id),
+                    },
+                    {
+                        "channel_user_id": str(channel_discord_user_id),
+                        "challenger_user_id": str(challenger_discord_user_id),
+                    }
+                ],
+                # where type != COMPLETE and type != DECLINED
+                "$and": [
+                    {
+                        "type": {
+                            "$ne": str(StreamAvatarTypes.COMPLETE),
+                        }
+                    },
+                    {
+                        "type": {
+                            "$ne": str(StreamAvatarTypes.DECLINED),
+                        }
+                    }
+                ],
+                "timestamp": {
+                    "$gte": timestamp_2_minutes_ago
+                }
+            }, {"$set": payload}, upsert=True)
         except Exception as ex:
             print(ex)
             traceback.print_exc()
@@ -769,7 +793,7 @@ class MongoDatabase:
             date = datetime.datetime.utcnow()
             timestamp = utils.to_timestamp(date)
             # 5 minutes ago
-            timestamp_5_minutes_ago = timestamp - (5 * 60)
+            timestamp_2_minutes_ago = timestamp - (2 * 60)
 
             channel = utils.clean_channel_name(channel)
             challenger = utils.clean_channel_name(challenger)
@@ -785,11 +809,43 @@ class MongoDatabase:
                 "challenger_user_id": str(challenger_discord_user_id),
                 "opponent_user_id": str(opponent_discord_user_id),
                 "type": str(type),
-                "timestamp": {"$gte": timestamp_5_minutes_ago}
+                # "timestamp": {"$lte": timestamp_2_minutes_ago}
             })
         except Exception as ex:
             print(ex)
             traceback.print_exc()
+
+    def close_twitch_stream_avatar_open_duels(self, channel: str):
+        try:
+            if self.connection is None:
+                self.open()
+
+            # find the open duel from the channel, (challenger or opponent) where the type is START and the timestamp is within the last 5 minutes
+            date = datetime.datetime.utcnow()
+            timestamp = utils.to_timestamp(date)
+            # 5 minutes ago
+            timestamp_5_minutes_ago = timestamp - (5 * 60)
+
+            channel = utils.clean_channel_name(channel)
+
+            channel_discord_user_id = self._get_discord_id(channel)
+            # close requested or accepted duels that have been open for more than 5 minutes.
+            # set them as unknown as the actual state is unknown since they did not close correctly.
+            self.connection.twitch_stream_avatar_duel.update_many( {
+                "guild_id": self.settings.discord_guild_id,
+                "channel_user_id": str(channel_discord_user_id),
+                "type": {
+                    "$eq": str(StreamAvatarTypes.REQUESTED),
+                    "$ne": str(StreamAvatarTypes.ACCEPTED),
+                },
+                "timestamp": {"$lte": timestamp_5_minutes_ago}
+            }, {"$set": {"type": str(StreamAvatarTypes.UNKNOWN)}})
+        except Exception as ex:
+            print(ex)
+            traceback.print_exc()
+        finally:
+            if self.connection:
+                self.close()
 
     def get_twitch_stream_avatar_duel_from_user(self, channel: str, user: str, type: StreamAvatarTypes = StreamAvatarTypes.ACCEPTED):
         try:
@@ -800,7 +856,7 @@ class MongoDatabase:
             date = datetime.datetime.utcnow()
             timestamp = utils.to_timestamp(date)
             # 5 minutes ago
-            timestamp_5_minutes_ago = timestamp - (5 * 60)
+            timestamp_2_minutes_ago = timestamp - (2 * 60)
 
             channel = utils.clean_channel_name(channel)
             user = utils.clean_channel_name(user)
@@ -816,14 +872,14 @@ class MongoDatabase:
                         "channel_user_id": str(channel_discord_user_id),
                         "opponent_user_id": str(user_discord_user_id),
                         "type": str(type),
-                        # "timestamp": {"$gte": timestamp_5_minutes_ago},
+                        "timestamp": {"$gte": timestamp_2_minutes_ago},
                         "winner_user_id": None
                     },
                     {
                         "channel_user_id": str(channel_discord_user_id),
                         "challenger_user_id": str(user_discord_user_id),
                         "type": str(type),
-                        # "timestamp": {"$gte": timestamp_5_minutes_ago},
+                        "timestamp": {"$gte": timestamp_2_minutes_ago},
                         "winner_user_id": None
                     }
                 ]
