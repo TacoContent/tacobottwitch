@@ -60,7 +60,7 @@ class FirstChatCog(commands.Cog):
             message = message.content
             is_first_message = self.db.track_user_message_in_chat(channel, user, message, self.TIME_PERIOD)
             if is_first_message:
-                reason = f"their first message today in {channel}'s chat"
+                reason = f"their first message today in @{channel}'s chat"
                 await self.tacos_log.give_user_tacos(
                     utils.clean_channel_name(self.settings.bot_name),
                     user,
