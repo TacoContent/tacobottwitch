@@ -100,7 +100,7 @@ class RainmakerCog(commands.Cog):
             set_message = ' '.join(args[0:]).strip()
             channel_settings[self.bot_user]["action_message"] = set_message
             self.settings.set_channel_settings(self.db, channel, channel_settings)
-            await ctx.reply(f"@{ctx.message.author.name} Your stream elements tip message has been set to '{set_message}'. Use {prefix}rainmaker set <regex> to change it.")
+            await ctx.reply(f"Your stream elements tip message has been set to '{set_message}'. Use {prefix}rainmaker set <regex> to change it.")
         except Exception as e:
             self.log.error(channel, f"{self._module}.{_method}", str(e), traceback.format_exc())
 
@@ -215,16 +215,16 @@ class RainmakerCog(commands.Cog):
                         )
                         return
 
-                    reason = f"retweeted the stream in {channel}'s channel"
+                    reason = f"retweeted the stream in @{channel}'s channel"
                     self.log.debug(
                         channel,
                         f"{self._module}.{_method}",
                         f"{username} retweeted the stream in {channel}'s channel",
                     )
                     await self.tacos_log.give_user_tacos(
-                        utils.clean_channel_name(self.settings.bot_name),
-                        username,
-                        reason,
+                        fromUser=utils.clean_channel_name(self.bot.nick),
+                        toUser=username,
+                        reason=reason,
                         give_type=tacotypes.TacoTypes.TWITCH_CUSTOM,
                         amount=self.TACO_AMOUNT,
                     )

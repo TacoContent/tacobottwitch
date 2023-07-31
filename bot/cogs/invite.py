@@ -65,7 +65,7 @@ class TacoInviteCog(commands.Cog):
 
                     # give to the broadcaster from the bot. no notification in broadcaster channel.
                     await self.tacos_log.give_user_tacos(
-                        fromUser=utils.clean_channel_name(self.settings.bot_name),
+                        fromUser=utils.clean_channel_name(self.bot.nick),
                         toUser=utils.clean_channel_name(ctx.message.channel.name),
                         reason="promoting TACO discord",
                         give_type=tacotypes.TacoTypes.TWITCH_PROMOTE,
@@ -101,8 +101,13 @@ class TacoInviteCog(commands.Cog):
             self.db.add_bot_to_channel(channel)
             self.log.debug(ctx.message.channel.name, f"{self._module}.{_method}", f"Added channel {channel} to channel list and joined channel.")
             await self.bot.join_channels([f"#{channel}"])
-            await ctx.reply(f"{ctx.message.author.mention}, I have added {channel} to the channel list and joined the channel.")
-            await self.tacos_log.give_user_tacos(ctx.message.channel.name, channel, "Inviting @ourtacobot to their channel.", tacotypes.TacoTypes.TWITCH_BOT_INVITE, 5)
+            await ctx.reply(f"{ctx.message.author.mention}, I have added @{channel} to the channel list and joined the channel.")
+            await self.tacos_log.give_user_tacos(
+                fromUser=utils.clean_channel_name(self.bot.nick),
+                toUser=channel,
+                reason=f"Inviting @ourtacobot to their channel.",
+                give_type=tacotypes.TacoTypes.TWITCH_BOT_INVITE,
+                amount=5)
         except ValueError as e:
             await ctx.reply(f"{ctx.message.author.mention}, {e}")
         except Exception as e:
@@ -140,7 +145,7 @@ class TacoInviteCog(commands.Cog):
             # await self.bot.part_channels([f"#{channel}"])
             # workaround:
             await self.bot._connection.send(f"PART #{channel}\r\n")
-            await ctx.reply(f"{ctx.message.author.mention}, I have removed the channel {channel} from the list and left the channel.")
+            await ctx.reply(f"{ctx.message.author.mention}, I have removed the channel @{channel} from the list and left the channel.")
         except ValueError as e:
             await ctx.reply(f"{ctx.message.author.mention}, {e}")
         except Exception as e:

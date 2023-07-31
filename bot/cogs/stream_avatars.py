@@ -106,7 +106,7 @@ class StreamAvatars(commands.Cog):
             await self.tacos_log.give_user_tacos(
                 fromUser=utils.clean_channel_name(self.bot.nick),
                 toUser=winner,
-                reason=f"Winning a Stream Avatars Duel against {opponent} in {channel}'s channel",
+                reason=f"Winning a Stream Avatars Duel against @{opponent} in @{channel}'s channel",
                 give_type=tacotypes.TacoTypes.TWITCH_STREAM_AVATARS,
                 amount=self.TACO_AMOUNT
             )

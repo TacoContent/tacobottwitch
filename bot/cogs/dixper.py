@@ -185,16 +185,16 @@ class DixperBroCog(commands.Cog):
                         )
                         return
 
-                    reason = f"purchasing {amount} {crate_name} dixper {crate_word} in {channel}'s channel"
+                    reason = f"purchasing {amount} {crate_name} dixper {crate_word} in @{channel}'s channel"
                     self.log.debug(
                         channel,
                         f"{self._module}.{_method}",
                         f"{username} {reason}",
                     )
                     await self.tacos_log.give_user_tacos(
-                        utils.clean_channel_name(self.settings.bot_name),
-                        username,
-                        reason,
+                        fromUser=utils.clean_channel_name(self.bot.nick),
+                        toUser=username,
+                        reason=reason,
                         give_type=tacotypes.TacoTypes.TWITCH_CUSTOM,
                         amount=self.TACO_AMOUNT,
                     )

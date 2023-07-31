@@ -181,16 +181,16 @@ class StreamCaptainBotCog(commands.Cog):
                         )
                         return
 
-                    reason = f"placing a StreamRaiders {epic_name} in {channel}'s channel"
+                    reason = f"placing a StreamRaiders {epic_name} in @{channel}'s channel"
                     self.log.debug(
                         channel,
                         f"{self._module}.{_method}",
                         f"{username} placed a StreamRaiders {epic_name} in {channel}'s channel",
                     )
                     await self.tacos_log.give_user_tacos(
-                        utils.clean_channel_name(self.settings.bot_name),
-                        username,
-                        reason,
+                        fromUser=utils.clean_channel_name(self.bot.nick),
+                        toUser=username,
+                        reason=reason,
                         give_type=tacotypes.TacoTypes.TWITCH_CUSTOM,
                         amount=self.TACO_AMOUNT,
                     )
@@ -213,16 +213,16 @@ class StreamCaptainBotCog(commands.Cog):
                         )
                         return
 
-                    reason = f"purchasing a StreamRaiders {skin_name} skin in {channel}'s channel"
+                    reason = f"purchasing a StreamRaiders {skin_name} skin in @{channel}'s channel"
                     self.log.debug(
                         channel,
                         f"{self._module}.{_method}",
                         f"{username} purchased a StreamRaiders {skin_name} skin in {channel}'s channel",
                     )
                     await self.tacos_log.give_user_tacos(
-                        utils.clean_channel_name(self.settings.bot_name),
-                        username,
-                        reason,
+                        fromUser=utils.clean_channel_name(self.bot.nick),
+                        toUser=username,
+                        reason=reason,
                         give_type=tacotypes.TacoTypes.TWITCH_CUSTOM,
                         amount=self.TACO_AMOUNT,
                     )

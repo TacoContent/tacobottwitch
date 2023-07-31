@@ -31,6 +31,8 @@ class MongoDatabase:
         try:
             if self.client:
                 self.client.close()
+                self.client = None
+                self.connection = None
         except Exception as ex:
             print(ex)
             traceback.print_exc()
@@ -120,7 +122,7 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
         finally:
-            if self.connection:
+            if self.connection is None:
                 self.close()
 
     def get_channels(self) -> typing.List[str]:
@@ -400,7 +402,7 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
         finally:
-            if self.connection:
+            if self.connection is None:
                 self.close()
 
     def add_tacos(self, twitch_name: str, count: int) -> int:
@@ -436,7 +438,7 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
         finally:
-            if self.connection:
+            if self.connection is None:
                 self.close()
 
     def remove_tacos(self, twitch_name: str, count: int) -> int:
@@ -478,7 +480,7 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
         finally:
-            if self.connection:
+            if self.connection is None:
                 self.close()
 
     def track_taco_gift(self, channel: str, user: str, amount: int, reason: str = None) -> None:
@@ -506,7 +508,7 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
         finally:
-            if self.connection:
+            if self.connection is None:
                 self.close()
 
     def get_total_gifted_tacos(self, channel: str, timespan_seconds: int = 86400) -> int:
@@ -533,7 +535,7 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
         finally:
-            if self.connection:
+            if self.connection is None:
                 self.close()
 
     def get_total_gifted_tacos_to_user(self, channel: str, user: str, timespan_seconds: int = 86400) -> int:
@@ -563,7 +565,7 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
         finally:
-            if self.connection:
+            if self.connection is None:
                 self.close()
 
     def track_user_message_in_chat(self, channel: str, user: str, message: str, timespan_seconds: int = 86400) -> bool:
@@ -615,7 +617,7 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
         finally:
-            if self.connection:
+            if self.connection is None:
                 self.close()
 
     def get_active_game_offer(self):
@@ -642,7 +644,7 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
         finally:
-            if self.connection:
+            if self.connection is None:
                 self.close()
 
     def track_tacos_log(self, channel: str, user: str, count: int, type: str, reason: str):
@@ -673,7 +675,7 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
         finally:
-            if self.connection:
+            if self.connection is None:
                 self.close()
 
     def track_twitch_stream_avatar_duel(self, channel: str, challenger: typing.Optional[str], opponent: typing.Optional[str], count: typing.Optional[int], winner: typing.Optional[str], type: StreamAvatarTypes, ignore_closed: bool = False):
@@ -774,7 +776,7 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
         finally:
-            if self.connection:
+            if self.connection is None:
                 self.close()
 
     def get_twitch_stream_avatar_duel_from_challenger_opponent(
@@ -844,7 +846,7 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
         finally:
-            if self.connection:
+            if self.connection is None:
                 self.close()
 
     def get_twitch_stream_avatar_duel_from_user(self, channel: str, user: str, type: StreamAvatarTypes = StreamAvatarTypes.ACCEPTED):
@@ -888,5 +890,5 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
         finally:
-            if self.connection:
+            if self.connection is None:is None:
                 self.close()
