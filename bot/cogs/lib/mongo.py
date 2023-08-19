@@ -205,7 +205,8 @@ class MongoDatabase:
             if self.connection is None:
                 self.open()
             # get the count of all invites
-            invite_count = self.connection.invite_codes.count()
+            all_invites = list(self.connection.invite_codes.find({}))
+            invite_count = len(all_invites)
             # get a random number between 0 and the count of invites
             rand_index = random.randint(0, invite_count)
             # get the invite at the random index and take 1 item
