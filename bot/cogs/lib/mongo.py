@@ -231,7 +231,6 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
             return None
-        finally:
 
     def get_tqotd(self) -> str:
         try:
