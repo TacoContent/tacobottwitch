@@ -54,8 +54,6 @@ class MongoDatabase:
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-        finally:
-            self.close()
 
     def clear_log(self, channel: str) -> None:
         try:
@@ -66,8 +64,6 @@ class MongoDatabase:
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-        finally:
-            self.close()
 
     def get_channel_settings(self, channel: str) -> dict:
         try:
@@ -85,9 +81,6 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
             return None
-        finally:
-            self.close()
-            pass
 
     def set_channel_settings(self, channel: str, settings: dict) -> None:
         try:
@@ -104,9 +97,6 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
             raise ex
-        finally:
-            self.close()
-            pass
 
     def get_settings(self, name: str) -> dict:
         try:
@@ -121,9 +111,6 @@ class MongoDatabase:
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-        finally:
-            if self.connection is None:
-                self.close()
 
     def get_channels(self) -> typing.List[str]:
         return self.get_bot_twitch_channels()
@@ -148,8 +135,6 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
             return None
-        finally:
-            self.close()
 
     def add_bot_to_channel(self, twitch_channel) -> None:
         try:
@@ -176,8 +161,6 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
             raise ex
-        finally:
-            self.close()
 
     def remove_bot_from_channel(self, twitch_channel) -> bool:
         try:
@@ -197,8 +180,6 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
             raise ex
-        finally:
-            self.close()
 
     def get_any_invite(self) -> dict:
         try:
@@ -221,8 +202,6 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
             return None
-        finally:
-            self.close()
 
     def get_invite_for_user(self, twitch_name: str) -> dict:
         try:
@@ -244,8 +223,6 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
             return None
-        finally:
-            self.close()
 
     def get_discord_id_for_twitch_username(self, username: str) -> str:
         try:
@@ -255,7 +232,6 @@ class MongoDatabase:
             traceback.print_exc()
             return None
         finally:
-            self.close()
 
     def get_tqotd(self) -> str:
         try:
@@ -285,8 +261,6 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
             return None
-        finally:
-            self.close()
 
     def _get_discord_id(self, username: str) -> str:
         if self.connection is None:
@@ -317,8 +291,6 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
             raise ex
-        finally:
-            self.close()
 
     def link_twitch_to_discord_from_code(self, twitch_name: str, code: str) -> bool:
         try:
@@ -346,8 +318,6 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
             raise ex
-        finally:
-            self.close()
 
     def get_top_tacos_leaderboard(self, limit: int = 10) -> list:
         try:
@@ -378,8 +348,6 @@ class MongoDatabase:
             print(ex)
             traceback.print_exc()
             return None
-        finally:
-            self.close()
 
     def get_tacos_count(self, twitch_name: str) -> int:
         try:
@@ -402,9 +370,6 @@ class MongoDatabase:
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-        finally:
-            if self.connection is None:
-                self.close()
 
     def add_tacos(self, twitch_name: str, count: int) -> int:
         try:
@@ -438,9 +403,6 @@ class MongoDatabase:
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-        finally:
-            if self.connection is None:
-                self.close()
 
     def remove_tacos(self, twitch_name: str, count: int) -> int:
         try:
@@ -480,9 +442,6 @@ class MongoDatabase:
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-        finally:
-            if self.connection is None:
-                self.close()
 
     def track_taco_gift(self, channel: str, user: str, amount: int, reason: str = None) -> None:
         try:
@@ -508,9 +467,6 @@ class MongoDatabase:
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-        finally:
-            if self.connection is None:
-                self.close()
 
     def get_total_gifted_tacos(self, channel: str, timespan_seconds: int = 86400) -> int:
         try:
@@ -535,9 +491,6 @@ class MongoDatabase:
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-        finally:
-            if self.connection is None:
-                self.close()
 
     def get_total_gifted_tacos_to_user(self, channel: str, user: str, timespan_seconds: int = 86400) -> int:
         try:
@@ -565,9 +518,7 @@ class MongoDatabase:
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-        finally:
-            if self.connection is None:
-                self.close()
+
 
     def track_user_message_in_chat(self, channel: str, user: str, message: str, timespan_seconds: int = 86400) -> bool:
         # if the user has not messaged in the channel in the last timespan_seconds, add them to the database
@@ -617,9 +568,7 @@ class MongoDatabase:
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-        finally:
-            if self.connection is None:
-                self.close()
+
 
     def get_active_game_offer(self):
         try:
@@ -644,9 +593,7 @@ class MongoDatabase:
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-        finally:
-            if self.connection is None:
-                self.close()
+
 
     def track_tacos_log(self, channel: str, user: str, count: int, type: str, reason: str):
         try:
@@ -675,9 +622,7 @@ class MongoDatabase:
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-        finally:
-            if self.connection is None:
-                self.close()
+
 
     def track_twitch_stream_avatar_duel(self, channel: str, challenger: typing.Optional[str], opponent: typing.Optional[str], count: typing.Optional[int], winner: typing.Optional[str], type: StreamAvatarTypes, ignore_closed: bool = False):
         try:
@@ -776,9 +721,7 @@ class MongoDatabase:
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-        finally:
-            if self.connection is None:
-                self.close()
+
 
     def get_twitch_stream_avatar_duel_from_challenger_opponent(
             self,
@@ -846,9 +789,7 @@ class MongoDatabase:
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-        finally:
-            if self.connection is None:
-                self.close()
+
 
     def get_twitch_stream_avatar_duel_from_user(self, channel: str, user: str, type: StreamAvatarTypes = StreamAvatarTypes.ACCEPTED):
         try:
@@ -890,6 +831,3 @@ class MongoDatabase:
         except Exception as ex:
             print(ex)
             traceback.print_exc()
-        finally:
-            if self.connection is None:is None:
-                self.close()
