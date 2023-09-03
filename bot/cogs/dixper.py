@@ -152,7 +152,7 @@ class DixperBroCog(commands.Cog):
                 # if message.content matches purchase regex
                 purchase_regex = re.compile(
                     game_settings.get("purchase_regex", self.default_settings["purchase_regex"]),
-                    re.IGNORECASE| re.MULTILINE,
+                    re.IGNORECASE | re.MULTILINE,
                 )
                 match = purchase_regex.match(message.content)
                 if match:
@@ -187,8 +187,7 @@ class DixperBroCog(commands.Cog):
 
                 # if message.content matches gift regex
                 gift_regex = re.compile(
-                    game_settings.get("gift_regex", self.default_settings["gift_regex"]),
-                    re.IGNORECASE| re.MULTILINE,
+                    game_settings.get("gift_regex", self.default_settings["gift_regex"]), re.IGNORECASE | re.MULTILINE
                 )
                 match = gift_regex.match(message.content)
                 if match:
@@ -207,7 +206,7 @@ class DixperBroCog(commands.Cog):
                     if not self.permissions_helper.has_linked_account(username):
                         self.log.debug(
                             channel,
-                            f"{self._module}.{_method}",
+                            f"{self._module}.{self._class}.{_method}",
                             f"NON-TACO: {username} gifted {amount} {crate_name} dixper {crate_word} to {gifted} in {channel}'s channel",
                         )
                         return
@@ -224,7 +223,9 @@ class DixperBroCog(commands.Cog):
                     return
 
         except Exception as e:
-            self.log.error(message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc())
+            self.log.error(
+                message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc()
+            )
 
 
 def prepare(bot) -> None:

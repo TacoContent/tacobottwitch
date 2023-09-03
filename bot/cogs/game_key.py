@@ -40,9 +40,7 @@ class TacoGameKeyCog(commands.Cog):
                 )
             else:
                 self.log.debug(
-                    channel,
-                    f"{self._module}.{self._class}.{_method}",
-                    "No invite found. Just sending the game info.",
+                    channel, f"{self._module}.{self._class}.{_method}", "No invite found. Just sending the game info."
                 )
                 await ctx.send(f"TACO Game Redeem: Get a key for '{game['title']}' using your tacos 🌮.")
         else:

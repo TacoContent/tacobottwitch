@@ -12,6 +12,7 @@ from bot.cogs.lib import utils
 class Settings:
     APP_VERSION = "1.0.0-snapshot"
     BITRATE_DEFAULT = 64
+
     def __init__(self) -> None:
         self.name = ""
         self.author = ""
@@ -77,8 +78,8 @@ class Settings:
             "marblesonstream": {"enabled": True},
             "rainmaker": {
                 "enabled": True,
-                "action_message": r"^Thank you for tweeting out the stream, (?P<user>@?[a-zA-Z0-9-_]+).$"
-            }
+                "action_message": r"^Thank you for tweeting out the stream, (?P<user>@?[a-zA-Z0-9-_]+).$",
+            },
         }
 
     def get_channel_settings(self, db, channel: str) -> dict:

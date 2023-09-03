@@ -23,15 +23,14 @@ class MongoDatabase:
         self.connection = None
         self.settings = settings.Settings()
 
-
     def log(
-            self,
-            level: loglevel.LogLevel,
-            method: str,
-            message: str,
-            stackTrace: typing.Optional[str] = None,
-            channel: typing.Optional[str] = None,
-        ) -> None:
+        self,
+        level: loglevel.LogLevel,
+        method: str,
+        message: str,
+        stackTrace: typing.Optional[str] = None,
+        channel: typing.Optional[str] = None,
+    ) -> None:
         _method = inspect.stack()[0][3]
         if channel is None:
             channel = str(loglevel.EmptyChannel())
@@ -541,6 +540,7 @@ class MongoDatabase:
                 stackTrace=traceback.format_exc(),
                 channel=None,
             )
+
     def add_tacos(self, twitch_name: str, count: int) -> typing.Optional[int]:
         _method = inspect.stack()[0][3]
         try:
@@ -775,11 +775,7 @@ class MongoDatabase:
                         "message": message,
                     }
                     self.connection.twitch_first_message.update_one(
-                        {
-                            "guild_id": self.settings.discord_guild_id,
-                            "channel": channel,
-                            "twitch_name": user,
-                        },
+                        {"guild_id": self.settings.discord_guild_id, "channel": channel, "twitch_name": user},
                         {"$set": payload},
                     )
                     return True
@@ -813,18 +809,12 @@ class MongoDatabase:
                 self.open()
 
             # get the open offer:
-            offer = self.connection.game_key_offers.find_one( {
-                "guild_id": self.settings.discord_guild_id,
-            })
+            offer = self.connection.game_key_offers.find_one({"guild_id": self.settings.discord_guild_id})
             if offer:
                 # get game data
-                game_data = self.connection.game_keys.find_one( {
-                    "_id": ObjectId(str(offer['game_key_id']))
-                })
+                game_data = self.connection.game_keys.find_one({"_id": ObjectId(str(offer['game_key_id']))})
                 if game_data:
-                    return {
-                        "title": game_data['title']
-                    }
+                    return {"title": game_data['title']}
             else:
                 return None
         except Exception as ex:
@@ -857,7 +847,7 @@ class MongoDatabase:
                 "count": count,
                 "type": type,
                 "reason": reason,
-                "timestamp": timestamp
+                "timestamp": timestamp,
             }
 
             self.connection.tacos_log.insert_one(payload)
@@ -978,11 +968,7 @@ class MongoDatabase:
             )
 
     def get_twitch_stream_avatar_duel_from_challenger_opponent(
-            self,
-            channel: str,
-            challenger: str,
-            opponent: str,
-            type: StreamAvatarTypes = StreamAvatarTypes.ACCEPTED
+        self, channel: str, challenger: str, opponent: str, type: StreamAvatarTypes = StreamAvatarTypes.ACCEPTED
     ) -> typing.Optional[dict]:
         _method = inspect.stack()[0][3]
         try:
@@ -992,8 +978,6 @@ class MongoDatabase:
             # find the open duel from the channel, (challenger or opponent) where the type is START and the timestamp is within the last 5 minutes
             date = datetime.datetime.utcnow()
             timestamp = utils.to_timestamp(date)
-            # 5 minutes ago
-            timestamp_2_minutes_ago = timestamp - (2 * 60)
 
             channel = utils.clean_channel_name(channel)
             challenger = utils.clean_channel_name(challenger)
@@ -1003,14 +987,16 @@ class MongoDatabase:
             challenger_discord_user_id = self._get_discord_id(challenger)
             opponent_discord_user_id = self._get_discord_id(opponent)
 
-            return self.connection.twitch_stream_avatar_duel.find_one( {
-                "guild_id": self.settings.discord_guild_id,
-                "channel_user_id": str(channel_discord_user_id),
-                "challenger_user_id": str(challenger_discord_user_id),
-                "opponent_user_id": str(opponent_discord_user_id),
-                "type": str(type),
-                # "timestamp": {"$lte": timestamp_2_minutes_ago}
-            })
+            return self.connection.twitch_stream_avatar_duel.find_one(
+                {
+                    "guild_id": self.settings.discord_guild_id,
+                    "channel_user_id": str(channel_discord_user_id),
+                    "challenger_user_id": str(challenger_discord_user_id),
+                    "opponent_user_id": str(opponent_discord_user_id),
+                    "type": str(type),
+                    # "timestamp": {"$lte": timestamp_2_minutes_ago}
+                }
+            )
         except Exception as ex:
             self.log(
                 level=loglevel.LogLevel.ERROR,
@@ -1076,26 +1062,28 @@ class MongoDatabase:
             channel_discord_user_id = self._get_discord_id(channel)
             user_discord_user_id = self._get_discord_id(user)
 
-            return self.connection.twitch_stream_avatar_duel.find_one( {
-                "guild_id": self.settings.discord_guild_id,
-                "channel": channel,
-                "$or": [
-                    {
-                        "channel_user_id": str(channel_discord_user_id),
-                        "opponent_user_id": str(user_discord_user_id),
-                        "type": str(type),
-                        "timestamp": {"$gte": timestamp_2_minutes_ago},
-                        "winner_user_id": None
-                    },
-                    {
-                        "channel_user_id": str(channel_discord_user_id),
-                        "challenger_user_id": str(user_discord_user_id),
-                        "type": str(type),
-                        "timestamp": {"$gte": timestamp_2_minutes_ago},
-                        "winner_user_id": None
-                    }
-                ]
-            })
+            return self.connection.twitch_stream_avatar_duel.find_one(
+                {
+                    "guild_id": self.settings.discord_guild_id,
+                    "channel": channel,
+                    "$or": [
+                        {
+                            "channel_user_id": str(channel_discord_user_id),
+                            "opponent_user_id": str(user_discord_user_id),
+                            "type": str(type),
+                            "timestamp": {"$gte": timestamp_2_minutes_ago},
+                            "winner_user_id": None,
+                        },
+                        {
+                            "channel_user_id": str(channel_discord_user_id),
+                            "challenger_user_id": str(user_discord_user_id),
+                            "type": str(type),
+                            "timestamp": {"$gte": timestamp_2_minutes_ago},
+                            "winner_user_id": None,
+                        },
+                    ],
+                }
+            )
         except Exception as ex:
             self.log(
                 level=loglevel.LogLevel.ERROR,

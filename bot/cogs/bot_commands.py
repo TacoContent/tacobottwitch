@@ -41,21 +41,14 @@ class BotCommands(commands.Cog):
 
             if not self._check_permission(ctx, f"{self._module}.{self._class}.{_method}", source_channel, dest_channel):
                 return
-
+            channel = ctx.message.channel.name
             reason = f"raiding the channel {dest_channel}"
             await self.tacos_log.give_user_tacos(
-                ctx.message.channel.name,
-                source_channel,
-                reason,
-                give_type=tacotypes.TacoTypes.TWITCH_RAID,
-                amount=self.TACO_AMOUNT,
+                channel, source_channel, reason, give_type=tacotypes.TacoTypes.TWITCH_RAID, amount=self.TACO_AMOUNT
             )
         except Exception as e:
             self.log.error(
-                ctx.message.channel.name,
-                f"{self._module}.{self._class}.{_method}",
-                str(e),
-                traceback.format_exc(),
+                ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc()
             )
 
     @commands.command(name="subscribe")
@@ -75,11 +68,7 @@ class BotCommands(commands.Cog):
 
             reason = f"supporting the channel {channel} with a subscription"
             await self.tacos_log.give_user_tacos(
-                ctx.message.channel.name,
-                username,
-                reason,
-                give_type=tacotypes.TacoTypes.TWITCH_SUB,
-                amount=25,
+                ctx.message.channel.name, username, reason, give_type=tacotypes.TacoTypes.TWITCH_SUB, amount=25
             )
         except Exception as e:
             self.log.error(
@@ -103,11 +92,7 @@ class BotCommands(commands.Cog):
             reason = f"supporting the channel {channel} with bits"
             # maybe we should make this a percentage of the bits?
             await self.tacos_log.give_user_tacos(
-                ctx.message.channel.name,
-                username,
-                reason,
-                give_type=tacotypes.TacoTypes.TWITCH_BITS,
-                amount=10,
+                ctx.message.channel.name, username, reason, give_type=tacotypes.TacoTypes.TWITCH_BITS, amount=10
             )
         except Exception as e:
             self.log.error(

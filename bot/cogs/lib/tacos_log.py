@@ -112,14 +112,14 @@ class TacosLog:
                 self.log.debug(
                     fromUser,
                     f"{self._module}.{_method}",
-                    f"Key {taco_type_key} not found in taco settings. Using taco_amount ({amount}) as taco count"
+                    f"Key {taco_type_key} not found in taco settings. Using taco_amount ({amount}) as taco count",
                 )
                 taco_count = taco_count
             else:
                 taco_count = taco_settings[tacotypes.TacoTypes.get_string_from_taco_type(give_type)]
             reason_msg = reason if reason else "no reason given"  # self.settings.get_string(fromUser, 'no_reason')
 
-            total_taco_count = self.db.add_tacos(toUser, taco_count)
+            total_taco_count = self.db.add_tacos(toUser, taco_count) or 0
             self.db.track_taco_gift(
                 utils.clean_channel_name(fromUser), utils.clean_channel_name(toUser), taco_count, reason_msg
             )
@@ -129,7 +129,8 @@ class TacosLog:
                 user=utils.clean_channel_name(toUser),
                 count=taco_count,
                 type=tacotypes.TacoTypes.get_db_type_from_taco_type(give_type),
-                reason=reason_msg)
+                reason=reason_msg,
+            )
 
             await self._log(fromUser, toUser, taco_count, total_taco_count, reason_msg)
             return total_taco_count

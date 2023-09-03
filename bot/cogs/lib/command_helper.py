@@ -1,4 +1,3 @@
-
 import typing
 
 from bot.cogs.lib import permissions

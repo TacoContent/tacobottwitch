@@ -25,16 +25,18 @@ class Permissions:
     def has_linked_account(
         self, user: typing.Optional[typing.Union[twitchio.Chatter, twitchio.PartialChatter, str]] = None
     ) -> bool:
-        if isinstance(user, twitchio.Chatter):
-            user = user.name
-        user = utils.clean_channel_name(user)
-        did = self.db.get_discord_id_for_twitch_username(user)
+        if isinstance(user, twitchio.Chatter) or isinstance(user, twitchio.PartialChatter):
+            username = user.name
+        else:
+            username = user
+        username = utils.clean_channel_name(username)
+        did = self.db.get_discord_id_for_twitch_username(username)
         return did is not None
 
     def has_permission(
         self,
         user: typing.Union[twitchio.Chatter, twitchio.PartialChatter],
-        level: PermissionLevel = PermissionLevel.EVERYONE
+        level: PermissionLevel = PermissionLevel.EVERYONE,
     ) -> bool:
 
         def is_vip(user):
@@ -46,7 +48,7 @@ class Permissions:
         def is_bot(user):
             return utils.clean_channel_name(user.name) == utils.clean_channel_name(self.settings.bot_name)
 
-        user_level = PermissionLevel.FOLLOWER # Since cant check follower, everyone is a follower...
+        user_level = PermissionLevel.FOLLOWER  # Since cant check follower, everyone is a follower...
         if is_bot_owner(user):
             user_level = PermissionLevel.BOT_OWNER
         elif is_bot(user):
@@ -63,7 +65,7 @@ class Permissions:
         # elif user_context.is_follower:
         #     user_level = PermissionLevel.FOLLOWER
         else:
-            user_level = PermissionLevel.FOLLOWER # Since cant check follower, everyone is a follower...
+            user_level = PermissionLevel.FOLLOWER  # Since cant check follower, everyone is a follower...
 
         return user_level.value >= level.value
 

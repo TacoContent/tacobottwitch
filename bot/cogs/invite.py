@@ -79,7 +79,7 @@ class TacoInviteCog(commands.Cog):
                 self.log.debug(
                     ctx.message.channel.name,
                     f"{self._module}.{self._class}.{_method}",
-                    f"I am not in one of the required channels. {','.join(self.settings.bot_restricted_channels)}"
+                    f"I am not in one of the required channels. {','.join(self.settings.bot_restricted_channels)}",
                 )
                 return
 
@@ -190,7 +190,6 @@ class TacoInviteCog(commands.Cog):
             self.log.error(
                 ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc()
             )
-
 
     async def cog_command_error(self, ctx: commands.core.Context, error: Exception):
         if isinstance(error, commands.errors.CommandOnCooldown):
