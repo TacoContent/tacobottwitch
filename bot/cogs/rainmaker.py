@@ -238,5 +238,7 @@ class RainmakerCog(commands.Cog):
             self.log.error(
                 message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc()
             )
+
+            
 def prepare(bot) -> None:
     bot.add_cog(RainmakerCog(bot))

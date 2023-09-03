@@ -1,20 +1,14 @@
-from twitchio.ext import commands
-import twitchio
 import os
-import traceback
-import sys
-import json
 import inspect
-from .lib import mongo
-from .lib import settings
-from .lib import utils
-from .lib import logger
-from .lib import loglevel
+
+from bot.cogs.lib import logger, loglevel, mongo, settings, utils
+from twitchio.ext import commands
 
 
 class TacoQuestionOfTheDayCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         _method = inspect.stack()[0][3]
+        self._class = self.__class__.__name__
         # get the file name without the extension and without the directory
         self._module = os.path.basename(__file__)[:-3]
         self.bot = bot
@@ -25,7 +19,7 @@ class TacoQuestionOfTheDayCog(commands.Cog):
             log_level = loglevel.LogLevel.DEBUG
 
         self.log = logger.Log(minimumLogLevel=log_level)
-        self.log.debug("NONE", f"{self._module}.{_method}", "Initialized")
+        self.log.debug("NONE", f"{self._module}.{self._class}.{_method}", "Initialized")
 
     @commands.command(name="tqotd", aliases=["tqod"])
     async def tqotd(self, ctx) -> None:
@@ -44,10 +38,14 @@ class TacoQuestionOfTheDayCog(commands.Cog):
                     f"TACO Question of the Day: {question} -> Join the discussion: {invite_data['info']['url']}"
                 )
             else:
-                self.log.debug(channel, f"{self._module}.{_method}", "No invite found. Just sending the question.")
+                self.log.debug(
+                    channel,
+                    f"{self._module}.{self._class}.{_method}",
+                    "No invite found. Just sending the question.",
+                )
                 await ctx.send(f"TACO Question of the Day: {question}")
         else:
-            self.log.warn(channel, f"{self._module}.{_method}", "No question found.")
+            self.log.warn(channel, f"{self._module}.{self._class}.{_method}", "No question found.")
             await ctx.send(f"No TACO Question of the Day found. Check back later.")
 
 

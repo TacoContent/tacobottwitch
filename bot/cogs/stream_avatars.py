@@ -1,25 +1,17 @@
-import re
-from twitchio.ext import commands
-import twitchio
-import os
-import traceback
-import sys
-import json
 import inspect
-from .lib import mongo
-from .lib import settings
-from .lib import utils
-from .lib import loglevel
-from .lib import logger
-from .lib import permissions
-from .lib import command_helper
-from .lib import tacos_log as tacos_log
-from .lib import tacotypes
-from .lib.sa_types import StreamAvatarTypes
+import os
+import re
+import traceback
+
+from bot.cogs.lib import logger, loglevel, mongo, settings, utils, permissions, tacos_log, tacotypes
+from bot.cogs.lib.sa_types import StreamAvatarTypes
+from twitchio.ext import commands
+
 
 class StreamAvatars(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         _method = inspect.stack()[0][3]
+        self._class = self.__class__.__name__
         # get the file name without the extension and without the directory
         self._module = os.path.basename(__file__)[:-3]
 
@@ -48,7 +40,7 @@ class StreamAvatars(commands.Cog):
 
         self.log = logger.Log(minimumLogLevel=log_level)
         self.permissions_helper = permissions.Permissions()
-        self.log.debug("NONE", f"{self._module}.{_method}", "Initialized")
+        self.log.debug("NONE", f"{self._module}.{self._class}.{_method}", "Initialized")
 
     async def end_duel(self, message, duel, winner: str) -> None:
         _method = inspect.stack()[0][3]
@@ -75,7 +67,7 @@ class StreamAvatars(commands.Cog):
 
             game_settings = channel_settings.get(self.event_name, self.default_settings)
             if not game_settings.get("enabled", True):
-                self.log.debug(channel, f"{self._module}.{_method}", "Event disabled")
+                self.log.debug(channel, f"{self._module}.{self._class}.{_method}", "Event disabled")
                 return
 
             self.db.track_twitch_stream_avatar_duel(
@@ -84,7 +76,7 @@ class StreamAvatars(commands.Cog):
                 opponent=opponent,
                 count=buyin,
                 winner=winner,
-                type=StreamAvatarTypes.COMPLETE
+                type=StreamAvatarTypes.COMPLETE,
             )
 
 
@@ -108,7 +100,7 @@ class StreamAvatars(commands.Cog):
                 toUser=winner,
                 reason=f"Winning a Stream Avatars Duel against @{opponent} in @{channel}'s channel",
                 give_type=tacotypes.TacoTypes.TWITCH_STREAM_AVATARS,
-                amount=self.TACO_AMOUNT
+                amount=self.TACO_AMOUNT,
             )
 
         except Exception as e:
@@ -120,8 +112,6 @@ class StreamAvatars(commands.Cog):
         try:
             if message.author is None or message.channel is None:
                 return
-
-            sender = utils.clean_channel_name(message.author.name)
             channel = utils.clean_channel_name(message.channel.name)
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
@@ -131,7 +121,7 @@ class StreamAvatars(commands.Cog):
 
             game_settings = channel_settings.get(self.event_name, self.default_settings)
             if not game_settings.get("enabled", True):
-                self.log.debug(channel, f"{self._module}.{_method}", "Event disabled")
+                self.log.debug(channel, f"{self._module}.{self._class}.{_method}", "Event disabled")
                 return
 
             self.db.track_twitch_stream_avatar_duel(
@@ -140,7 +130,7 @@ class StreamAvatars(commands.Cog):
                 opponent=opponent,
                 count=buyin,
                 winner=None,
-                type=StreamAvatarTypes.REQUESTED
+                type=StreamAvatarTypes.REQUESTED,
             )
 
             # if the buyin is not a positive number, use 0
@@ -149,7 +139,7 @@ class StreamAvatars(commands.Cog):
 
             # from here we only care if the opponent is the bot
             if opponent != utils.clean_channel_name(self.bot.nick):
-                self.log.debug(channel, f"{self._module}.{_method}", "Challenged is not the bot")
+                self.log.debug(channel, f"{self._module}.{self._class}.{_method}", "Challenged is not the bot")
                 return
 
             # if the user is not a known taco user, decline the duel if there is a buyin
@@ -173,13 +163,12 @@ class StreamAvatars(commands.Cog):
                 opponent=duel['opponent'],
                 count=duel['count'],
                 winner=None,
-                type=StreamAvatarTypes.ACCEPTED
+                type=StreamAvatarTypes.ACCEPTED,
             )
         except Exception as e:
             raise e
 
     async def duel_declined(self, message, duel) -> None:
-        _method = inspect.stack()[0][3]
         try:
             self.db.track_twitch_stream_avatar_duel(
                 channel=duel['channel'],
@@ -210,7 +199,7 @@ class StreamAvatars(commands.Cog):
 
             game_settings = channel_settings.get(self.event_name, self.default_settings)
             if not game_settings.get("enabled", True):
-                self.log.debug(channel, f"{self._module}.{_method}", "Event disabled")
+                self.log.debug(channel, f"{self._module}.{self._class}.{_method}", "Event disabled")
                 return
 
             # make sure the settings are in the channel settings for each property
@@ -239,7 +228,7 @@ class StreamAvatars(commands.Cog):
 
             if start_duel_match:
                 print(f"named groups: {start_duel_match.groupdict()}")
-                self.log.debug(channel, f"{self._module}.{_method}", "Message matched to start duel")
+                self.log.debug(channel, f"{self._module}.{self._class}.{_method}", "Message matched to start duel")
                 opponent = utils.clean_channel_name(start_duel_match.group("opponent"))
                 challenger = utils.clean_channel_name(start_duel_match.group("challenger"))
                 buyin = int(start_duel_match.group("buyin"))
@@ -252,16 +241,27 @@ class StreamAvatars(commands.Cog):
                     channel=channel,
                     challenger=challenger,
                     opponent=opponent,
-                    type=StreamAvatarTypes.REQUESTED)
+                    type=StreamAvatarTypes.REQUESTED,
+                )
                 if duel is None:
-                    self.log.debug(channel, f"{self._module}.{_method}", f"Could not find duel: {challenger} vs {opponent}")
+                    self.log.debug(
+                        channel,
+                        f"{self._module}.{self._class}.{_method}",
+                        f"Could not find duel: {challenger} vs {opponent}",
+                    )
                     return
                 await self.duel_accepted(message, duel)
             elif decline_match:
                 opponent = utils.clean_channel_name(decline_match.group("opponent"))
-                duel = self.db.get_twitch_stream_avatar_duel_from_user(channel=channel, user=opponent, type=StreamAvatarTypes.REQUESTED)
+                duel = self.db.get_twitch_stream_avatar_duel_from_user(
+                    channel=channel, user=opponent, type=StreamAvatarTypes.REQUESTED
+                )
                 if duel is None:
-                    self.log.debug(channel, f"{self._module}.{_method}", f"Could not find duel for opponent: {opponent}")
+                    self.log.debug(
+                        channel,
+                        f"{self._module}.{self._class}.{_method}",
+                        f"Could not find duel for opponent: {opponent}",
+                    )
                     return
 
                 await self.duel_declined(message, duel)
@@ -270,29 +270,33 @@ class StreamAvatars(commands.Cog):
                 winner = utils.clean_channel_name(winner_match.group("winner"))
                 buyin = int(winner_match.group("buyin"))
 
-                duel = self.db.get_twitch_stream_avatar_duel_from_user(channel=channel, user=winner, type=StreamAvatarTypes.ACCEPTED)
+                duel = self.db.get_twitch_stream_avatar_duel_from_user(
+                    channel=channel, user=winner, type=StreamAvatarTypes.ACCEPTED
+                )
                 if duel is None:
-                    self.log.debug(channel, f"{self._module}.{_method}", f"Could not find duel for winner: {winner}")
+                    self.log.debug(
+                        channel, f"{self._module}.{self._class}.{_method}", f"Could not find duel for winner: {winner}"
+                    )
                     return
 
                 challenger = duel['challenger']
                 opponent = duel['opponent']
                 buyin = duel['count']
 
-                self.log.debug(channel, f"{self._module}.{_method}", f"Found duel between: {duel['challenger']} and {duel['opponent']} with a buyin of {duel['count']}")
-
-                await self.end_duel(
-                    message=message,
-                    duel=duel,
-                    winner=winner
+                self.log.debug(
+                    channel,
+                    f"{self._module}.{self._class}.{_method}",
+                    f"Found duel between: {duel['challenger']} and {duel['opponent']} with a buyin of {duel['count']}",
                 )
+
+                await self.end_duel(message=message, duel=duel, winner=winner)
 
                 return
             else:
                 return
 
         except Exception as e:
-            self.log.error(message.channel.name, f"{self._module}.{_method}", str(e), traceback.format_exc())
+            self.log.error(message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc())
 
     def init_channel_settings(self, channel: str) -> None:
         channel_settings = self.settings.get_channel_settings(self.db, channel)
@@ -321,6 +325,7 @@ class StreamAvatars(commands.Cog):
         if "error_message" not in game_settings:
             channel_settings[self.event_name]["error_message"] = self.default_settings['error_message']
             self.settings.set_channel_settings(self.db, channel, channel_settings)
+
 
 def prepare(bot) -> None:
     bot.add_cog(StreamAvatars(bot))

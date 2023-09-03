@@ -1,11 +1,10 @@
-from twitchio.ext import commands
 import os
-import traceback
 import json
 import inspect
-from .lib import settings
-from .lib import loglevel
-from .lib import logger
+
+from bot.cogs.lib import logger, loglevel, settings
+from twitchio.ext import commands
+
 
 class MessageLoggingCog(commands.Cog):
     def __init__(self, bot: commands.bot) -> None:
@@ -22,7 +21,6 @@ class MessageLoggingCog(commands.Cog):
         self.log = logger.Log(minimumLogLevel=log_level)
         self.log.debug("NONE", f"{self._module}.{_method}", "Initialized")
 
-
     @commands.Cog.event()
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
     async def event_message(self, message) -> None:
@@ -37,11 +35,10 @@ class MessageLoggingCog(commands.Cog):
             f"{message.channel.name} -> {json.dumps(message.author.badges)} {message.author.name} -> {message.content}",
         )
 
-        # print(f"{message.channel.name} -> {json.dumps(message.author.badges)} {message.author.name} -> {message.content}")
-
     @commands.Cog.event()
     async def event_ready(self) -> None:
         pass
+
 
 def prepare(bot) -> None:
     bot.add_cog(MessageLoggingCog(bot))

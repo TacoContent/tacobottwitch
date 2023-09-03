@@ -1,26 +1,17 @@
-from dataclasses import replace
-from twitchio.ext import commands
-import twitchio
+import inspect
 import os
 import traceback
-import sys
-import json
-import inspect
-from .lib import mongo
-from .lib import settings
-from .lib import logger
-from .lib import loglevel
-from .lib import permissions
-from .lib import command_helper
-from .lib import tacos_log as tacos_log
-from .lib import tacotypes
-from .lib import utils
+import typing
+
+from bot.cogs.lib import command_helper, logger, loglevel, mongo, settings, permissions, tacos_log, tacotypes, utils
+from twitchio.ext import commands
+
 
 class TacosCog(commands.Cog):
     """Allows the streamer to give a user tacos"""
-
     def __init__(self, bot: commands.Bot) -> None:
         _method = inspect.stack()[0][3]
+        self._class = self.__class__.__name__
         # get the file name without the extension and without the directory
         self._module = os.path.basename(__file__)[:-3]
         self.bot = bot
@@ -39,7 +30,7 @@ class TacosCog(commands.Cog):
         self.log.debug("NONE", f"{self._module}.{_method}", "Initialized")
 
     @commands.command(name="tacos")
-    async def tacos(self, ctx, subcommand: str = None, *args) -> None:
+    async def tacos(self, ctx, subcommand: typing.Optional[str] = None, *args) -> None:
         _method = inspect.stack()[1][3]
 
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
@@ -322,6 +313,7 @@ class TacosCog(commands.Cog):
         if not cog_settings:
             raise Exception(f"No tacos settings found for guild {self.settings.discord_guild_id}")
         return cog_settings
+
 
 def prepare(bot) -> None:
     bot.add_cog(TacosCog(bot))

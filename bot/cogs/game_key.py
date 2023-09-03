@@ -1,20 +1,14 @@
-from twitchio.ext import commands
-import twitchio
 import os
-import traceback
-import sys
-import json
 import inspect
-from .lib import mongo
-from .lib import settings
-from .lib import utils
-from .lib import logger
-from .lib import loglevel
+
+from bot.cogs.lib import logger, loglevel, mongo, settings, utils
+from twitchio.ext import commands
 
 
 class TacoGameKeyCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         _method = inspect.stack()[0][3]
+        self._class = self.__class__.__name__
         # get the file name without the extension and without the directory
         self._module = os.path.basename(__file__)[:-3]
         self.bot = bot
@@ -25,7 +19,7 @@ class TacoGameKeyCog(commands.Cog):
             log_level = loglevel.LogLevel.DEBUG
 
         self.log = logger.Log(minimumLogLevel=log_level)
-        self.log.debug("NONE", f"{self._module}.{_method}", "Initialized")
+        self.log.debug("NONE", f"{self._module}.{self._class}.{_method}", "Initialized")
 
     @commands.command(name="game")
     async def game(self, ctx) -> None:
@@ -37,7 +31,7 @@ class TacoGameKeyCog(commands.Cog):
         if game:
             invite_data = self.db.get_invite_for_user(channel)
             if not invite_data:
-                self.log.debug(channel, f"{self._module}.{_method}", "Looking for random invite")
+                self.log.debug(channel, f"{self._module}.{self._class}.{_method}", "Looking for random invite")
                 invite_data = self.db.get_any_invite()
 
             if invite_data:
@@ -45,10 +39,16 @@ class TacoGameKeyCog(commands.Cog):
                     f"TACO Game Redeem: Get a key for '{game['title']}' using your tacos 🌮. -> {invite_data['info']['url']}"
                 )
             else:
-                self.log.debug(channel, f"{self._module}.{_method}", "No invite found. Just sending the game info.")
+                self.log.debug(
+                    channel,
+                    f"{self._module}.{self._class}.{_method}",
+                    "No invite found. Just sending the game info.",
+                )
                 await ctx.send(f"TACO Game Redeem: Get a key for '{game['title']}' using your tacos 🌮.")
         else:
-            self.log.warn(channel, f"{self._module}.{_method}", "No game found.")
+            self.log.warn(channel, f"{self._module}.{self._class}.{_method}", "No game found.")
             await ctx.send(f"No TACO Game Redeem currently active. Check back later.")
+
+
 def prepare(bot) -> None:
     bot.add_cog(TacoGameKeyCog(bot))

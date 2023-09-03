@@ -1,29 +1,18 @@
-import re
-from twitchio.ext import commands
-import twitchio
-import os
-import traceback
-import sys
-import json
 import inspect
+import os
+import re
+import traceback
 import typing
 
-from .lib import mongo
-from .lib import settings
-from .lib import utils
-from .lib import loglevel
-from .lib import logger
-from .lib import permissions
-from .lib import command_helper
-from .lib import tacos_log as tacos_log
-from .lib import tacotypes
+import twitchio
+from bot.cogs.lib import logger, loglevel, mongo, settings, utils, permissions, tacos_log, tacotypes
+from twitchio.ext import commands
 
 # streamelements: inmax_cz just tipped $10.00 PogChamp
-
-
 class StreamElementsBotCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         _method = inspect.stack()[0][3]
+        self._class = self.__class__.__name__
         # get the file name without the extension and without the directory
         self._module = os.path.basename(__file__)[:-3]
 
@@ -50,16 +39,16 @@ class StreamElementsBotCog(commands.Cog):
 
         self.log = logger.Log(minimumLogLevel=log_level)
         self.permissions_helper = permissions.Permissions()
-        self.log.debug("NONE", f"{self._module}.{_method}", "Initialized")
+        self.log.debug("NONE", f"{self._module}.{self._class}.{_method}", "Initialized")
 
     @commands.command(name="streamelements")
-    async def streamelements(self, ctx: commands.Context, subcommand: str = None, *args) -> None:
+    async def streamelements(self, ctx: commands.Context, subcommand: typing.Optional[str] = None, *args) -> None:
         _method = inspect.stack()[1][3]
 
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
             self.log.debug(
                 ctx.message.channel.name,
-                f"{self._module}.{_method}",
+                f"{self._module}.{self._class}.{_method}",
                 f"{ctx.message.author.name} does not have permission to use this command.",
             )
             return
@@ -74,21 +63,20 @@ class StreamElementsBotCog(commands.Cog):
 
     async def _streamelements_tip(self, ctx: commands.Context, args) -> None:
         _method = inspect.stack()[1][3]
+        channel = utils.clean_channel_name(ctx.channel.name)
         try:
-            channel = utils.clean_channel_name(ctx.channel.name)
-
             if channel is None:
                 return
 
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BROADCASTER):
                 self.log.debug(
                     channel,
-                    f"{self._module}.{_method}",
+                    f"{self._module}.{self._class}.{_method}",
                     f"{ctx.message.author.name} does not have permission to use this command.",
                 )
                 return
 
-            self.log.debug(channel, f"{self._module}.{_method}", f"Stopping streamelements event in {channel}")
+            self.log.debug(channel, f"{self._module}.{self._class}.{_method}", f"Stopping streamelements event in {channel}")
             prefixes = self.settings.prefixes
             if not prefixes:
                 prefixes = ["!taco "]
@@ -96,10 +84,10 @@ class StreamElementsBotCog(commands.Cog):
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
             if channel_settings is None:
-                self.log.error(channel, f"{self._module}.{_method}", f"No streamelements settings found for {channel}")
+                self.log.error(channel, f"{self._module}.{self._class}.{_method}", f"No streamelements settings found for {channel}")
                 return
             if args is None or len(args) == 0:
-                self.log.error(channel, f"{self._module}.{_method}", f"No arguments provided for {channel}")
+                self.log.error(channel, f"{self._module}.{self._class}.{_method}", f"No arguments provided for {channel}")
                 return
 
             tip_message = ' '.join(args[0:]).strip()
@@ -108,27 +96,28 @@ class StreamElementsBotCog(commands.Cog):
 
             channel_settings[self.event_name]["tip_message"] = tip_message
             self.settings.set_channel_settings(self.db, channel, channel_settings)
-            await ctx.reply(f"@{ctx.message.author.name} Your stream elements tip message has been set to '{tip_message}'. Use {prefix}streamelements tip <message> to change it.")
+            await ctx.reply(
+                f"@{ctx.message.author.name} Your stream elements tip message has been set to '{tip_message}'. Use {prefix}streamelements tip <message> to change it."
+            )
         except Exception as e:
-            self.log.error(channel, f"{self._module}.{_method}", str(e), traceback.format_exc())
+            self.log.error(channel, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc())
 
     async def _streamelements_stop(self, ctx: commands.Context, args) -> None:
         _method = inspect.stack()[1][3]
+        channel = utils.clean_channel_name(ctx.channel.name)
         try:
-            channel = utils.clean_channel_name(ctx.channel.name)
-
             if channel is None:
                 return
 
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
                 self.log.debug(
                     channel,
-                    f"{self._module}.{_method}",
+                    f"{self._module}.{self._class}.{_method}",
                     f"{ctx.message.author.name} does not have permission to use this command.",
                 )
                 return
 
-            self.log.debug(channel, f"{self._module}.{_method}", f"Stopping streamelements event in {channel}")
+            self.log.debug(channel, f"{self._module}.{self._class}.{_method}", f"Stopping streamelements event in {channel}")
             prefixes = self.settings.prefixes
             if not prefixes:
                 prefixes = ["!taco "]
@@ -137,27 +126,26 @@ class StreamElementsBotCog(commands.Cog):
             channel_settings = self.settings.get_channel_settings(self.db, channel)
             if self.event_name not in channel_settings:
                 channel_settings[self.event_name] = self.default_settings
-            channel_settings[self.event_user]["enabled"] = False
+            channel_settings[self.event_name]["enabled"] = False
             self.settings.set_channel_settings(self.db, channel, channel_settings)
 
             await ctx.reply(
                 f"@{ctx.message.author.name}, I will no longer watch for stream elements events in your channel. You can start it again with `{prefix}streamelements start`."
             )
         except Exception as e:
-            self.log.error(channel, f"{self._module}.{_method}", str(e), traceback.format_exc())
+            self.log.error(channel, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc())
 
     async def _streamelements_start(self, ctx: commands.Context, args) -> None:
         _method = inspect.stack()[1][3]
+        channel = utils.clean_channel_name(ctx.message.channel.name)
         try:
-            channel = utils.clean_channel_name(ctx.message.channel.name)
-
             if channel is None:
                 return
 
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
                 self.log.debug(
                     channel,
-                    f"{self._module}.{_method}",
+                    f"{self._module}.{self._class}.{_method}",
                     f"{ctx.message.author.name} does not have permission to use this command.",
                 )
                 return
@@ -178,7 +166,7 @@ class StreamElementsBotCog(commands.Cog):
                 f"@{ctx.message.author.name}, I will now watch for stream elements events in your channel and give tacos to supporters. You can stop it with `{prefix}streamelements stop`."
             )
         except Exception as e:
-            self.log.error(channel, f"{self._module}.{_method}", str(e), traceback.format_exc())
+            self.log.error(channel, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc())
 
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
     @commands.Cog.event(event="event_message")
@@ -221,7 +209,7 @@ class StreamElementsBotCog(commands.Cog):
                     if not self.permissions_helper.has_linked_account(username):
                         self.log.debug(
                             channel,
-                            f"{self._module}.{_method}",
+                            f"{self._module}.{self._class}.{_method}",
                             f"NON-TACO: {username} just tipped {tip} in {channel}'s channel",
                         )
                         return
@@ -229,7 +217,7 @@ class StreamElementsBotCog(commands.Cog):
                     reason = f"tipping {tip} in {channel}'s channel"
                     self.log.debug(
                         channel,
-                        f"{self._module}.{_method}",
+                        f"{self._module}.{self._class}.{_method}",
                         f"{username} {reason}",
                     )
                     await self.tacos_log.give_user_tacos(
@@ -241,7 +229,10 @@ class StreamElementsBotCog(commands.Cog):
                     )
                     return
         except Exception as e:
-            self.log.error(message.channel.name, f"{self._module}.{_method}", str(e), traceback.format_exc())
+            self.log.error(
+                message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc()
+            )
+
 
 def prepare(bot) -> None:
     bot.add_cog(StreamElementsBotCog(bot))
