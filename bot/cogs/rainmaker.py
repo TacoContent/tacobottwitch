@@ -27,8 +27,8 @@ class RainmakerCog(commands.Cog):
         self.set_commands = ["set", "update"]
 
         self.default_settings = {
-          "enabled": True,
-          "action_message": r"^Thank you for tweeting out the stream, (?P<user>@?[a-zA-Z0-9-_]+).$"
+            "enabled": True,
+            "action_message": r"^Thank you for tweeting out the stream, (?P<user>@?[a-zA-Z0-9-_]+).$"
         }
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]

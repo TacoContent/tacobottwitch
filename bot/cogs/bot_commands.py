@@ -40,20 +40,7 @@ class BotCommands(commands.Cog):
             source_channel = utils.clean_channel_name(source_channel)
             dest_channel = utils.clean_channel_name(dest_channel)
 
-            if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT):
-                # ONLY action if THIS account called the command
-                return
-            if not self.permissions_helper.in_command_restricted_channel(ctx):
-                self.log.debug(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", f"We are not in one of the restricted channels. we are in {ctx.message.channel.name}.")
-                return
-
-            # check the source channel is a channel that is a taco channel (this should never be false)
-            if not self.permissions_helper.has_linked_account(source_channel):
-                self.log.debug(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", f"Source channel {source_channel} is not a known taco user.")
-                return
-            # check if the destination channel is a channel that is a "taco" channel
-            if not self.permissions_helper.has_linked_account(dest_channel):
-                self.log.debug(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", f"Destination channel {dest_channel} is not a known taco user.")
+            if not self._check_permission(ctx, f"{self._module}.{self._class}.{_method}", source_channel, dest_channel):
                 return
 
             reason = f"raiding the channel {dest_channel}"
@@ -73,20 +60,7 @@ class BotCommands(commands.Cog):
             username = utils.clean_channel_name(username)
             channel = utils.clean_channel_name(channel)
 
-            if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT):
-                # ONLY action if THIS account called the command
-                return
-            if not self.permissions_helper.in_command_restricted_channel(ctx):
-                self.log.debug(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", f"We are not in one of the restricted channels. we are in {ctx.message.channel.name}.")
-                return
-
-            # check the source channel is a channel that is a taco channel (this should never be false)
-            if not self.permissions_helper.has_linked_account(username):
-                self.log.debug(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", f"Source channel {username} is not a known taco user.")
-                return
-            # check if the destination channel is a channel that is a "taco" channel
-            if not self.permissions_helper.has_linked_account(channel):
-                self.log.debug(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", f"Destination channel {channel} is not a known taco user.")
+            if not self._check_permission(ctx, f"{self._module}.{self._class}.{_method}", username, channel):
                 return
 
             reason = f"supporting the channel {channel} with a subscription"
@@ -105,20 +79,7 @@ class BotCommands(commands.Cog):
             username = utils.clean_channel_name(username)
             channel = utils.clean_channel_name(channel)
 
-            if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT):
-                # ONLY action if THIS account called the command
-                return
-            if not self.permissions_helper.in_command_restricted_channel(ctx):
-                self.log.debug(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", f"We are not in one of the restricted channels. we are in {ctx.message.channel.name}.")
-                return
-
-            # check the source channel is a channel that is a taco channel (this should never be false)
-            if not self.permissions_helper.has_linked_account(username):
-                self.log.debug(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", f"Source channel {username} is not a known taco user.")
-                return
-            # check if the destination channel is a channel that is a "taco" channel
-            if not self.permissions_helper.has_linked_account(channel):
-                self.log.debug(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", f"Destination channel {channel} is not a known taco user.")
+            if not self._check_permission(ctx, f"{self._module}.{self._class}.{_method}", username, channel):
                 return
 
             reason = f"supporting the channel {channel} with bits"
@@ -137,20 +98,7 @@ class BotCommands(commands.Cog):
             username = utils.clean_channel_name(username)
             channel = utils.clean_channel_name(channel)
 
-            if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT):
-                # ONLY action if THIS account called the command
-                return
-            if not self.permissions_helper.in_command_restricted_channel(ctx):
-                self.log.debug(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", f"We are not in one of the restricted channels. we are in {ctx.message.channel.name}.")
-                return
-
-            # check the source channel is a channel that is a taco channel (this should never be false)
-            if not self.permissions_helper.has_linked_account(username):
-                self.log.debug(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", f"Source channel {username} is not a known taco user.")
-                return
-            # check if the destination channel is a channel that is a "taco" channel
-            if not self.permissions_helper.has_linked_account(channel):
-                self.log.debug(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", f"Destination channel {channel} is not a known taco user.")
+            if not self._check_permission(ctx, f"{self._module}.{self._class}.{_method}", username, channel):
                 return
 
             reason = f"supporting the channel {channel} with a follow"
@@ -158,5 +106,24 @@ class BotCommands(commands.Cog):
         except Exception as e:
             self.log.error(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc())
 
+    def _check_permission(self, ctx, source, username: str, channel: str) -> bool:
+        username = utils.clean_channel_name(username)
+        channel = utils.clean_channel_name(channel)
+        if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BOT):
+            # ONLY action if THIS account called the command
+            return False
+        if not self.permissions_helper.in_command_restricted_channel(ctx):
+            self.log.debug(ctx.message.channel.name, f"{source}", f"We are not in one of the restricted channels. we are in {ctx.message.channel.name}.")
+            return False
+
+        # check the source channel is a channel that is a taco channel (this should never be false)
+        if not self.permissions_helper.has_linked_account(username):
+            self.log.debug(ctx.message.channel.name, f"{source}", f"Source channel {username} is not a known taco user.")
+            return False
+        # check if the destination channel is a channel that is a "taco" channel
+        if not self.permissions_helper.has_linked_account(channel):
+            self.log.debug(ctx.message.channel.name, f"{source}", f"Destination channel {channel} is not a known taco user.")
+            return False
+        return True
 def prepare(bot) -> None:
     bot.add_cog(BotCommands(bot))

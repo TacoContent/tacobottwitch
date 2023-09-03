@@ -34,12 +34,12 @@ class StreamAvatars(commands.Cog):
         self.set_commands = ["set", "update"]
 
         self.default_settings = {
-          "enabled": True,
-          "action_message": r"^(?P<challenger>@?[a-zA-Z0-9-_]+) Has Challenged (?P<opponent>@?[a-zA-Z0-9-_]+) To A Duel with a buyin of (?P<buyin>\d{1,}). Type \!accept or \!decline within \d{1,} seconds$",
-          "winner_message": r"^Congratulations to (?P<winner>@?[a-zA-Z0-9-_]+) for winning the duel! \+(?P<buyin>\d{1,})$",
-          "accept_message": r"^(?P<opponent>@?[a-zA-Z0-9-_]+) has accepted the duel against (?P<challenger>@?[a-zA-Z0-9-_]+)!$",
-          "decline_message": r"^(?P<opponent>@?[a-zA-Z0-9-_]+) has declined the duel$",
-          "error_message": r"^Could not find target (?P<opponent>@?[a-zA-Z0-9-_]+)$",
+            "enabled": True,
+            "action_message": r"^(?P<challenger>@?[a-zA-Z0-9-_]+) Has Challenged (?P<opponent>@?[a-zA-Z0-9-_]+) To A Duel with a buyin of (?P<buyin>\d{1,}). Type \!accept or \!decline within \d{1,} seconds$",
+            "winner_message": r"^Congratulations to (?P<winner>@?[a-zA-Z0-9-_]+) for winning the duel! \+(?P<buyin>\d{1,})$",
+            "accept_message": r"^(?P<opponent>@?[a-zA-Z0-9-_]+) has accepted the duel against (?P<challenger>@?[a-zA-Z0-9-_]+)!$",
+            "decline_message": r"^(?P<opponent>@?[a-zA-Z0-9-_]+) has declined the duel$",
+            "error_message": r"^Could not find target (?P<opponent>@?[a-zA-Z0-9-_]+)$",
         }
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]

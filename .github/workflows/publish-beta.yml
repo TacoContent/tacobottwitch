@@ -21,8 +21,11 @@ jobs:
         TAGSZ="${GHCR_IMAGE}:beta,${GHCR_IMAGE}:beta-${{ github.sha }}";
         BUILD_DATEZ="$(date +'%Y-%m-%dT%TZ%z' -u)";
         PROJECT_NAMEZ=$(echo "${{ env.REPOSITORY_NAME }}" | awk '{split($0,a,"/"); print a[2]}');
+        # shellcheck disable=SC2129
         echo "BUILD_TAGS=${TAGSZ}" >> "$GITHUB_ENV";
+        # shellcheck disable=SC2129
         echo "BUILD_DATE=${BUILD_DATEZ}" >> "$GITHUB_ENV";
+        # shellcheck disable=SC2129
         echo "PROJECT_NAME=${PROJECT_NAMEZ}" >> "$GITHUB_ENV";
 
     - name: Set up QEMU
