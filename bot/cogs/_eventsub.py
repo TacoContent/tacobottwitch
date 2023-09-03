@@ -31,7 +31,6 @@ class EventSubCog(commands.Cog):
         # get all the channels that we are monitoring and create the eventsub subscriptions
         self.log.debug("NONE", f"{self._module}.{self._class}.{_method}", "Initialized")
 
-
     @commands.Cog.event()
     async def event_eventsub_notification_followV2(self, payload: eventsub.ChannelFollowData) -> None:
         return None

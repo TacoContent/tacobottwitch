@@ -31,7 +31,6 @@ class BotCommands(commands.Cog):
         self.permissions_helper = permissions.Permissions()
         self.log.debug("NONE", f"{self._module}.{self._class}.{_method}", "Initialized")
 
-
     @commands.command(name="raid", aliases=["host"])
     # @commands.restrict_channels(channels=["ourtacobot", "ourtaco"])
     async def raid(self, ctx, source_channel: str, dest_channel: str) -> None:
@@ -44,9 +43,20 @@ class BotCommands(commands.Cog):
                 return
 
             reason = f"raiding the channel {dest_channel}"
-            await self.tacos_log.give_user_tacos(ctx.message.channel.name, source_channel, reason, give_type=tacotypes.TacoTypes.TWITCH_RAID, amount=self.TACO_AMOUNT)
+            await self.tacos_log.give_user_tacos(
+                ctx.message.channel.name,
+                source_channel,
+                reason,
+                give_type=tacotypes.TacoTypes.TWITCH_RAID,
+                amount=self.TACO_AMOUNT,
+            )
         except Exception as e:
-            self.log.error(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc())
+            self.log.error(
+                ctx.message.channel.name,
+                f"{self._module}.{self._class}.{_method}",
+                str(e),
+                traceback.format_exc(),
+            )
 
     @commands.command(name="subscribe")
     # @commands.restrict_channels(channels=["ourtacobot", "ourtaco"])
@@ -64,9 +74,17 @@ class BotCommands(commands.Cog):
                 return
 
             reason = f"supporting the channel {channel} with a subscription"
-            await self.tacos_log.give_user_tacos(ctx.message.channel.name, username, reason, give_type=tacotypes.TacoTypes.TWITCH_SUB, amount=25)
+            await self.tacos_log.give_user_tacos(
+                ctx.message.channel.name,
+                username,
+                reason,
+                give_type=tacotypes.TacoTypes.TWITCH_SUB,
+                amount=25,
+            )
         except Exception as e:
-            self.log.error(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc())
+            self.log.error(
+                ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc()
+            )
 
     @commands.command(name="cheer")
     # @commands.restrict_channels(channels=["ourtacobot", "ourtaco"])
@@ -84,9 +102,17 @@ class BotCommands(commands.Cog):
 
             reason = f"supporting the channel {channel} with bits"
             # maybe we should make this a percentage of the bits?
-            await self.tacos_log.give_user_tacos(ctx.message.channel.name, username, reason, give_type=tacotypes.TacoTypes.TWITCH_BITS, amount=10)
+            await self.tacos_log.give_user_tacos(
+                ctx.message.channel.name,
+                username,
+                reason,
+                give_type=tacotypes.TacoTypes.TWITCH_BITS,
+                amount=10,
+            )
         except Exception as e:
-            self.log.error(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc())
+            self.log.error(
+                ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc()
+            )
 
     @commands.command(name="follow")
     async def follow(self, ctx, username: str, channel: str) -> None:
@@ -102,9 +128,13 @@ class BotCommands(commands.Cog):
                 return
 
             reason = f"supporting the channel {channel} with a follow"
-            await self.tacos_log.give_user_tacos(ctx.message.channel.name, username, reason, give_type=tacotypes.TacoTypes.TWITCH_FOLLOW, amount=10)
+            await self.tacos_log.give_user_tacos(
+                ctx.message.channel.name, username, reason, give_type=tacotypes.TacoTypes.TWITCH_FOLLOW, amount=10
+            )
         except Exception as e:
-            self.log.error(ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc())
+            self.log.error(
+                ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc()
+            )
 
     def _check_permission(self, ctx, source, username: str, channel: str) -> bool:
         username = utils.clean_channel_name(username)
@@ -113,17 +143,27 @@ class BotCommands(commands.Cog):
             # ONLY action if THIS account called the command
             return False
         if not self.permissions_helper.in_command_restricted_channel(ctx):
-            self.log.debug(ctx.message.channel.name, f"{source}", f"We are not in one of the restricted channels. we are in {ctx.message.channel.name}.")
+            self.log.debug(
+                ctx.message.channel.name,
+                f"{source}",
+                f"We are not in one of the restricted channels. we are in {ctx.message.channel.name}.",
+            )
             return False
 
         # check the source channel is a channel that is a taco channel (this should never be false)
         if not self.permissions_helper.has_linked_account(username):
-            self.log.debug(ctx.message.channel.name, f"{source}", f"Source channel {username} is not a known taco user.")
+            self.log.debug(
+                ctx.message.channel.name, f"{source}", f"Source channel {username} is not a known taco user."
+            )
             return False
         # check if the destination channel is a channel that is a "taco" channel
         if not self.permissions_helper.has_linked_account(channel):
-            self.log.debug(ctx.message.channel.name, f"{source}", f"Destination channel {channel} is not a known taco user.")
+            self.log.debug(
+                ctx.message.channel.name, f"{source}", f"Destination channel {channel} is not a known taco user."
+            )
             return False
         return True
+
+
 def prepare(bot) -> None:
     bot.add_cog(BotCommands(bot))

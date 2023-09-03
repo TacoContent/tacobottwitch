@@ -48,5 +48,5 @@ jobs:
         push: true
         build-args: |
           PROJECT_NAME="${{ env.PROJECT_NAME }}"
-          BUILD_VERSION="${{ needs.version.outputs.app_version }}"
+          BUILD_VERSION="beta-${{ github.sha }}"
         tags: "${{ env.BUILD_TAGS }}"
