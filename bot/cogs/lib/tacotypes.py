@@ -3,6 +3,8 @@
 ### UPDATE TacoBotTwitch/cogs/lib/tacotypes.py WHEN CHANGING TACO TYPES ###
 
 from enum import Enum
+
+
 class TacoTypes(Enum):
     JOIN_SERVER = 1
     BOOST = 2
@@ -35,8 +37,7 @@ class TacoTypes(Enum):
     APPROVE_INTRODUCTION = 29
     GAME_DONATE_REDEEM = 30
 
-
-    TWITCH_BOT_INVITE = 1000 # Invite @OurTacoBot to your Twitch channel
+    TWITCH_BOT_INVITE = 1000  # Invite @OurTacoBot to your Twitch channel
     TWITCH_RAID = 1001
     TWITCH_SUB = 1002
     TWITCH_BITS = 1003
@@ -44,9 +45,9 @@ class TacoTypes(Enum):
     TWITCH_PROMOTE = 1005
     TWITCH_GIVE_TACOS = 32
     TWITCH_RECEIVE_TACOS = 1006
-    TWITCH_FOLLOW = 1007 # not yet implemented until i can figure out how to get the event from eventsub
-    TWITCH_STREAM_AVATARS = 1008
+    TWITCH_FOLLOW = 1007  # not yet implemented until i can figure out how to get the event from eventsub
 
+    TWITCH_STREAM_AVATARS = 1008
     PURGE = 9996
     LEAVE_SERVER = 9997
 
@@ -112,7 +113,8 @@ class TacoTypes(Enum):
         elif taco_type_string == "trivia_incorrect_count":
             return TacoTypes.TRIVIA_INCORRECT
         elif taco_type_string == "follow_channel_count":
-            return TacoTypes.FOLLOW_CHANNEL  # this can't be triggered by events
+            # this can't be triggered by events
+            return TacoTypes.FOLLOW_CHANNEL
         elif taco_type_string == "create_voice_channel_count":
             return TacoTypes.CREATE_VOICE_CHANNEL
         elif taco_type_string == "post_introduction_count":
@@ -131,114 +133,24 @@ class TacoTypes(Enum):
             return TacoTypes.TWITCH_FIRST_MESSAGE
         elif taco_type_string == "twitch_promote_count":
             return TacoTypes.TWITCH_PROMOTE
-        elif taco_type_string == "twitch_give_tacos":  # this property is not saved in settings, as it should be the amount they give
+        elif taco_type_string == "twitch_give_tacos":
+            # this property is not saved in settings, as it should be the amount they give
             return TacoTypes.TWITCH_GIVE_TACOS
-        elif taco_type_string == "twitch_receive_tacos":  # this property is not saved in settings, as it should be the amount they receive
+        elif taco_type_string == "twitch_receive_tacos":
+            # this property is not saved in settings, as it should be the amount they receive
             return TacoTypes.TWITCH_RECEIVE_TACOS
         elif taco_type_string == "twitch_follow_count":
             return TacoTypes.TWITCH_FOLLOW
-        elif taco_type_string == "twitch_stream_avatars_count":
+        elif taco_type_string == "twitch_stream_avatars":
             return TacoTypes.TWITCH_STREAM_AVATARS
         elif taco_type_string == "twitch_custom":
             return TacoTypes.TWITCH_CUSTOM
         else:
             return TacoTypes.CUSTOM
 
-    def __str__(self):
-        return str(self.name)
-
     @staticmethod
     def get_db_type_from_taco_type(taco_type):
-        return str(taco_type)
-
-        if taco_type == TacoTypes.JOIN_SERVER:
-            return "JOIN_SERVER"
-        elif taco_type == TacoTypes.BOOST:
-            return "BOOST"
-        elif taco_type == TacoTypes.REACT_REWARD:
-            return "REACT_REWARD"
-        elif taco_type == TacoTypes.SUGGEST:
-            return "SUGGEST"
-        elif taco_type == TacoTypes.USER_INVITE:
-            return "USER_INVITE"
-        elif taco_type == TacoTypes.REACTION:
-            return "REACTION"
-        elif taco_type == TacoTypes.REPLY:
-            return "REPLY"
-        elif taco_type == TacoTypes.TQOTD:
-            return "TQOTD"
-        elif taco_type == TacoTypes.BIRTHDAY:
-            return "BIRTHDAY"
-        elif taco_type == TacoTypes.TWITCH_LINK:
-            return "TWITCH_LINK"
-        elif taco_type == TacoTypes.STREAM:
-            return "STREAM"
-        elif taco_type == TacoTypes.PHOTO_POST:
-            return "PHOTO_POST"
-        elif taco_type == TacoTypes.WDYCTW:
-            return "WDYCTW"
-        elif taco_type == TacoTypes.TECH_THURSDAY:
-            return "TECH_THURSDAY"
-        elif taco_type == TacoTypes.TACO_TUESDAY:
-            return "TACO_TUESDAY"
-        elif taco_type == TacoTypes.MENTAL_MONDAY:
-            return "MENTAL_MONDAY"
-        elif taco_type == TacoTypes.FIRST_MESSAGE:
-            return "FIRST_MESSAGE"
-        elif taco_type == TacoTypes.EVENT_CREATE:
-            return "EVENT_CREATE"
-        elif taco_type == TacoTypes.EVENT_JOIN:
-            return "EVENT_JOIN"
-        elif taco_type == TacoTypes.EVENT_LEAVE:
-            return "EVENT_LEAVE"
-        elif taco_type == TacoTypes.EVENT_CANCEL:
-            return "EVENT_CANCEL"
-        elif taco_type == TacoTypes.EVENT_COMPLETE:
-            return "EVENT_COMPLETE"
-        elif taco_type == TacoTypes.PURGE:
-            return "PURGE"
-        elif taco_type == TacoTypes.LEAVE_SERVER:
-            return "LEAVE_SERVER"
-        elif taco_type == TacoTypes.GAME_REDEEM:
-            return "GAME_REDEEM"
-        elif taco_type == TacoTypes.GAME_DONATE_REDEEM:
-            return "GAME_DONATE_REDEEM"
-        elif taco_type == TacoTypes.TRIVIA_CORRECT:
-            return "TRIVIA_CORRECT"
-        elif taco_type == TacoTypes.TRIVIA_INCORRECT:
-            return "TRIVIA_INCORRECT"
-        elif taco_type == TacoTypes.FOLLOW_CHANNEL:  # this can't be triggered by events
-            return "FOLLOW_CHANNEL"
-        elif taco_type == TacoTypes.CREATE_VOICE_CHANNEL:
-            return "CREATE_VOICE_CHANNEL"
-        elif taco_type == TacoTypes.POST_INTRODUCTION:
-            return "POST_INTRODUCTION"
-        elif taco_type == TacoTypes.APPROVE_INTRODUCTION:
-            return "APPROVE_INTRODUCTION"
-        elif taco_type == TacoTypes.TWITCH_BOT_INVITE:
-            return "TWITCH_BOT_INVITE"
-        elif taco_type == TacoTypes.TWITCH_RAID:
-            return "TWITCH_RAID"
-        elif taco_type == TacoTypes.TWITCH_SUB:
-            return "TWITCH_SUB"
-        elif taco_type == TacoTypes.TWITCH_BITS:
-            return "TWITCH_BITS"
-        elif taco_type == TacoTypes.TWITCH_FIRST_MESSAGE:
-            return "TWITCH_FIRST_MESSAGE"
-        elif taco_type == TacoTypes.TWITCH_PROMOTE:
-            return "TWITCH_PROMOTE"
-        elif taco_type == TacoTypes.TWITCH_GIVE_TACOS:
-            return "TWITCH_GIVE_TACOS"
-        elif taco_type == TacoTypes.TWITCH_RECEIVE_TACOS:
-            return "TWITCH_RECEIVE_TACOS"
-        elif taco_type == TacoTypes.TWITCH_FOLLOW:
-            return "TWITCH_FOLLOW"
-        elif taco_type == TacoTypes.TWITCH_STREAM_AVATARS:
-            return "TWITCH_STREAM_AVATARS"
-        elif taco_type == TacoTypes.TWITCH_CUSTOM:
-            return "TWITCH_CUSTOM"
-        else:
-            return "CUSTOM"
+        return taco_type.name.upper()
 
     @staticmethod
     def get_string_from_taco_type(taco_type):
@@ -298,7 +210,7 @@ class TacoTypes(Enum):
             return "trivia_correct_count"
         elif taco_type == TacoTypes.TRIVIA_INCORRECT:
             return "trivia_incorrect_count"
-        elif taco_type == TacoTypes.FOLLOW_CHANNEL: # this can't be triggered by events
+        elif taco_type == TacoTypes.FOLLOW_CHANNEL:  # this can't be triggered by events
             return "follow_channel_count"
         elif taco_type == TacoTypes.CREATE_VOICE_CHANNEL:
             return "create_voice_channel_count"
@@ -319,13 +231,15 @@ class TacoTypes(Enum):
         elif taco_type == TacoTypes.TWITCH_PROMOTE:
             return "twitch_promote_count"
         elif taco_type == TacoTypes.TWITCH_GIVE_TACOS:
-            return "twitch_give_tacos" # this property is not saved in settings, as it should be the amount they give
+            return "twitch_give_tacos"
+            # this property is not saved in settings, as it should be the amount they give
         elif taco_type == TacoTypes.TWITCH_RECEIVE_TACOS:
-            return "twitch_receive_tacos" # this property is not saved in settings, as it should be the amount they give
+            return "twitch_receive_tacos"
+            # this property is not saved in settings, as it should be the amount they give
         elif taco_type == TacoTypes.TWITCH_FOLLOW:
             return "twitch_follow_count"
         elif taco_type == TacoTypes.TWITCH_STREAM_AVATARS:
-            return "twitch_stream_avatars_count"
+            return "twitch_stream_avatars"
         elif taco_type == TacoTypes.TWITCH_CUSTOM:
             return "twitch_custom"
         else:

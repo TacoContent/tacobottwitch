@@ -1,24 +1,14 @@
-import re
-from twitchio.ext import commands
-import twitchio
-import os
-import traceback
-import sys
-import json
 import inspect
-from .lib import mongo
-from .lib import settings
-from .lib import utils
-from .lib import loglevel
-from .lib import logger
-from .lib import permissions
-from .lib import command_helper
-from .lib import tacos_log as tacos_log
-from .lib import tacotypes
+import os
+
+from twitchio.ext import commands
+from bot.cogs.lib import logger, loglevel, mongo, permissions, settings, tacos_log
+
 
 class CustomCommandCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         _method = inspect.stack()[0][3]
+        self._class = self.__class__.__name__
         # get the file name without the extension and without the directory
         self._module = os.path.basename(__file__)[:-3]
         self.bot = bot
@@ -37,4 +27,4 @@ class CustomCommandCog(commands.Cog):
 
         self.log = logger.Log(minimumLogLevel=log_level)
         self.permissions_helper = permissions.Permissions()
-        self.log.debug("NONE", "custom_command.__init__", "Initialized")
+        self.log.debug("NONE", f"{self._module}.{self._class}.{_method}", "Initialized")

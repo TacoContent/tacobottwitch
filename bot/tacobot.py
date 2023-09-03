@@ -1,18 +1,16 @@
-from twitchio.ext import commands
+import inspect
 import os
 import traceback
-import sys
-import inspect
-from .cogs.lib import mongo
-from .cogs.lib import settings
-from .cogs.lib import logger
-from .cogs.lib import loglevel
-from .cogs.lib import utils
+import typing
+
+from bot.cogs.lib import logger, loglevel, mongo, settings
+from twitchio.ext import commands
 
 # https://twitchio.dev/en/latest/exts/commands.html#twitchio.ext.commands.Bot.load_module
 class TacoBot(commands.Bot):
     def __init__(self) -> None:
         _method = inspect.stack()[0][3]
+        self._class = self.__class__.__name__
         # get the file name without the extension and without the directory
         self._module = os.path.basename(__file__)[:-3]
         self.settings = settings.Settings()
@@ -45,15 +43,11 @@ class TacoBot(commands.Bot):
         # self.bot = commands.Bot(
         #     token=self.settings.twitch_oauth_token, prefix=self.get_prefixes, initial_channels=self.get_initial_channels
         # )
-
-
         # self.esclient = eventsub.EventSubClient(
         #     client=self,
         #     callback_route=self.settings.eventsub_callback_url,
         #     webhook_secret=self.settings.eventsub_secret,
         # )
-
-
         # get a list of all the cogs in the cogs directory
         cogs = [
             f"bot.cogs.{os.path.splitext(f)[0]}"
@@ -61,21 +55,20 @@ class TacoBot(commands.Bot):
             if f.endswith(".py") and not f.startswith("_")
         ]
 
-
         # load all the cogs
         for extension in cogs:
             try:
                 # self.bot.load_module(extension)
                 self.load_module(extension)
             except Exception as e:
-                print(f"Failed to load extension {extension}.", file=sys.stderr)
-                traceback.print_exc()
-
-
-        # print(f"starting bot")
+                self.log.error(
+                    "NONE",
+                    f"{self._module}.{self._class}.{_method}",
+                    f"Failed to load extension {extension}: {e}",
+                    traceback.format_exc(),
+                )
         self.log.debug("NONE", f"{self._module}.{_method}", "Starting bot")
         self.run()
-
 
     # async def __ainit__(self) -> None:
     #     self.loop.create_task(self.esclient.listen(port=4000))
@@ -95,7 +88,7 @@ class TacoBot(commands.Bot):
     #             self.log.error("NONE", "tacobot.__ainit__", f"failed to subscribe to follow event for channel: {channel} -> {str(e)}", traceback.format_exc())
     #             pass
 
-    def get_initial_channels(self) -> list:
+    def get_initial_channels(self) -> typing.Optional[list[str]]:
         _method = inspect.stack()[0][3]
         try:
             if self.settings.IS_DEBUG:
@@ -103,6 +96,12 @@ class TacoBot(commands.Bot):
                 return self.settings.default_channels
 
             channels = self.db.get_bot_twitch_channels()
+            if not channels:
+                self.log.debug(
+                    "NONE", f"{self._module}.{_method}", "no channels found in database, joining default channels"
+                )
+                return self.settings.default_channels
+
             self.log.debug("NONE", f"{self._module}.{_method}", f"joining channels: {', '.join(channels)}")
 
             return channels

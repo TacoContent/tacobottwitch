@@ -1,26 +1,18 @@
 import re
 from twitchio.ext import commands
-import twitchio
 import os
 import traceback
-import sys
-import json
 import inspect
-from .lib import mongo
-from .lib import settings
-from .lib import utils
-from .lib import loglevel
-from .lib import logger
-from .lib import permissions
-from .lib import command_helper
-from .lib import tacos_log as tacos_log
-from .lib import tacotypes
+
+from bot.cogs.lib import logger, loglevel, mongo, permissions, settings, tacos_log, tacotypes, utils
+
 
 class RainmakerCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         _method = inspect.stack()[0][3]
         # get the file name without the extension and without the directory
         self._module = os.path.basename(__file__)[:-3]
+        self._class = self.__class__.__name__
 
         self.bot = bot
         self.db = mongo.MongoDatabase()
@@ -45,7 +37,7 @@ class RainmakerCog(commands.Cog):
 
         self.log = logger.Log(minimumLogLevel=log_level)
         self.permissions_helper = permissions.Permissions()
-        self.log.debug("NONE", f"{self._module}.{_method}", "Initialized")
+        self.log.debug("NONE", f"{self._module}.{self._class}.{_method}", "Initialized")
 
     @commands.command(name="rainmaker")
     async def rainmaker(self, ctx: commands.Context, subcommand: str = None, *args) -> None:
@@ -54,7 +46,7 @@ class RainmakerCog(commands.Cog):
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):
             self.log.debug(
                 ctx.message.channel.name,
-                f"{self._module}.{_method}",
+                f"{self._module}.{self._class}.{_method}",
                 f"{ctx.message.author.name} does not have permission to use this command.",
             )
             return
@@ -75,15 +67,18 @@ class RainmakerCog(commands.Cog):
             if channel is None:
                 return
 
+            if ctx is None:
+                return
+
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.BROADCASTER):
                 self.log.debug(
                     channel,
-                    f"{self._module}.{_method}",
+                    f"{self._module}.{self._class}.{_method}",
                     f"{ctx.message.author.name} does not have permission to use this command.",
                 )
                 return
 
-            self.log.debug(channel, f"{self._module}.{_method}", f"Stopping rainmaker event in {channel}")
+            self.log.debug(channel, f"{self._module}.{self._class}.{_method}", f"Stopping rainmaker event in {channel}")
             prefixes = self.settings.prefixes
             if not prefixes:
                 prefixes = ["!taco "]
@@ -91,18 +86,24 @@ class RainmakerCog(commands.Cog):
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
             if channel_settings is None:
-                self.log.error(channel, f"{self._module}.{_method}", f"No rainmaker settings found for {channel}")
+                self.log.error(
+                    channel, f"{self._module}.{self._class}.{_method}", f"No rainmaker settings found for {channel}"
+                )
                 return
             if args is None or len(args) == 0:
-                self.log.error(channel, f"{self._module}.{_method}", f"No arguments provided for {channel}")
+                self.log.error(
+                    channel, f"{self._module}.{self._class}.{_method}", f"No arguments provided for {channel}"
+                )
                 return
 
             set_message = ' '.join(args[0:]).strip()
             channel_settings[self.bot_user]["action_message"] = set_message
             self.settings.set_channel_settings(self.db, channel, channel_settings)
-            await ctx.reply(f"Your stream elements tip message has been set to '{set_message}'. Use {prefix}rainmaker set <regex> to change it.")
+            await ctx.reply(
+                f"Your stream elements tip message has been set to '{set_message}'. Use {prefix}rainmaker set <regex> to change it."
+            )
         except Exception as e:
-            self.log.error(channel, f"{self._module}.{_method}", str(e), traceback.format_exc())
+            self.log.error(channel, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc())
 
     async def _rainmaker_stop(self, ctx: commands.Context, args) -> None:
         _method = inspect.stack()[1][3]
@@ -115,12 +116,12 @@ class RainmakerCog(commands.Cog):
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
                 self.log.debug(
                     channel,
-                    f"{self._module}.{_method}",
+                    f"{self._module}.{self._class}.{_method}",
                     f"{ctx.message.author.name} does not have permission to use this command.",
                 )
                 return
 
-            self.log.debug(channel, f"{self._module}.{_method}", f"Stopping rainmaker event in {channel}")
+            self.log.debug(channel, f"{self._module}.{self._class}.{_method}", f"Stopping rainmaker event in {channel}")
             prefixes = self.settings.prefixes
             if not prefixes:
                 prefixes = ["!taco "]
@@ -137,7 +138,7 @@ class RainmakerCog(commands.Cog):
                 f"@{ctx.message.author.name}, I will no longer give tacos if someone that retweets and rainmaker notifies the channel. You can start it again with `{prefix}rainmaker start`."
             )
         except Exception as e:
-            self.log.error(channel, f"{self._module}.{_method}", str(e), traceback.format_exc())
+            self.log.error(channel, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc())
 
     async def _rainmaker_start(self, ctx: commands.Context, args) -> None:
         _method = inspect.stack()[1][3]
@@ -150,12 +151,12 @@ class RainmakerCog(commands.Cog):
             if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.MODERATOR):
                 self.log.debug(
                     channel,
-                    f"{self._module}.{_method}",
+                    f"{self._module}.{self._class}.{_method}",
                     f"{ctx.message.author.name} does not have permission to use this command.",
                 )
                 return
 
-            self.log.debug(channel, f"{self._module}.{_method}", f"Starting rainmaker event in {channel}")
+            self.log.debug(channel, f"{self._module}.{self._class}.{_method}", f"Starting rainmaker event in {channel}")
             prefixes = self.settings.prefixes
             if not prefixes:
                 prefixes = ["!taco "]
@@ -172,7 +173,7 @@ class RainmakerCog(commands.Cog):
                 f"@{ctx.message.author.name}, I will now give tacos if someone that retweets the stream and rainmaker notifies the channel. You can stop it again with `{prefix}rainmaker stop`."
             )
         except Exception as e:
-            self.log.error(channel, f"{self._module}.{_method}", str(e), traceback.format_exc())
+            self.log.error(channel, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc())
 
     @commands.Cog.event()
     # https://twitchio.dev/en/latest/reference.html#twitchio.Message
@@ -194,7 +195,10 @@ class RainmakerCog(commands.Cog):
             if not game_settings.get("enabled", True):
                 return
 
-            rainmaker_regex = re.compile(game_settings.get("action_message", self.default_settings['action_message']), re.IGNORECASE | re.MULTILINE)
+            rainmaker_regex = re.compile(
+                game_settings.get("action_message", self.default_settings['action_message']),
+                re.IGNORECASE | re.MULTILINE,
+            )
 
             if sender == channel:
                 return
@@ -210,7 +214,7 @@ class RainmakerCog(commands.Cog):
                     if not self.permissions_helper.has_linked_account(username):
                         self.log.debug(
                             channel,
-                            f"{self._module}.{_method}",
+                            f"{self._module}.{self._class}.{_method}",
                             f"NON-TACO: {username} retweeted the stream in {channel}'s channel",
                         )
                         return
@@ -218,7 +222,7 @@ class RainmakerCog(commands.Cog):
                     reason = f"retweeted the stream in @{channel}'s channel"
                     self.log.debug(
                         channel,
-                        f"{self._module}.{_method}",
+                        f"{self._module}.{self._class}.{_method}",
                         f"{username} retweeted the stream in {channel}'s channel",
                     )
                     await self.tacos_log.give_user_tacos(
@@ -231,6 +235,8 @@ class RainmakerCog(commands.Cog):
                     return
 
         except Exception as e:
-            self.log.error(message.channel.name, f"{self._module}.{_method}", str(e), traceback.format_exc())
+            self.log.error(
+                message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc()
+            )
 def prepare(bot) -> None:
     bot.add_cog(RainmakerCog(bot))

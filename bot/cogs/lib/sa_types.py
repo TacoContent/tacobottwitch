@@ -1,4 +1,6 @@
 from enum import Enum
+
+
 class StreamAvatarTypes(Enum):
     REQUESTED = 0,
     ACCEPTED = 1,

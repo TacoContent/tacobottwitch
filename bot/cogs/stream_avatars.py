@@ -134,9 +134,6 @@ class StreamAvatars(commands.Cog):
                 self.log.debug(channel, f"{self._module}.{_method}", "Event disabled")
                 return
 
-            print(f"opponent: {opponent}")
-            print(f"challenger: {challenger}")
-
             self.db.track_twitch_stream_avatar_duel(
                 channel=channel,
                 challenger=challenger,

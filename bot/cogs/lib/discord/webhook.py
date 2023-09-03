@@ -1,15 +1,15 @@
-import requests
-import json
 import traceback
-import typing
-class DiscordWebhook():
-    def __init__(self, webhook_url) -> None:
+
+import requests
+
+
+class DiscordWebhook:
+    def __init__(self, webhook_url: str) -> None:
         self.webhook_url = webhook_url
 
     def send(self, **kwargs) -> None:
         try:
-
-            data = { }
+            data = {}
             # data['tts'] = False
 
             for key, value in kwargs.items():
