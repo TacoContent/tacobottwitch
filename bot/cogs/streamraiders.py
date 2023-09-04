@@ -123,7 +123,6 @@ class StreamCaptainBotCog(commands.Cog):
             if self.event_name not in channel_settings:
                 channel_settings[self.event_name] = self.default_settings
 
-
             channel_settings[self.event_name]["enabled"] = True
             self.settings.set_channel_settings(self.db, channel, channel_settings)
 

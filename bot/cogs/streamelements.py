@@ -90,7 +90,7 @@ class StreamElementsBotCog(commands.Cog):
                 self.log.error(
                     channel,
                     f"{self._module}.{self._class}.{_method}",
-                    f"No streamelements settings found for {channel}"
+                    f"No streamelements settings found for {channel}",
                 )
                 return
             if args is None or len(args) == 0:
