@@ -1,5 +1,5 @@
-import os
 import inspect
+import os
 
 from bot.cogs.lib import logger, loglevel, mongo, settings, utils
 from twitchio.ext import commands
@@ -39,9 +39,7 @@ class TacoQuestionOfTheDayCog(commands.Cog):
                 )
             else:
                 self.log.debug(
-                    channel,
-                    f"{self._module}.{self._class}.{_method}",
-                    "No invite found. Just sending the question.",
+                    channel, f"{self._module}.{self._class}.{_method}", "No invite found. Just sending the question."
                 )
                 await ctx.send(f"TACO Question of the Day: {question}")
         else:

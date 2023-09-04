@@ -59,7 +59,6 @@ class StreamAvatars(commands.Cog):
             challenger = utils.clean_channel_name(duel['challenger'])
             buyin = duel['count']
 
-
             channel_settings = self.settings.get_channel_settings(self.db, channel)
             if self.event_name not in channel_settings:
                 channel_settings[self.event_name] = self.default_settings
@@ -78,7 +77,6 @@ class StreamAvatars(commands.Cog):
                 winner=winner,
                 type=StreamAvatarTypes.COMPLETE,
             )
-
 
             # from here we only care if the opponent is the bot
             if opponent != utils.clean_channel_name(self.bot.nick):
@@ -105,7 +103,6 @@ class StreamAvatars(commands.Cog):
 
         except Exception as e:
             raise e
-
 
     async def start_duel(self, message, opponent: str, challenger: str, buyin: int) -> None:
         _method = inspect.stack()[0][3]
@@ -176,7 +173,7 @@ class StreamAvatars(commands.Cog):
                 opponent=duel['opponent'],
                 count=duel['count'],
                 winner=None,
-                type=StreamAvatarTypes.DECLINED
+                type=StreamAvatarTypes.DECLINED,
             )
         except Exception as e:
             raise e
@@ -210,10 +207,10 @@ class StreamAvatars(commands.Cog):
             accept_pattern = game_settings.get("accept_message", self.default_settings['accept_message'])
             decline_pattern = game_settings.get("decline_message", self.default_settings['decline_message'])
 
-            start_match_regex = re.compile(action_pattern, re.IGNORECASE| re.MULTILINE )
-            winner_match_regex = re.compile(winner_pattern, re.IGNORECASE| re.MULTILINE )
-            accept_match_regex = re.compile(accept_pattern, re.IGNORECASE| re.MULTILINE )
-            decline_match_regex = re.compile(decline_pattern, re.IGNORECASE| re.MULTILINE )
+            start_match_regex = re.compile(action_pattern, re.IGNORECASE| re.MULTILINE)
+            winner_match_regex = re.compile(winner_pattern, re.IGNORECASE| re.MULTILINE)
+            accept_match_regex = re.compile(accept_pattern, re.IGNORECASE| re.MULTILINE)
+            decline_match_regex = re.compile(decline_pattern, re.IGNORECASE| re.MULTILINE)
 
             # close any unknown, open duels
             self.db.close_twitch_stream_avatar_open_duels(channel)
@@ -238,10 +235,7 @@ class StreamAvatars(commands.Cog):
                 opponent = utils.clean_channel_name(accept_match.group("opponent"))
                 challenger = utils.clean_channel_name(accept_match.group("challenger"))
                 duel = self.db.get_twitch_stream_avatar_duel_from_challenger_opponent(
-                    channel=channel,
-                    challenger=challenger,
-                    opponent=opponent,
-                    type=StreamAvatarTypes.REQUESTED,
+                    channel=channel, challenger=challenger, opponent=opponent, type=StreamAvatarTypes.REQUESTED
                 )
                 if duel is None:
                     self.log.debug(
@@ -296,7 +290,9 @@ class StreamAvatars(commands.Cog):
                 return
 
         except Exception as e:
-            self.log.error(message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc())
+            self.log.error(
+                message.channel.name, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc()
+            )
 
     def init_channel_settings(self, channel: str) -> None:
         channel_settings = self.settings.get_channel_settings(self.db, channel)

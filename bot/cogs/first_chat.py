@@ -3,7 +3,7 @@ import inspect
 import os
 import traceback
 
-from bot.cogs.lib import loglevel, logger, mongo, permissions, settings, tacos_log, tacotypes, utils
+from bot.cogs.lib import logger, loglevel, mongo, permissions, settings, tacos_log, tacotypes, utils
 from twitchio.ext import commands
 
 

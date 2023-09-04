@@ -2,8 +2,8 @@
 import inspect
 import os
 
-from twitchio.ext import commands, eventsub
 from bot.cogs.lib import logger, loglevel, mongo, permissions, settings, tacos_log
+from twitchio.ext import commands, eventsub
 
 
 # https://twitchio.dev/en/latest/exts/eventsub.html

@@ -1,10 +1,10 @@
-import re
-from twitchio.ext import commands
-import os
-import traceback
 import inspect
+import os
+import re
+import traceback
 
 from bot.cogs.lib import logger, loglevel, mongo, permissions, settings, tacos_log, tacotypes, utils
+from twitchio.ext import commands
 
 
 class RainmakerCog(commands.Cog):
@@ -28,7 +28,7 @@ class RainmakerCog(commands.Cog):
 
         self.default_settings = {
             "enabled": True,
-            "action_message": r"^Thank you for tweeting out the stream, (?P<user>@?[a-zA-Z0-9-_]+).$"
+            "action_message": r"^Thank you for tweeting out the stream, (?P<user>@?[a-zA-Z0-9-_]+).$",
         }
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
@@ -63,7 +63,6 @@ class RainmakerCog(commands.Cog):
         _method = inspect.stack()[1][3]
         channel = utils.clean_channel_name(ctx.channel.name)
         try:
-
             if channel is None:
                 return
 
@@ -144,7 +143,6 @@ class RainmakerCog(commands.Cog):
         _method = inspect.stack()[1][3]
         channel = utils.clean_channel_name(ctx.message.channel.name)
         try:
-
             if channel is None:
                 return
 

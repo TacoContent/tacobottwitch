@@ -1,8 +1,8 @@
 import inspect
 import os
 
-from twitchio.ext import commands
 from bot.cogs.lib import logger, loglevel, mongo, permissions, settings, tacos_log
+from twitchio.ext import commands
 
 
 class CustomCommandCog(commands.Cog):

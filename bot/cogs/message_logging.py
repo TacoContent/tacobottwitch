@@ -1,6 +1,6 @@
-import os
-import json
 import inspect
+import json
+import os
 
 from bot.cogs.lib import logger, loglevel, settings
 from twitchio.ext import commands

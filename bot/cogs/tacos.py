@@ -9,6 +9,7 @@ from twitchio.ext import commands
 
 class TacosCog(commands.Cog):
     """Allows the streamer to give a user tacos"""
+
     def __init__(self, bot: commands.Bot) -> None:
         _method = inspect.stack()[0][3]
         self._class = self.__class__.__name__
@@ -83,7 +84,6 @@ class TacosCog(commands.Cog):
             message_out = "Tacos Leaderboard: "
             index_position = 1
             for i in lb:
-
                 taco_count = i["count"]
                 taco_word = "taco"
                 if taco_count != 1:
@@ -147,7 +147,9 @@ class TacosCog(commands.Cog):
                 taco_word = "taco"
                 if user_tacos != 1:
                     taco_word = "tacos"
-                await ctx.reply(f"@{ctx.message.author.display_name}, {response_user} {response_has} {user_tacos} {taco_word} 🌮.")
+                await ctx.reply(
+                    f"@{ctx.message.author.display_name}, {response_user} {response_has} {user_tacos} {taco_word} 🌮."
+                )
             else:
                 await ctx.reply(f"@{ctx.message.author.display_name}, {response_user} {response_has} no tacos 🌮.")
         except Exception as e:
@@ -182,8 +184,12 @@ class TacosCog(commands.Cog):
         if len(args) >= 2:
             user = utils.clean_channel_name(args[0])
 
-            if user == utils.clean_channel_name(ctx.message.channel.name) or user == utils.clean_channel_name(ctx.message.author.name):
-                await ctx.reply(f"@{ctx.message.author.display_name}, you can't give yourself (or {ctx.message.channel.name}) tacos.")
+            if user == utils.clean_channel_name(ctx.message.channel.name) or user == utils.clean_channel_name(
+                ctx.message.author.name
+            ):
+                await ctx.reply(
+                    f"@{ctx.message.author.display_name}, you can't give yourself (or {ctx.message.channel.name}) tacos."
+                )
                 return
 
             ## Give all users tacos??
@@ -197,24 +203,36 @@ class TacosCog(commands.Cog):
                 if not await command_helper.check_linked_account(ctx, user):
                     return
 
-                total_gifted_to_user = self.db.get_total_gifted_tacos_to_user(utils.clean_channel_name(ctx.message.channel.name), utils.clean_channel_name(ctx.message.author.name), 86400)
+                total_gifted_to_user = self.db.get_total_gifted_tacos_to_user(
+                    utils.clean_channel_name(ctx.message.channel.name),
+                    utils.clean_channel_name(ctx.message.author.name),
+                    86400,
+                )
                 remaining_gifts_to_user = max_give_per_user_per_day - total_gifted_to_user
 
                 if remaining_gifts_to_user < 1:
-                    await ctx.reply(f"@{ctx.message.author.display_name}, you have reached the maximum number of tacos you can give to {user} in a rolling 24 hours.")
+                    await ctx.reply(
+                        f"@{ctx.message.author.display_name}, you have reached the maximum number of tacos you can give to {user} in a rolling 24 hours."
+                    )
                     return
                 elif remaining_gifts_to_user < amount:
-                    await ctx.reply(f"@{ctx.message.author.display_name}, you can only give {remaining_gifts_to_user} tacos to {user} in a rolling 24 hours.")
+                    await ctx.reply(
+                        f"@{ctx.message.author.display_name}, you can only give {remaining_gifts_to_user} tacos to {user} in a rolling 24 hours."
+                    )
                     return
 
 
                 total_gifted_24_hours = self.db.get_total_gifted_tacos(utils.clean_channel_name(ctx.message.channel.name), 86400)
                 remaining_gifts_24_hours = max_give_per_day - total_gifted_24_hours
                 if remaining_gifts_24_hours < 1:
-                    await ctx.reply(f"@{ctx.message.author.display_name}, you have reached the maximum number of tacos you can give in a rolling 24 hours.")
+                    await ctx.reply(
+                        f"@{ctx.message.author.display_name}, you have reached the maximum number of tacos you can give in a rolling 24 hours."
+                    )
                     return
                 elif remaining_gifts_24_hours < amount:
-                    await ctx.reply(f"@{ctx.message.author.display_name}, you can only have {remaining_gifts_24_hours} tacos you can give out in a rolling 24 hours.")
+                    await ctx.reply(
+                        f"@{ctx.message.author.display_name}, you can only have {remaining_gifts_24_hours} tacos you can give out in a rolling 24 hours."
+                    )
                     return
 
                 reason = "just being awesome"
@@ -233,7 +251,8 @@ class TacosCog(commands.Cog):
                         toUser=user,
                         reason=reason,
                         give_type=tacotypes.TacoTypes.TWITCH_RECEIVE_TACOS,
-                        amount=amount)
+                        amount=amount,
+                    )
 
                     # don't need to check if the user has permissions, since we do that above.
 
@@ -245,7 +264,8 @@ class TacosCog(commands.Cog):
                         toUser=utils.clean_channel_name(ctx.message.channel.name),
                         reason=f"giving {user} {amount} {taco_word} 🌮",
                         give_type=tacotypes.TacoTypes.TWITCH_GIVE_TACOS,
-                        amount=amount,)
+                        amount=amount,
+                    )
 
                 else:
                     await ctx.send(f"You can't give negative tacos!")
@@ -271,7 +291,9 @@ class TacosCog(commands.Cog):
 
         channel = self.bot.get_channel(ctx.message.channel.name)
         if not channel:
-            self.log.debug(ctx.message.channel.name, f"{self._module}.{_method}", f"Channel {ctx.message.channel.name} not found.")
+            self.log.debug(
+                ctx.message.channel.name, f"{self._module}.{_method}", f"Channel {ctx.message.channel.name} not found."
+            )
             return
 
         if len(args) >= 2:
@@ -295,7 +317,8 @@ class TacosCog(commands.Cog):
                         user,
                         reason,
                         give_type=tacotypes.TacoTypes.TWITCH_CUSTOM,
-                        amount=-(amount))
+                        amount=-(amount),
+                    )
                 else:
                     await ctx.send(f"You can't take negative or more than {max_take_per_user} tacos!")
             else:

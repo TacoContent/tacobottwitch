@@ -1,7 +1,7 @@
 import inspect
 import os
 
-from bot.cogs.lib import loglevel, logger, mongo, settings, tacos_log
+from bot.cogs.lib import logger, loglevel, mongo, settings
 from twitchio.ext import commands
 
 

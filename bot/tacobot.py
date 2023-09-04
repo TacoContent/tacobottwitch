@@ -6,6 +6,7 @@ import typing
 from bot.cogs.lib import logger, loglevel, mongo, settings
 from twitchio.ext import commands
 
+
 # https://twitchio.dev/en/latest/exts/commands.html#twitchio.ext.commands.Bot.load_module
 class TacoBot(commands.Bot):
     def __init__(self) -> None:

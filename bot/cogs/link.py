@@ -35,7 +35,9 @@ class DiscordAccountLinkCog(commands.Cog):
         _method = inspect.stack()[1][3]
         if code:
             try:
-                result = self.db.link_twitch_to_discord_from_code(utils.clean_channel_name(ctx.message.author.name), code)
+                result = self.db.link_twitch_to_discord_from_code(
+                    utils.clean_channel_name(ctx.message.author.name), code
+                )
                 if result:
                     await ctx.reply(
                         f"{ctx.message.author.mention}, I used the code {code} to link your discord account to your twitch account. Thank you!"
@@ -92,10 +94,7 @@ class DiscordAccountLinkCog(commands.Cog):
             await ctx.send(str(error))
         else:
             self.log.error(
-                ctx.message.channel.name,
-                f"{self._module}.{self._class}.{_method}",
-                str(error),
-                traceback.format_exc(),
+                ctx.message.channel.name, f"{self._module}.{self._class}.{_method}", str(error), traceback.format_exc()
             )
             await ctx.send(f"Error: {error}")
 

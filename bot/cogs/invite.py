@@ -3,8 +3,9 @@ import os
 import traceback
 import typing
 
-from bot.cogs.lib import loglevel, logger, mongo, permissions, settings, tacos_log, tacotypes, utils
+from bot.cogs.lib import logger, loglevel, mongo, permissions, settings, tacos_log, tacotypes, utils
 from twitchio.ext import commands
+
 
 class TacoInviteCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
@@ -97,8 +98,6 @@ class TacoInviteCog(commands.Cog):
 
             if channel is None or channel == "":
                 channel = utils.clean_channel_name(ctx.message.author.name)
-
-
             # check if we know who this user is in discord.
             discord_id = self.db.get_discord_id_for_twitch_username(channel)
             if discord_id is None:

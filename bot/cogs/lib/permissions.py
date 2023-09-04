@@ -38,7 +38,6 @@ class Permissions:
         user: typing.Union[twitchio.Chatter, twitchio.PartialChatter],
         level: PermissionLevel = PermissionLevel.EVERYONE,
     ) -> bool:
-
         def is_vip(user):
             return "vip" in user.badges
 

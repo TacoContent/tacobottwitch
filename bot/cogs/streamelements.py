@@ -8,6 +8,7 @@ import twitchio
 from bot.cogs.lib import logger, loglevel, mongo, settings, utils, permissions, tacos_log, tacotypes
 from twitchio.ext import commands
 
+
 # streamelements: inmax_cz just tipped $10.00 PogChamp
 class StreamElementsBotCog(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
@@ -76,7 +77,9 @@ class StreamElementsBotCog(commands.Cog):
                 )
                 return
 
-            self.log.debug(channel, f"{self._module}.{self._class}.{_method}", f"Stopping streamelements event in {channel}")
+            self.log.debug(
+                channel, f"{self._module}.{self._class}.{_method}", f"Stopping streamelements event in {channel}"
+            )
             prefixes = self.settings.prefixes
             if not prefixes:
                 prefixes = ["!taco "]
@@ -84,10 +87,14 @@ class StreamElementsBotCog(commands.Cog):
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
             if channel_settings is None:
-                self.log.error(channel, f"{self._module}.{self._class}.{_method}", f"No streamelements settings found for {channel}")
+                self.log.error(
+                    channel, f"{self._module}.{self._class}.{_method}", f"No streamelements settings found for {channel}"
+                )
                 return
             if args is None or len(args) == 0:
-                self.log.error(channel, f"{self._module}.{self._class}.{_method}", f"No arguments provided for {channel}")
+                self.log.error(
+                    channel, f"{self._module}.{self._class}.{_method}", f"No arguments provided for {channel}"
+                )
                 return
 
             tip_message = ' '.join(args[0:]).strip()
@@ -117,7 +124,9 @@ class StreamElementsBotCog(commands.Cog):
                 )
                 return
 
-            self.log.debug(channel, f"{self._module}.{self._class}.{_method}", f"Stopping streamelements event in {channel}")
+            self.log.debug(
+                channel, f"{self._module}.{self._class}.{_method}", f"Stopping streamelements event in {channel}"
+            )
             prefixes = self.settings.prefixes
             if not prefixes:
                 prefixes = ["!taco "]
@@ -180,16 +189,16 @@ class StreamElementsBotCog(commands.Cog):
             channel = utils.clean_channel_name(message.channel.name)
 
             channel_settings = self.settings.get_channel_settings(self.db, channel)
-            game_settings:dict[str,typing.Any] = channel_settings.get(self.event_name, self.default_settings)
+            game_settings: dict[str, typing.Any] = channel_settings.get(self.event_name, self.default_settings)
             if not game_settings.get("enabled", True):
                 return
 
-            tip_pattern:str = game_settings.get("tip_message", self.default_settings["tip_message"])
+            tip_pattern: str = game_settings.get("tip_message", self.default_settings["tip_message"])
             # replace {currency}{amount} with "(?P<tip>[¥$₡£¢]?\d{1,}(?:\.\d{1,})?)"
             tip_pattern = tip_pattern.replace("{currency}{amount}", r"(?P<tip>[¥$₡£¢]?\\d{1,}(?:\.\d{1,})?)")
             # replace {user} with "(?P<user>\w+)"
             tip_pattern = tip_pattern.replace("{user}", r"(?P<user>\w+)")
-            tip_regex:re.Pattern = re.compile(tip_pattern, re.IGNORECASE| re.MULTILINE)
+            tip_regex: re.Pattern = re.compile(tip_pattern, re.IGNORECASE| re.MULTILINE)
 
             if sender == channel:
                 return
@@ -216,9 +225,7 @@ class StreamElementsBotCog(commands.Cog):
 
                     reason = f"tipping {tip} in {channel}'s channel"
                     self.log.debug(
-                        channel,
-                        f"{self._module}.{self._class}.{_method}",
-                        f"{username} {reason}",
+                        channel, f"{self._module}.{self._class}.{_method}", f"{username} {reason}"
                     )
                     await self.tacos_log.give_user_tacos(
                         utils.clean_channel_name(self.settings.bot_name),

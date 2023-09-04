@@ -7,8 +7,8 @@ import traceback
 import typing
 
 from bot.cogs.lib import loglevel, settings, utils
-from bot.cogs.lib.sa_types import StreamAvatarTypes
 from bot.cogs.lib.colors import Colors
+from bot.cogs.lib.sa_types import StreamAvatarTypes
 from bson.objectid import ObjectId
 from pymongo import MongoClient
 
@@ -946,7 +946,7 @@ class MongoDatabase:
                         {
                             "channel_user_id": str(channel_discord_user_id),
                             "challenger_user_id": str(challenger_discord_user_id),
-                        }
+                        },
                     ],
                     # where type != COMPLETE and type != DECLINED
                     "$and": [

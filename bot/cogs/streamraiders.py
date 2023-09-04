@@ -75,7 +75,9 @@ class StreamCaptainBotCog(commands.Cog):
                 )
                 return
 
-            self.log.debug(channel, f"{self._module}.{self._class}.{_method}", f"Stopping streamraiders event in {channel}")
+            self.log.debug(
+                channel, f"{self._module}.{self._class}.{_method}", f"Stopping streamraiders event in {channel}"
+            )
             prefixes = self.settings.prefixes
             if not prefixes:
                 prefixes = ["!taco "]
@@ -84,7 +86,6 @@ class StreamCaptainBotCog(commands.Cog):
             channel_settings = self.settings.get_channel_settings(self.db, channel)
             if self.event_name not in channel_settings:
                 channel_settings[self.event_name] = self.default_settings
-
 
             channel_settings[self.event_name]["enabled"] = False
             self.settings.set_channel_settings(self.db, channel, channel_settings)
@@ -111,7 +112,9 @@ class StreamCaptainBotCog(commands.Cog):
                 )
                 return
 
-            self.log.debug(channel, f"{self._module}.{self._class}.{_method}", f"Starting streamraiders event in {channel}")
+            self.log.debug(
+                channel, f"{self._module}.{self._class}.{_method}", f"Starting streamraiders event in {channel}"
+            )
             prefixes = self.settings.prefixes
             if not prefixes:
                 prefixes = ["!taco "]
