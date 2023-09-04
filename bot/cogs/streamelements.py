@@ -5,7 +5,7 @@ import traceback
 import typing
 
 import twitchio
-from bot.cogs.lib import logger, loglevel, mongo, settings, utils, permissions, tacos_log, tacotypes
+from bot.cogs.lib import logger, loglevel, mongo, permissions, settings, tacos_log, tacotypes, utils
 from twitchio.ext import commands
 
 
@@ -88,7 +88,9 @@ class StreamElementsBotCog(commands.Cog):
             channel_settings = self.settings.get_channel_settings(self.db, channel)
             if channel_settings is None:
                 self.log.error(
-                    channel, f"{self._module}.{self._class}.{_method}", f"No streamelements settings found for {channel}"
+                    channel,
+                    f"{self._module}.{self._class}.{_method}",
+                    f"No streamelements settings found for {channel}"
                 )
                 return
             if args is None or len(args) == 0:
@@ -198,7 +200,7 @@ class StreamElementsBotCog(commands.Cog):
             tip_pattern = tip_pattern.replace("{currency}{amount}", r"(?P<tip>[¥$₡£¢]?\\d{1,}(?:\.\d{1,})?)")
             # replace {user} with "(?P<user>\w+)"
             tip_pattern = tip_pattern.replace("{user}", r"(?P<user>\w+)")
-            tip_regex: re.Pattern = re.compile(tip_pattern, re.IGNORECASE| re.MULTILINE)
+            tip_regex: re.Pattern = re.compile(tip_pattern, re.IGNORECASE | re.MULTILINE)
 
             if sender == channel:
                 return
@@ -224,9 +226,7 @@ class StreamElementsBotCog(commands.Cog):
                         return
 
                     reason = f"tipping {tip} in {channel}'s channel"
-                    self.log.debug(
-                        channel, f"{self._module}.{self._class}.{_method}", f"{username} {reason}"
-                    )
+                    self.log.debug(channel, f"{self._module}.{self._class}.{_method}", f"{username} {reason}")
                     await self.tacos_log.give_user_tacos(
                         utils.clean_channel_name(self.settings.bot_name),
                         username,

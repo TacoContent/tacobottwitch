@@ -3,9 +3,9 @@
 ### They are triggered by twitch events that the bot receives in the users channels.
 ### The events are triggered via nodered.
 ###
+import inspect
 import os
 import traceback
-import inspect
 
 from bot.cogs.lib import logger, loglevel, mongo, permissions, settings, tacos_log, tacotypes, utils
 from twitchio.ext import commands

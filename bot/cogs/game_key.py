@@ -1,5 +1,5 @@
-import os
 import inspect
+import os
 
 from bot.cogs.lib import logger, loglevel, mongo, settings, utils
 from twitchio.ext import commands

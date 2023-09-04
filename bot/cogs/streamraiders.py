@@ -4,7 +4,7 @@ import re
 import traceback
 import typing
 
-from bot.cogs.lib import logger, loglevel, mongo, settings, utils, permissions, tacos_log, tacotypes
+from bot.cogs.lib import logger, loglevel, mongo, permissions, settings, tacos_log, tacotypes, utils
 from twitchio.ext import commands
 
 
@@ -100,7 +100,6 @@ class StreamCaptainBotCog(commands.Cog):
         _method = inspect.stack()[1][3]
         channel = utils.clean_channel_name(ctx.message.channel.name)
         try:
-
             if channel is None:
                 return
 
@@ -158,7 +157,9 @@ class StreamCaptainBotCog(commands.Cog):
             # is the message from the bot?
             if sender == utils.clean_channel_name(self.bot_user):
                 # if message.content matches epic regex
-                epic_regex = re.compile(game_settings.get("epic_regex", self.default_settings["epic_regex"]), re.IGNORECASE | re.MULTILINE)
+                epic_regex = re.compile(
+                    game_settings.get("epic_regex", self.default_settings["epic_regex"]), re.IGNORECASE | re.MULTILINE
+                )
                 match = epic_regex.match(message.content)
                 if match:
                     # get the epic name

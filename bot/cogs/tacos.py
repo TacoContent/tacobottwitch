@@ -3,7 +3,7 @@ import os
 import traceback
 import typing
 
-from bot.cogs.lib import command_helper, logger, loglevel, mongo, settings, permissions, tacos_log, tacotypes, utils
+from bot.cogs.lib import command_helper, logger, loglevel, mongo, permissions, settings, tacos_log, tacotypes, utils
 from twitchio.ext import commands
 
 
@@ -178,7 +178,9 @@ class TacosCog(commands.Cog):
 
         channel = self.bot.get_channel(ctx.message.channel.name)
         if not channel:
-            self.log.debug(ctx.message.channel.name, f"{self._module}.{_method}", f"Channel {ctx.message.channel.name} not found.")
+            self.log.debug(
+                ctx.message.channel.name, f"{self._module}.{_method}", f"Channel {ctx.message.channel.name} not found."
+            )
             return
 
         if len(args) >= 2:
@@ -194,7 +196,6 @@ class TacosCog(commands.Cog):
 
             ## Give all users tacos??
             ## should this be implemented? I don't think so.
-
 
             amount = args[1]
             if amount.isdigit():
@@ -221,8 +222,9 @@ class TacosCog(commands.Cog):
                     )
                     return
 
-
-                total_gifted_24_hours = self.db.get_total_gifted_tacos(utils.clean_channel_name(ctx.message.channel.name), 86400)
+                total_gifted_24_hours = self.db.get_total_gifted_tacos(
+                    utils.clean_channel_name(ctx.message.channel.name), 86400
+                )
                 remaining_gifts_24_hours = max_give_per_day - total_gifted_24_hours
                 if remaining_gifts_24_hours < 1:
                     await ctx.reply(

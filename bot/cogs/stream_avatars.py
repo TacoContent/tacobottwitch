@@ -3,7 +3,7 @@ import os
 import re
 import traceback
 
-from bot.cogs.lib import logger, loglevel, mongo, settings, utils, permissions, tacos_log, tacotypes
+from bot.cogs.lib import logger, loglevel, mongo, permissions, settings, tacos_log, tacotypes, utils
 from bot.cogs.lib.sa_types import StreamAvatarTypes
 from twitchio.ext import commands
 
@@ -207,10 +207,10 @@ class StreamAvatars(commands.Cog):
             accept_pattern = game_settings.get("accept_message", self.default_settings['accept_message'])
             decline_pattern = game_settings.get("decline_message", self.default_settings['decline_message'])
 
-            start_match_regex = re.compile(action_pattern, re.IGNORECASE| re.MULTILINE)
-            winner_match_regex = re.compile(winner_pattern, re.IGNORECASE| re.MULTILINE)
-            accept_match_regex = re.compile(accept_pattern, re.IGNORECASE| re.MULTILINE)
-            decline_match_regex = re.compile(decline_pattern, re.IGNORECASE| re.MULTILINE)
+            start_match_regex = re.compile(action_pattern, re.IGNORECASE | re.MULTILINE)
+            winner_match_regex = re.compile(winner_pattern, re.IGNORECASE | re.MULTILINE)
+            accept_match_regex = re.compile(accept_pattern, re.IGNORECASE | re.MULTILINE)
+            decline_match_regex = re.compile(decline_pattern, re.IGNORECASE | re.MULTILINE)
 
             # close any unknown, open duels
             self.db.close_twitch_stream_avatar_open_duels(channel)

@@ -1,7 +1,7 @@
 # specific commands that are called only by the bot in the restricted channels.
+import inspect
 import os
 import traceback
-import inspect
 
 from bot.cogs.lib import logger, loglevel, mongo, settings, permissions, tacos_log
 from twitchio.ext import commands
