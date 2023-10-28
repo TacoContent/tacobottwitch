@@ -53,10 +53,11 @@ jobs:
           TAGSZ="${GHCR_IMAGE}:latest,${GHCR_IMAGE}:${{ needs.version.outputs.app_version }}";
           BUILD_DATEZ="$(date +'%Y-%m-%dT%TZ%z' -u)";
           PROJECT_NAMEZ="${IMAGE_NAME}";
-          echo "BUILD_TAGS=${TAGSZ}" >> "$GITHUB_ENV";
-          echo "BUILD_DATE=${BUILD_DATEZ}" >> "$GITHUB_ENV";
-          echo "PROJECT_NAME=${PROJECT_NAMEZ}" >> "$GITHUB_ENV";
-
+          {
+            echo "BUILD_TAGS=${TAGSZ}";
+            echo "BUILD_DATE=${BUILD_DATEZ}";
+            echo "PROJECT_NAME=${PROJECT_NAMEZ}";
+          } >> "$GITHUB_ENV";
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
