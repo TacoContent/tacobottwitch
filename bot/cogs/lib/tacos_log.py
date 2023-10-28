@@ -1,17 +1,17 @@
-from .discord import webhook as discord_webhook
-from . import settings
-from . import loglevel
-from . import logger
-from . import tacotypes
-from . import mongo
-from . import utils
-
-import traceback
 import inspect
+import os
+import traceback
 import typing
+
+from bot.cogs.lib import logger, loglevel, mongo, settings, tacotypes, utils
+from bot.cogs.lib.discord import webhook as discord_webhook
+
 
 class TacosLog:
     def __init__(self, bot):
+        _method = inspect.stack()[0][3]
+        # get the file name without the extension and without the directory
+        self._module = os.path.basename(__file__)[:-3]
         self.settings = settings.Settings()
         self.bot = bot
         self.webhook = discord_webhook.DiscordWebhook(self.settings.discord_tacos_log_webhook_url)
@@ -23,15 +23,16 @@ class TacosLog:
 
         self.log = logger.Log(minimumLogLevel=log_level)
 
-    async def _log(self, fromUser: str, toUser: str, amount: int, total_taco_count: int, reason: str = None,) -> None:
+    async def _log(
+        self, fromUser: str, toUser: str, amount: int, total_taco_count: int, reason: typing.Optional[str] = None
+    ) -> None:
         if amount == 0:
             return
         action = "received"
-        action_adverb = "to"
+        action_adverb = "from"
         abs_amount = abs(amount)
         if amount < 0:
             action = "lost"
-            action_adverb = "from"
         if reason is None:
             reason = "[no reason given]"
         taco_word = "taco"
@@ -42,7 +43,7 @@ class TacosLog:
         if total_taco_count != 1:
             total_taco_word = "tacos"
 
-        content = f"{toUser} has {action} {abs_amount} {taco_word} 🌮 {action_adverb} {fromUser} for {reason}, giving them {total_taco_count} {total_taco_word} 🌮 total."
+        content = f"@{toUser} has {action} {abs_amount} {taco_word} 🌮 {action_adverb} @{fromUser} for {reason}, giving them {total_taco_count} {total_taco_word} 🌮 total."
 
         # TODO use a defined type for this instead of a list of dicts
         fields = [
@@ -55,10 +56,16 @@ class TacosLog:
 
         embeds = [
             {
-                "author": {"name": "@OurTacoBot", "icon_url": "https://i.imgur.com/ejJu8de.png", "url": "https://twitch.tv/ourtacobot"},
+                "author": {
+                    "name": "@OurTacoBot",
+                    "icon_url": "https://i.imgur.com/ejJu8de.png",
+                    "url": "https://twitch.tv/ourtacobot",
+                },
                 "color": 0x7289DA,
                 "fields": fields,
-                "footer": {"text": f"{self.settings.name} [Twitch] v{self.settings.APP_VERSION} developed by {self.settings.author}"},
+                "footer": {
+                    "text": f"{self.settings.name} [Twitch] v{self.settings.APP_VERSION} developed by {self.settings.author}"
+                },
             }
         ]
 
@@ -93,26 +100,26 @@ class TacosLog:
             if not taco_settings:
                 # raise exception if there are no tacos settings
                 self.log.error(
-                    fromUser, "tacos.on_message", f"No tacos settings found for guild {self.settings.discord_guild_id}"
+                    fromUser,
+                    f"{self._module}.{_method}",
+                    f"No tacos settings found for guild {self.settings.discord_guild_id}",
                 )
                 return
             taco_count = amount
 
             taco_type_key = tacotypes.TacoTypes.get_string_from_taco_type(give_type)
             if taco_type_key not in taco_settings:
-                self.log.debug(fromUser, f"tacos_log.{_method}", f"Key {taco_type_key} not found in taco settings. Using taco_amount ({amount}) as taco count")
+                self.log.debug(
+                    fromUser,
+                    f"{self._module}.{_method}",
+                    f"Key {taco_type_key} not found in taco settings. Using taco_amount ({amount}) as taco count",
+                )
                 taco_count = taco_count
             else:
                 taco_count = taco_settings[tacotypes.TacoTypes.get_string_from_taco_type(give_type)]
-
-            # only reject <= 0 tacos if it is not custom type
-            # if taco_count <= 0 and (give_type != tacotypes.TacoTypes.CUSTOM and give_type != tacotypes.TacoTypes.TWITCH_CUSTOM):
-            #     self.log.warn(fromUser, "tacos.on_message", f"Invalid taco count {taco_count}")
-            #     return
-
             reason_msg = reason if reason else "no reason given"  # self.settings.get_string(fromUser, 'no_reason')
 
-            total_taco_count = self.db.add_tacos(toUser, taco_count)
+            total_taco_count = self.db.add_tacos(toUser, taco_count) or 0
             self.db.track_taco_gift(
                 utils.clean_channel_name(fromUser), utils.clean_channel_name(toUser), taco_count, reason_msg
             )
@@ -122,9 +129,10 @@ class TacosLog:
                 user=utils.clean_channel_name(toUser),
                 count=taco_count,
                 type=tacotypes.TacoTypes.get_db_type_from_taco_type(give_type),
-                reason=reason_msg)
+                reason=reason_msg,
+            )
 
             await self._log(fromUser, toUser, taco_count, total_taco_count, reason_msg)
             return total_taco_count
         except Exception as e:
-            self.log.error(fromUser, f"tacos_log.{_method}", str(e), traceback.format_exc())
+            self.log.error(fromUser, f"{self._module}.{_method}", str(e), traceback.format_exc())

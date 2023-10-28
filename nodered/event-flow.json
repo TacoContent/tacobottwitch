@@ -1,2256 +1,2256 @@
 [
-	{
-		"id": "46f750dd0c884772",
-		"type": "tab",
-		"label": "OurTacoBot",
-		"disabled": false,
-		"info": ""
-	},
-	{
-		"id": "a1086a4ec9e7afb7",
-		"type": "split",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"splt": "\\n",
-		"spltType": "str",
-		"arraySplt": 1,
-		"arraySpltType": "len",
-		"stream": false,
-		"addname": "",
-		"x": 930,
-		"y": 20,
-		"wires": [
-			[
-				"872337111ee46aba"
-			]
-		]
-	},
-	{
-		"id": "55cbd0c68d78eca6",
-		"type": "debug",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"active": true,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "false",
-		"statusVal": "",
-		"statusType": "auto",
-		"x": 2070,
-		"y": 240,
-		"wires": []
-	},
-	{
-		"id": "1234a5552197c0f7",
-		"type": "tmi-event-connected",
-		"z": "46f750dd0c884772",
-		"config": "",
-		"name": "",
-		"x": 100,
-		"y": 20,
-		"wires": [
-			[
-				"b7fe330fc6fde8b4"
-			]
-		]
-	},
-	{
-		"id": "872337111ee46aba",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "format data",
-		"func": "msg.payload = {\n    channel: msg.payload.channel\n};\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 1070,
-		"y": 20,
-		"wires": [
-			[
-				"8d07fe0812b084a8"
-			]
-		]
-	},
-	{
-		"id": "8d07fe0812b084a8",
-		"type": "tmi-command-join",
-		"z": "46f750dd0c884772",
-		"config": "",
-		"name": "",
-		"x": 1210,
-		"y": 20,
-		"wires": [
-			[],
-			[]
-		]
-	},
-	{
-		"id": "46229fbb87d2ac60",
-		"type": "tmi-event-hosted",
-		"z": "46f750dd0c884772",
-		"config": "",
-		"name": "",
-		"x": 90,
-		"y": 140,
-		"wires": [
-			[
-				"a736b6720f4061a3"
-			]
-		]
-	},
-	{
-		"id": "a49a3465e499a7bb",
-		"type": "tmi-event-raided",
-		"z": "46f750dd0c884772",
-		"config": "",
-		"name": "",
-		"x": 90,
-		"y": 240,
-		"wires": [
-			[
-				"35e9fdb59d20e549"
-			]
-		]
-	},
-	{
-		"id": "dfc1e527623c72e7",
-		"type": "tmi-event-cheer",
-		"z": "46f750dd0c884772",
-		"config": "",
-		"name": "",
-		"x": 90,
-		"y": 340,
-		"wires": [
-			[
-				"baf5258ea64c5e0b"
-			]
-		]
-	},
-	{
-		"id": "565c5f87b5816dcb",
-		"type": "tmi-event-subscription",
-		"z": "46f750dd0c884772",
-		"config": "",
-		"name": "",
-		"x": 110,
-		"y": 500,
-		"wires": [
-			[
-				"e6fd12deccdd2307"
-			]
-		]
-	},
-	{
-		"id": "e663ae9e85d5209d",
-		"type": "tmi-event-resub",
-		"z": "46f750dd0c884772",
-		"config": "",
-		"name": "",
-		"x": 90,
-		"y": 600,
-		"wires": [
-			[
-				"e6fd12deccdd2307"
-			]
-		]
-	},
-	{
-		"id": "d50a9ca967187113",
-		"type": "tmi-event-primepaidupgrade",
-		"z": "46f750dd0c884772",
-		"config": "",
-		"name": "",
-		"x": 130,
-		"y": 700,
-		"wires": [
-			[
-				"e6fd12deccdd2307"
-			]
-		]
-	},
-	{
-		"id": "3b1c7d52e3dbbe4d",
-		"type": "tmi-event-subgift",
-		"z": "46f750dd0c884772",
-		"config": "",
-		"name": "",
-		"x": 90,
-		"y": 800,
-		"wires": [
-			[
-				"e6fd12deccdd2307"
-			]
-		]
-	},
-	{
-		"id": "1eaf8485e3fb09da",
-		"type": "tmi-event-giftpaidupgrade",
-		"z": "46f750dd0c884772",
-		"config": "",
-		"name": "",
-		"x": 120,
-		"y": 900,
-		"wires": [
-			[
-				"e6fd12deccdd2307"
-			]
-		]
-	},
-	{
-		"id": "a736b6720f4061a3",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Create Action",
-		"func": "msg.payload = {\n    action: \"host\",\n    channel: msg.payload.channel.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    user: msg.payload.username.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    count: msg.payload.viewers\n};\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 300,
-		"y": 140,
-		"wires": [
-			[
-				"9ca901b9e40d2f55"
-			]
-		]
-	},
-	{
-		"id": "ef440c7ac39f0f66",
-		"type": "tmi-command-say",
-		"z": "46f750dd0c884772",
-		"config": "",
-		"name": "",
-		"x": 1910,
-		"y": 280,
-		"wires": [
-			[],
-			[]
-		]
-	},
-	{
-		"id": "30b5f389976ccad1",
-		"type": "mongodb in",
-		"z": "46f750dd0c884772",
-		"mongodb": "cca90e0ad48e5446",
-		"name": "",
-		"collection": "",
-		"operation": "find",
-		"x": 800,
-		"y": 20,
-		"wires": [
-			[
-				"a1086a4ec9e7afb7"
-			]
-		]
-	},
-	{
-		"id": "b7a48f10569cc161",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Get Bot Channels Query",
-		"func": "msg.payload = {\n    \"guild_id\": \"935294040386183228\"\n};\nmsg.collection = \"twitch_channels\";\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 610,
-		"y": 20,
-		"wires": [
-			[
-				"30b5f389976ccad1"
-			]
-		]
-	},
-	{
-		"id": "35e9fdb59d20e549",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Create Action",
-		"func": "msg.payload = {\n    action: \"raid\",\n    channel: msg.payload.channel.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    user: msg.payload.username.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    count: msg.payload.viewers\n};\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 300,
-		"y": 240,
-		"wires": [
-			[
-				"9ca901b9e40d2f55"
-			]
-		]
-	},
-	{
-		"id": "9ca901b9e40d2f55",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Build Command",
-		"func": "msg.payload = {\n    channel: \"ourtacobot\",\n    message: `!taco ${msg.payload.action} ${msg.payload.user} ${msg.payload.channel}`    \n}\n\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 1100,
-		"y": 240,
-		"wires": [
-			[
-				"ffaaaab41b41a887",
-				"fbd7aed491c06946"
-			]
-		]
-	},
-	{
-		"id": "33fc045ae186aa3f",
-		"type": "inject",
-		"z": "46f750dd0c884772",
-		"name": "TEST RAID",
-		"props": [
-			{
-				"p": "payload"
-			},
-			{
-				"p": "test",
-				"v": "true",
-				"vt": "jsonata"
-			}
-		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\",\"viewers\":5}",
-		"payloadType": "json",
-		"x": 110,
-		"y": 280,
-		"wires": [
-			[
-				"35e9fdb59d20e549"
-			]
-		]
-	},
-	{
-		"id": "58fd5a01580c6e98",
-		"type": "inject",
-		"z": "46f750dd0c884772",
-		"name": "TEST HOST",
-		"props": [
-			{
-				"p": "payload"
-			},
-			{
-				"p": "test",
-				"v": "true",
-				"vt": "jsonata"
-			}
-		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\",\"viewers\":5}",
-		"payloadType": "json",
-		"x": 110,
-		"y": 180,
-		"wires": [
-			[
-				"a736b6720f4061a3"
-			]
-		]
-	},
-	{
-		"id": "e6fd12deccdd2307",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Create SUB Action",
-		"func": "msg.payload = {\n    action: \"subscribe\",\n    channel: msg.payload.channel.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    user: msg.payload.username.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\")\n};\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 870,
-		"y": 720,
-		"wires": [
-			[
-				"9ca901b9e40d2f55"
-			]
-		]
-	},
-	{
-		"id": "baf5258ea64c5e0b",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Format Payload",
-		"func": "msg.payload = {\n  channel: msg.payload.channel,\n  username: msg.payload.userstate['display-name'].toLowerCase().replace(\"@\", \"\").replace(\"#\", \"\"),\n  amount: msg.payload.userstate.bits || 1\n};\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 380,
-		"y": 400,
-		"wires": [
-			[
-				"e3f5771cb4dff405",
-				"5d5147cb9cd2625e"
-			]
-		]
-	},
-	{
-		"id": "40497c7d9234c271",
-		"type": "inject",
-		"z": "46f750dd0c884772",
-		"name": "TEST CHEER < 100",
-		"props": [
-			{
-				"p": "payload"
-			},
-			{
-				"p": "test",
-				"v": "true",
-				"vt": "jsonata"
-			}
-		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "{\"channel\":\"guynamemike\",\"userstate\":{\"display-name\":\"DarthMinos\",\"bits\":10}}",
-		"payloadType": "json",
-		"x": 130,
-		"y": 380,
-		"wires": [
-			[
-				"baf5258ea64c5e0b"
-			]
-		]
-	},
-	{
-		"id": "81cc523992ad7633",
-		"type": "inject",
-		"z": "46f750dd0c884772",
-		"name": "TEST SUBSCRIPTION",
-		"props": [
-			{
-				"p": "payload"
-			},
-			{
-				"p": "test",
-				"v": "true",
-				"vt": "jsonata"
-			}
-		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\"}",
-		"payloadType": "json",
-		"x": 140,
-		"y": 540,
-		"wires": [
-			[
-				"e6fd12deccdd2307"
-			]
-		]
-	},
-	{
-		"id": "5b60394a7ab365c7",
-		"type": "inject",
-		"z": "46f750dd0c884772",
-		"name": "TEST RESUB",
-		"props": [
-			{
-				"p": "payload"
-			},
-			{
-				"p": "test",
-				"v": "true",
-				"vt": "jsonata"
-			}
-		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\",\"streakMonths\":5}",
-		"payloadType": "json",
-		"x": 110,
-		"y": 640,
-		"wires": [
-			[
-				"e6fd12deccdd2307"
-			]
-		]
-	},
-	{
-		"id": "e9a418e2ded6fa78",
-		"type": "inject",
-		"z": "46f750dd0c884772",
-		"name": "TEST PRIME UPGRADE",
-		"props": [
-			{
-				"p": "payload"
-			},
-			{
-				"p": "test",
-				"v": "true",
-				"vt": "jsonata"
-			}
-		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\"}",
-		"payloadType": "json",
-		"x": 150,
-		"y": 740,
-		"wires": [
-			[
-				"e6fd12deccdd2307"
-			]
-		]
-	},
-	{
-		"id": "fcc3e0a062c5b788",
-		"type": "inject",
-		"z": "46f750dd0c884772",
-		"name": "TEST SUBGIFT",
-		"props": [
-			{
-				"p": "payload"
-			},
-			{
-				"p": "test",
-				"v": "true",
-				"vt": "jsonata"
-			}
-		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\"}",
-		"payloadType": "json",
-		"x": 120,
-		"y": 840,
-		"wires": [
-			[
-				"e6fd12deccdd2307"
-			]
-		]
-	},
-	{
-		"id": "c1f88b165672acaa",
-		"type": "inject",
-		"z": "46f750dd0c884772",
-		"name": "TEST GIFT UPGRADE",
-		"props": [
-			{
-				"p": "payload"
-			},
-			{
-				"p": "test",
-				"v": "true",
-				"vt": "jsonata"
-			}
-		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\"}",
-		"payloadType": "json",
-		"x": 140,
-		"y": 940,
-		"wires": [
-			[
-				"e6fd12deccdd2307"
-			]
-		]
-	},
-	{
-		"id": "ffaaaab41b41a887",
-		"type": "switch",
-		"z": "46f750dd0c884772",
-		"name": "Is TEST",
-		"property": "test",
-		"propertyType": "msg",
-		"rules": [
-			{
-				"t": "eq",
-				"v": "true",
-				"vt": "jsonata"
-			}
-		],
-		"checkall": "true",
-		"repair": false,
-		"outputs": 1,
-		"x": 1540,
-		"y": 240,
-		"wires": [
-			[
-				"55cbd0c68d78eca6"
-			]
-		]
-	},
-	{
-		"id": "fbd7aed491c06946",
-		"type": "switch",
-		"z": "46f750dd0c884772",
-		"name": "Is ACTION",
-		"property": "test",
-		"propertyType": "msg",
-		"rules": [
-			{
-				"t": "neq",
-				"v": "true",
-				"vt": "jsonata"
-			}
-		],
-		"checkall": "true",
-		"repair": false,
-		"outputs": 1,
-		"x": 1550,
-		"y": 280,
-		"wires": [
-			[
-				"f1bb52da63e95672",
-				"9bb875c9ece15ae0"
-			]
-		]
-	},
-	{
-		"id": "f1bb52da63e95672",
-		"type": "delay",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"pauseType": "rate",
-		"timeout": "5",
-		"timeoutUnits": "seconds",
-		"rate": "10",
-		"nbRateUnits": "1",
-		"rateUnits": "second",
-		"randomFirst": "1",
-		"randomLast": "5",
-		"randomUnits": "seconds",
-		"drop": false,
-		"allowrate": false,
-		"outputs": 1,
-		"x": 1760,
-		"y": 280,
-		"wires": [
-			[
-				"ef440c7ac39f0f66"
-			]
-		]
-	},
-	{
-		"id": "27accf06d04c7f46",
-		"type": "inject",
-		"z": "46f750dd0c884772",
-		"name": "TEST CHEER 100+",
-		"props": [
-			{
-				"p": "payload"
-			},
-			{
-				"p": "test",
-				"v": "true",
-				"vt": "jsonata"
-			}
-		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "{\"channel\":\"guynamemike\",\"userstate\":{\"display-name\":\"DarthMinos\",\"bits\":500}}",
-		"payloadType": "json",
-		"x": 130,
-		"y": 420,
-		"wires": [
-			[
-				"baf5258ea64c5e0b"
-			]
-		]
-	},
-	{
-		"id": "5d5147cb9cd2625e",
-		"type": "switch",
-		"z": "46f750dd0c884772",
-		"name": "Bits >= 100",
-		"property": "payload.amount",
-		"propertyType": "msg",
-		"rules": [
-			{
-				"t": "gte",
-				"v": "100",
-				"vt": "num"
-			}
-		],
-		"checkall": "true",
-		"repair": false,
-		"outputs": 1,
-		"x": 590,
-		"y": 500,
-		"wires": [
-			[
-				"9220fc289d8ce45f"
-			]
-		]
-	},
-	{
-		"id": "e3f5771cb4dff405",
-		"type": "switch",
-		"z": "46f750dd0c884772",
-		"name": "Bits < 100",
-		"property": "payload.amount",
-		"propertyType": "msg",
-		"rules": [
-			{
-				"t": "lt",
-				"v": "100",
-				"vt": "num"
-			}
-		],
-		"checkall": "true",
-		"repair": false,
-		"outputs": 1,
-		"x": 580,
-		"y": 300,
-		"wires": [
-			[
-				"f08aafad55e13bcd"
-			]
-		]
-	},
-	{
-		"id": "f08aafad55e13bcd",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Log Message",
-		"func": "msg.payload = { message: \"Ignoring Cheer: Fewer than 100 bits.\" }\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 760,
-		"y": 300,
-		"wires": [
-			[
-				"2e48570e2813eab2"
-			]
-		]
-	},
-	{
-		"id": "2e48570e2813eab2",
-		"type": "debug",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"active": true,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "false",
-		"statusVal": "",
-		"statusType": "auto",
-		"x": 750,
-		"y": 340,
-		"wires": []
-	},
-	{
-		"id": "617d105d8db46f55",
-		"type": "http in",
-		"z": "46f750dd0c884772",
-		"name": "Invite To Channel",
-		"url": "/tacobot/guild/:guild/invite/:channel",
-		"method": "post",
-		"upload": false,
-		"swaggerDoc": "",
-		"x": 120,
-		"y": 1020,
-		"wires": [
-			[
-				"b0f8aee21e010557",
-				"8ca13e0f98f994e7"
-			]
-		]
-	},
-	{
-		"id": "6f8a5950184f2997",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Format Payload",
-		"func": "msg.payload = {\n    action: \"invite\",\n    channel: msg.req.params.channel,\n    guild: msg.req.params.guild\n}\nmsg.statusCode = 200;\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 1120,
-		"y": 880,
-		"wires": [
-			[
-				"f961d1de47b5d3fa",
-				"5c632a06a9e4e5f7"
-			]
-		]
-	},
-	{
-		"id": "f961d1de47b5d3fa",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Build Command",
-		"func": "let _action = msg.payload.action;\nlet _channel = msg.payload.channel;\n\n\nmsg.payload = {\n    channel: \"ourtacobot\",\n    message: `!taco ${_action} ${_channel}`    \n}\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 1360,
-		"y": 880,
-		"wires": [
-			[
-				"ffaaaab41b41a887",
-				"fbd7aed491c06946"
-			]
-		]
-	},
-	{
-		"id": "0e7bb96a38d4110c",
-		"type": "inject",
-		"z": "46f750dd0c884772",
-		"name": "TEST HTTP INVITE",
-		"props": [
-			{
-				"p": "req",
-				"v": "{\"params\":{\"channel\":\"darthminos\",\"guild\":\"935294040386183228\"},\"headers\":{\"X-AUTH-TOKEN\":\"935665133957566525\"}}",
-				"vt": "json"
-			},
-			{
-				"p": "test",
-				"v": "true",
-				"vt": "jsonata"
-			},
-			{
-				"p": "payload"
-			}
-		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "{}",
-		"payloadType": "json",
-		"x": 130,
-		"y": 1060,
-		"wires": [
-			[
-				"b0f8aee21e010557",
-				"8ca13e0f98f994e7"
-			]
-		]
-	},
-	{
-		"id": "82d83ce5e40b7360",
-		"type": "inject",
-		"z": "46f750dd0c884772",
-		"name": "TEST HTTP INVITE [NOT AUTHORIZED]",
-		"props": [
-			{
-				"p": "req",
-				"v": "{\"params\":{\"channel\":\"darthminos\",\"guild\":\"935294040386183228\"},\"headers\":{\"X-AUTH-TOKEN\":\"262031734260891648\"}}",
-				"vt": "json"
-			},
-			{
-				"p": "test",
-				"v": "true",
-				"vt": "jsonata"
-			},
-			{
-				"p": "payload"
-			}
-		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "{}",
-		"payloadType": "json",
-		"x": 200,
-		"y": 1100,
-		"wires": [
-			[
-				"b0f8aee21e010557",
-				"8ca13e0f98f994e7"
-			]
-		]
-	},
-	{
-		"id": "b0f8aee21e010557",
-		"type": "switch",
-		"z": "46f750dd0c884772",
-		"name": "Is Valid X-AUTH-TOKEN",
-		"property": "req.headers['X-AUTH-TOKEN']",
-		"propertyType": "msg",
-		"rules": [
-			{
-				"t": "eq",
-				"v": "935665133957566525",
-				"vt": "str"
-			}
-		],
-		"checkall": "true",
-		"repair": false,
-		"outputs": 1,
-		"x": 610,
-		"y": 920,
-		"wires": [
-			[
-				"43d5df8a1a51a83c",
-				"bd583d68bb5f6bc4"
-			]
-		]
-	},
-	{
-		"id": "43d5df8a1a51a83c",
-		"type": "switch",
-		"z": "46f750dd0c884772",
-		"name": "Is Valid Guild",
-		"property": "req.params.guild",
-		"propertyType": "msg",
-		"rules": [
-			{
-				"t": "eq",
-				"v": "935294040386183228",
-				"vt": "str"
-			}
-		],
-		"checkall": "true",
-		"repair": false,
-		"outputs": 1,
-		"x": 890,
-		"y": 880,
-		"wires": [
-			[
-				"6f8a5950184f2997"
-			]
-		]
-	},
-	{
-		"id": "8ca13e0f98f994e7",
-		"type": "switch",
-		"z": "46f750dd0c884772",
-		"name": "Is NOT Valid X-AUTH-TOKEN",
-		"property": "req.headers['X-AUTH-TOKEN']",
-		"propertyType": "msg",
-		"rules": [
-			{
-				"t": "neq",
-				"v": "935665133957566525",
-				"vt": "str"
-			}
-		],
-		"checkall": "true",
-		"repair": false,
-		"outputs": 1,
-		"x": 630,
-		"y": 1020,
-		"wires": [
-			[
-				"bfb71e71ad1ce767"
-			]
-		]
-	},
-	{
-		"id": "bd583d68bb5f6bc4",
-		"type": "switch",
-		"z": "46f750dd0c884772",
-		"name": "Is NOT Valid Guild",
-		"property": "req.params.guild",
-		"propertyType": "msg",
-		"rules": [
-			{
-				"t": "neq",
-				"v": "935294040386183228",
-				"vt": "str"
-			}
-		],
-		"checkall": "true",
-		"repair": false,
-		"outputs": 1,
-		"x": 910,
-		"y": 960,
-		"wires": [
-			[
-				"3e47e6fb49235e3e"
-			]
-		]
-	},
-	{
-		"id": "42ecfa1e206ce3ee",
-		"type": "inject",
-		"z": "46f750dd0c884772",
-		"name": "TEST HTTP INVITE [BAD GUILD]",
-		"props": [
-			{
-				"p": "req",
-				"v": "{\"params\":{\"channel\":\"darthminos\",\"guild\":\"262036511665422336\"},\"headers\":{\"X-AUTH-TOKEN\":\"935665133957566525\"}}",
-				"vt": "json"
-			},
-			{
-				"p": "test",
-				"v": "true",
-				"vt": "jsonata"
-			},
-			{
-				"p": "payload"
-			}
-		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "{}",
-		"payloadType": "json",
-		"x": 180,
-		"y": 1140,
-		"wires": [
-			[
-				"b0f8aee21e010557",
-				"8ca13e0f98f994e7"
-			]
-		]
-	},
-	{
-		"id": "3e47e6fb49235e3e",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Message Output",
-		"func": "msg.payload = {\n    message: \"Invalid GUILD ID\",\n    req: msg.req\n}\nmsg.req = msg.req;\nmsg.statusCode = 403;\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 1120,
-		"y": 960,
-		"wires": [
-			[
-				"5c632a06a9e4e5f7"
-			]
-		]
-	},
-	{
-		"id": "bfb71e71ad1ce767",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Message Output",
-		"func": "msg.payload = {\n    message: \"Invalid X-AUTH-TOKEN\",\n    req: msg.req\n}\nmsg.statusCode = 403;\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 1120,
-		"y": 1020,
-		"wires": [
-			[
-				"5c632a06a9e4e5f7"
-			]
-		]
-	},
-	{
-		"id": "5c632a06a9e4e5f7",
-		"type": "debug",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"active": true,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "false",
-		"statusVal": "",
-		"statusType": "auto",
-		"x": 1350,
-		"y": 1020,
-		"wires": []
-	},
-	{
-		"id": "d61d003709dca254",
-		"type": "http response",
-		"z": "46f750dd0c884772",
-		"name": "Return Status Code",
-		"statusCode": "",
-		"headers": {},
-		"x": 1950,
-		"y": 380,
-		"wires": []
-	},
-	{
-		"id": "9bb875c9ece15ae0",
-		"type": "switch",
-		"z": "46f750dd0c884772",
-		"name": "Check HTTP",
-		"property": "req",
-		"propertyType": "msg",
-		"rules": [
-			{
-				"t": "nnull"
-			}
-		],
-		"checkall": "true",
-		"repair": false,
-		"outputs": 1,
-		"x": 1750,
-		"y": 340,
-		"wires": [
-			[
-				"d61d003709dca254",
-				"8f3551e5552c98b7"
-			]
-		]
-	},
-	{
-		"id": "8f3551e5552c98b7",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"func": "msg.payload = {\n    message: \"IS HTTP REQUEST\"\n}\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 1920,
-		"y": 340,
-		"wires": [
-			[
-				"55cbd0c68d78eca6"
-			]
-		]
-	},
-	{
-		"id": "b56dbe3bdf0e2cf4",
-		"type": "comment",
-		"z": "46f750dd0c884772",
-		"name": "Invite To Channel",
-		"info": "This is https://nodered.bit13.local/ request to trigger a command",
-		"x": 100,
-		"y": 980,
-		"wires": []
-	},
-	{
-		"id": "b7fe330fc6fde8b4",
-		"type": "trigger",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"op1": "{\"message\":\"Trigger Join Channels\"}",
-		"op2": "0",
-		"op1type": "json",
-		"op2type": "str",
-		"duration": "-1",
-		"extend": false,
-		"overrideDelay": false,
-		"units": "hr",
-		"reset": "",
-		"bytopic": "all",
-		"topic": "topic",
-		"outputs": 1,
-		"x": 310,
-		"y": 20,
-		"wires": [
-			[
-				"b7a48f10569cc161",
-				"f3275be8e60ea5b0"
-			]
-		]
-	},
-	{
-		"id": "f3275be8e60ea5b0",
-		"type": "debug",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"active": true,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "false",
-		"statusVal": "",
-		"statusType": "auto",
-		"x": 570,
-		"y": 60,
-		"wires": []
-	},
-	{
-		"id": "09ece4d7dde857ed",
-		"type": "http in",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"url": "/tacobot/minecraft/whitelist.json",
-		"method": "get",
-		"upload": false,
-		"swaggerDoc": "",
-		"x": 180,
-		"y": 1200,
-		"wires": [
-			[
-				"2f0f17821ea46aa2"
-			]
-		]
-	},
-	{
-		"id": "2f0f17821ea46aa2",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Get Whitelist Users Query",
-		"func": "msg.payload = {\n    \"whitelist\": true\n};\nmsg.collection = \"minecraft_users\";\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 490,
-		"y": 1200,
-		"wires": [
-			[
-				"7d05304ec9d87716"
-			]
-		]
-	},
-	{
-		"id": "7d05304ec9d87716",
-		"type": "mongodb in",
-		"z": "46f750dd0c884772",
-		"mongodb": "cca90e0ad48e5446",
-		"name": "",
-		"collection": "",
-		"operation": "find",
-		"x": 700,
-		"y": 1200,
-		"wires": [
-			[
-				"bac5cc89895b0ecf"
-			]
-		]
-	},
-	{
-		"id": "bac5cc89895b0ecf",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Format Payload",
-		"func": "let result = []\nfor(let i = 0; i < msg.payload.length; ++i) {\n    result.push({\n        \"uuid\": msg.payload[i].uuid,\n        \"name\": msg.payload[i].username\n    });\n}\nmsg.payload = result;\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n}\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 880,
-		"y": 1200,
-		"wires": [
-			[
-				"711792225dfc56f9"
-			]
-		]
-	},
-	{
-		"id": "711792225dfc56f9",
-		"type": "http response",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"statusCode": "",
-		"headers": {},
-		"x": 1050,
-		"y": 1200,
-		"wires": []
-	},
-	{
-		"id": "83cb5407c78f1af7",
-		"type": "http in",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"url": "/tacobot/minecraft/ops.json",
-		"method": "get",
-		"upload": false,
-		"swaggerDoc": "",
-		"x": 170,
-		"y": 1240,
-		"wires": [
-			[
-				"b43859e38a7f43d5"
-			]
-		]
-	},
-	{
-		"id": "b43859e38a7f43d5",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Get OPs Users Query",
-		"func": "msg.payload = {\n    \"whitelist\": true,\n    \"op.enabled\": true\n};\nmsg.collection = \"minecraft_users\";\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 480,
-		"y": 1240,
-		"wires": [
-			[
-				"3956c05b84f01d4c"
-			]
-		]
-	},
-	{
-		"id": "3956c05b84f01d4c",
-		"type": "mongodb in",
-		"z": "46f750dd0c884772",
-		"mongodb": "cca90e0ad48e5446",
-		"name": "",
-		"collection": "",
-		"operation": "find",
-		"x": 700,
-		"y": 1240,
-		"wires": [
-			[
-				"2ce7e0e132bf896f"
-			]
-		]
-	},
-	{
-		"id": "2ce7e0e132bf896f",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Format Payload",
-		"func": "let result = []\nfor(let i = 0; i < msg.payload.length; ++i) {\n    if (msg.payload[i].op) {\n        result.push({\n            \"uuid\": msg.payload[i].uuid,\n            \"name\": msg.payload[i].username,\n            \"level\": msg.payload[i].op.level,\n            \"bypassesPlayerLimit\":  msg.payload[i].op.bypassesPlayerLimit\n        });\n    }\n}\nmsg.payload = result;\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n}\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 880,
-		"y": 1240,
-		"wires": [
-			[
-				"98e687a80637b896"
-			]
-		]
-	},
-	{
-		"id": "98e687a80637b896",
-		"type": "http response",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"statusCode": "",
-		"headers": {},
-		"x": 1050,
-		"y": 1240,
-		"wires": []
-	},
-	{
-		"id": "ea680f7f69fb6315",
-		"type": "http request",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"method": "GET",
-		"ret": "txt",
-		"paytoqs": "ignore",
-		"url": "",
-		"tls": "",
-		"persist": false,
-		"proxy": "",
-		"authType": "",
-		"x": 710,
-		"y": 1280,
-		"wires": [
-			[
-				"f26bfeb80d1dca08"
-			]
-		]
-	},
-	{
-		"id": "c50448f1b9de481f",
-		"type": "http in",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"url": "/tacobot/minecraft/uuid/:username",
-		"method": "get",
-		"upload": false,
-		"swaggerDoc": "",
-		"x": 190,
-		"y": 1280,
-		"wires": [
-			[
-				"31671a48bfc81c6d"
-			]
-		]
-	},
-	{
-		"id": "31671a48bfc81c6d",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Create URL",
-		"func": "msg.url = `https://api.mojang.com/users/profiles/minecraft/${msg.req.params.username}`\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 450,
-		"y": 1280,
-		"wires": [
-			[
-				"ea680f7f69fb6315"
-			]
-		]
-	},
-	{
-		"id": "a6f143d14584811c",
-		"type": "http response",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"statusCode": "",
-		"headers": {},
-		"x": 1050,
-		"y": 1280,
-		"wires": []
-	},
-	{
-		"id": "f26bfeb80d1dca08",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Format Payload",
-		"func": "function format_uuid(s) {\n    return s.replace(/^([a-f0-9]{8})([a-f0-9]{4})([a-f0-9]{4})([a-f0-9]{4})([a-f0-9]{12})$/gmi, '$1-$2-$3-$4-$5');\n}\n\nif(msg.statusCode < 200 || msg.statusCode > 399) {\n    msg.payload = { \"error\": msg.statusCode };\n    msg.statusCode = 200\n    return msg;\n} else if (msg.statusCode == 204) {\n    msg.statusCode = 404\n}\n\nif (msg.payload !== \"\") {\n    data_payload = JSON.parse(msg.payload)\n    console.log(data_payload)\n    msg.payload = {\n        \"name\": data_payload.name,\n        \"uuid\": format_uuid(data_payload.id)\n    }\n} else {\n    msg.payload = { \"error\": msg.statusCode };\n    msg.statusCode = 200\n}\n\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n}\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 880,
-		"y": 1280,
-		"wires": [
-			[
-				"a6f143d14584811c"
-			]
-		]
-	},
-	{
-		"id": "6c4c24579a1e7206",
-		"type": "minecraft-ping",
-		"z": "46f750dd0c884772",
-		"server": "c35c7083d8eba0bf",
-		"x": 450,
-		"y": 1360,
-		"wires": [
-			[
-				"46f1a40da4ef3538"
-			]
-		]
-	},
-	{
-		"id": "d31c3102ef0e7fa4",
-		"type": "inject",
-		"z": "46f750dd0c884772",
-		"name": "TEST HTTP STATUS",
-		"props": [
-			{
-				"p": "payload"
-			},
-			{
-				"p": "topic",
-				"vt": "str"
-			}
-		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "",
-		"payloadType": "date",
-		"x": 140,
-		"y": 1360,
-		"wires": [
-			[
-				"6c4c24579a1e7206"
-			]
-		]
-	},
-	{
-		"id": "02986aa4bc4d13fe",
-		"type": "http in",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"url": "/tacobot/minecraft/status",
-		"method": "get",
-		"upload": false,
-		"swaggerDoc": "",
-		"x": 160,
-		"y": 1400,
-		"wires": [
-			[
-				"6c4c24579a1e7206"
-			]
-		]
-	},
-	{
-		"id": "46f1a40da4ef3538",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Format Payload",
-		"func": "const SERVER_HOST = \"mc.fuku.io\";\nif (msg.payload && \n    msg.payload.description && \n    msg.payload.description.text && \n    msg.payload.version && \n    msg.payload.version.name ) {\n    msg.payload = {\n        success: true,\n        host: SERVER_HOST,\n        title: msg.payload.description.text.replace(/§[0-9a-z]/gsi,\"\"),\n        status: \"online\",\n        online: true,\n        players: {\n            max: msg.payload.players.max || 0,\n            online: msg.payload.players.online || 0\n        },\n        version: msg.payload.version.name\n    }\n} else {\n    msg.payload = {\n        success: true,\n        host: SERVER_HOST,\n        online: false,\n        status: \"offline\",\n        title: \"OFFLINE\",\n        players: {\n            max: 0,\n            online: 0\n        },\n        version: \"OFFLINE\"\n    }\n}\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 700,
-		"y": 1360,
-		"wires": [
-			[
-				"21317ff56cb936b7"
-			]
-		]
-	},
-	{
-		"id": "21317ff56cb936b7",
-		"type": "http response",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"statusCode": "200",
-		"headers": {},
-		"x": 880,
-		"y": 1400,
-		"wires": []
-	},
-	{
-		"id": "b7c801186c661167",
-		"type": "tcp request",
-		"z": "46f750dd0c884772",
-		"name": "MINECRAFT TCP CONNECT",
-		"server": "vader.bit13.local",
-		"port": " 25565",
-		"out": "time",
-		"ret": "string",
-		"splitc": "0",
-		"newline": "",
-		"trim": false,
-		"tls": "",
-		"x": 890,
-		"y": 1620,
-		"wires": [
-			[
-				"d8230fa52dd1f793"
-			]
-		]
-	},
-	{
-		"id": "8c9706e82ffceecc",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Status Payload",
-		"func": "msg.payload = Buffer.from([0xFE, 0x01]);\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 760,
-		"y": 1520,
-		"wires": [
-			[
-				"b7c801186c661167"
-			]
-		]
-	},
-	{
-		"id": "fba0041102cf2513",
-		"type": "inject",
-		"z": "46f750dd0c884772",
-		"name": "TEST STATUS",
-		"props": [
-			{
-				"p": "payload"
-			},
-			{
-				"p": "topic",
-				"vt": "str"
-			}
-		],
-		"repeat": "",
-		"crontab": "",
-		"once": false,
-		"onceDelay": 0.1,
-		"topic": "",
-		"payload": "",
-		"payloadType": "date",
-		"x": 480,
-		"y": 1640,
-		"wires": [
-			[
-				"8c9706e82ffceecc"
-			]
-		]
-	},
-	{
-		"id": "d8230fa52dd1f793",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Parse Response",
-		"func": "var server_info = msg.payload.split(\"\\x00\\x00\\x00\");\nconst NUM_FIELDS = 6;\nif (server_info && server_info.length >= NUM_FIELDS) {\n    msg.payload = {\n      online: true,\n      version: server_info[2].replace(/\\u0000/g,''),\n      motd: server_info[3].replace(/\\u0000/g,''),\n      motd_clean: server_info[3].replace(/\\u0000/g,'').replace(/�[0-9a-z]/gi,''),\n      players: {\n          online: parseInt(server_info[4].replace(/\\u0000/g,'')),\n          max: parseInt(server_info[5].replace(/\\u0000/g,''))\n      }\n    };\n} else {\n   msg.payload = {\n       online: false\n   } \n}\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 990,
-		"y": 1560,
-		"wires": [
-			[
-				"e5af97a8c9c70002",
-				"6058e4212b3023bf"
-			]
-		]
-	},
-	{
-		"id": "002e7ab99fa94e1e",
-		"type": "catch",
-		"z": "46f750dd0c884772",
-		"name": "Minecraft Status Exception",
-		"scope": [
-			"b7c801186c661167"
-		],
-		"uncaught": false,
-		"x": 770,
-		"y": 1720,
-		"wires": [
-			[
-				"145e438b94ef4b3b"
-			]
-		]
-	},
-	{
-		"id": "145e438b94ef4b3b",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "OFFLINE",
-		"func": "msg.payload = {\n       online: false\n   };\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 980,
-		"y": 1720,
-		"wires": [
-			[
-				"e5af97a8c9c70002",
-				"6058e4212b3023bf"
-			]
-		]
-	},
-	{
-		"id": "be1781432ef92877",
-		"type": "mqtt out",
-		"z": "46f750dd0c884772",
-		"name": "MINECRAFT STATUS / AVAILABILITY",
-		"topic": "",
-		"qos": "",
-		"retain": "true",
-		"respTopic": "",
-		"contentType": "",
-		"userProps": "",
-		"correl": "",
-		"expiry": "",
-		"broker": "2c814fd5907f7043",
-		"x": 1650,
-		"y": 1600,
-		"wires": []
-	},
-	{
-		"id": "6058e4212b3023bf",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Availablity Payload",
-		"func": "msg.topic = \"minecraft/availability\";\nmsg.payload = {\n    state: msg.payload.online\n}\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 1350,
-		"y": 1640,
-		"wires": [
-			[
-				"be1781432ef92877"
-			]
-		]
-	},
-	{
-		"id": "e5af97a8c9c70002",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Status Payload",
-		"func": "msg.topic = \"minecraft/status\";\n\n// let now = new Date();\n// let current = now.toISOString();\nmsg.payload = msg.payload;\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 1360,
-		"y": 1600,
-		"wires": [
-			[
-				"be1781432ef92877"
-			]
-		]
-	},
-	{
-		"id": "e19479213f50f34e",
-		"type": "status",
-		"z": "46f750dd0c884772",
-		"name": "MINECRAFT MQTT CONNECTED",
-		"scope": [
-			"be1781432ef92877"
-		],
-		"x": 160,
-		"y": 1520,
-		"wires": [
-			[
-				"49531eb747cddef2"
-			]
-		]
-	},
-	{
-		"id": "49531eb747cddef2",
-		"type": "trigger",
-		"z": "46f750dd0c884772",
-		"name": "TRIGGER STATUS CHECK",
-		"op1": "",
-		"op2": "0",
-		"op1type": "date",
-		"op2type": "str",
-		"duration": "-60",
-		"extend": false,
-		"overrideDelay": false,
-		"units": "s",
-		"reset": "",
-		"bytopic": "all",
-		"topic": "topic",
-		"outputs": 1,
-		"x": 500,
-		"y": 1520,
-		"wires": [
-			[
-				"8c9706e82ffceecc"
-			]
-		]
-	},
-	{
-		"id": "a2d75312a1d53e67",
-		"type": "catch",
-		"z": "46f750dd0c884772",
-		"name": "Minecraft Ping Exception",
-		"scope": [
-			"6c4c24579a1e7206"
-		],
-		"uncaught": false,
-		"x": 450,
-		"y": 1420,
-		"wires": [
-			[
-				"41b27a3f5ce909ab"
-			]
-		]
-	},
-	{
-		"id": "41b27a3f5ce909ab",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Format Payload",
-		"func": "msg.payload = {\n    success: false,\n    host: \"mc.fuku.io\",\n    message: \"Error when getting the status of the server.\",\n    status: \"unknown\"\n}\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 700,
-		"y": 1420,
-		"wires": [
-			[
-				"21317ff56cb936b7"
-			]
-		]
-	},
-	{
-		"id": "441863df3525ef69",
-		"type": "http in",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"url": "/tacobot/minecraft/player/:uuid/stats/",
-		"method": "post",
-		"upload": false,
-		"swaggerDoc": "",
-		"x": 180,
-		"y": 1820,
-		"wires": [
-			[
-				"4fa6b71fd1d20d8a"
-			]
-		]
-	},
-	{
-		"id": "3a7993b8e7b5e6f9",
-		"type": "mongodb in",
-		"z": "46f750dd0c884772",
-		"mongodb": "cca90e0ad48e5446",
-		"name": "Find User",
-		"collection": "minecraft_users",
-		"operation": "find",
-		"x": 660,
-		"y": 1820,
-		"wires": [
-			[
-				"667072f5e1b88bf3"
-			]
-		]
-	},
-	{
-		"id": "4fa6b71fd1d20d8a",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "store stats payload",
-		"func": "global.set(\"mc_stats\", msg.req.body);\nglobal.set(\"mc_uuid\", msg.req.params.uuid);\nmsg.payload = {\n    \"uuid\": msg.req.params.uuid\n}\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 470,
-		"y": 1820,
-		"wires": [
-			[
-				"3a7993b8e7b5e6f9"
-			]
-		]
-	},
-	{
-		"id": "667072f5e1b88bf3",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "User Info",
-		"func": "var user_info = msg.payload[0];\nvar data = global.get(\"mc_stats\")[\"stats\"];\nvar timestamp = Date.now();\nmsg.payload = {\n    \"$set\": {\n        \"uuid\": user_info.uuid,\n        \"user_id\": user_info.user_id,\n        \"username\": user_info.username,\n        \"stats\": data,\n        \"modified\": timestamp\n    }\n}\n\nmsg.query = {\n    \"uuid\": { \"$eq\": user_info.uuid }//,\n    //\"user_id\": { \"$eq\": user_info.user_id }\n};\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 820,
-		"y": 1820,
-		"wires": [
-			[
-				"1d5873adb46dd15f",
-				"88933731f5c5743e",
-				"c14ce2e002771995"
-			]
-		]
-	},
-	{
-		"id": "1d5873adb46dd15f",
-		"type": "mongodb out",
-		"z": "46f750dd0c884772",
-		"mongodb": "cca90e0ad48e5446",
-		"name": "",
-		"collection": "minecraft_stats",
-		"payonly": true,
-		"upsert": true,
-		"multi": true,
-		"operation": "update",
-		"x": 1070,
-		"y": 1820,
-		"wires": []
-	},
-	{
-		"id": "88933731f5c5743e",
-		"type": "http response",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"statusCode": "",
-		"headers": {},
-		"x": 1010,
-		"y": 1780,
-		"wires": []
-	},
-	{
-		"id": "c14ce2e002771995",
-		"type": "debug",
-		"z": "46f750dd0c884772",
-		"name": "MINECRAFT-STATS",
-		"active": false,
-		"tosidebar": true,
-		"console": false,
-		"tostatus": false,
-		"complete": "payload",
-		"targetType": "msg",
-		"statusVal": "",
-		"statusType": "auto",
-		"x": 1060,
-		"y": 1880,
-		"wires": []
-	},
-	{
-		"id": "7c0550bed709438d",
-		"type": "http in",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"url": "/tacobot/minecraft/player/:username/stats",
-		"method": "get",
-		"upload": false,
-		"swaggerDoc": "",
-		"x": 190,
-		"y": 1940,
-		"wires": [
-			[
-				"f38e97f485bdeabc"
-			]
-		]
-	},
-	{
-		"id": "cca0e9492cf722cd",
-		"type": "mongodb in",
-		"z": "46f750dd0c884772",
-		"mongodb": "cca90e0ad48e5446",
-		"name": "Find User Stats",
-		"collection": "minecraft_stats",
-		"operation": "find",
-		"x": 680,
-		"y": 1940,
-		"wires": [
-			[
-				"d6a16c507359253a"
-			]
-		]
-	},
-	{
-		"id": "f38e97f485bdeabc",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "user query",
-		"func": "msg.payload = {\n    \"username\": { \"$regex\": new RegExp(`^${msg.req.params.username}$`,\"i\") }\n}\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 470,
-		"y": 1940,
-		"wires": [
-			[
-				"cca0e9492cf722cd"
-			]
-		]
-	},
-	{
-		"id": "d6a16c507359253a",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "format payload",
-		"func": "if (msg.payload && msg.payload.length > 0) {\n    let user_data = msg.payload[0];\n    msg.payload = {\n        \"uuid\": user_data.uuid,\n        \"username\": user_data.username,\n        \"user_id\": user_data.user_id,\n        \"modified\": user_data.modified,\n        \"stats\": user_data.stats\n    };\n\n} else {\n    msg.payload = null;\n}\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 880,
-		"y": 1940,
-		"wires": [
-			[
-				"5271cab4f5a8cd09"
-			]
-		]
-	},
-	{
-		"id": "5271cab4f5a8cd09",
-		"type": "http response",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"statusCode": "",
-		"headers": {
-			"Content-Type": "application/json"
-		},
-		"x": 1070,
-		"y": 1940,
-		"wires": []
-	},
-	{
-		"id": "ecbaecad8f7c4daa",
-		"type": "http in",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"url": "/tacobot/user/find/:userid",
-		"method": "get",
-		"upload": false,
-		"swaggerDoc": "",
-		"x": 140,
-		"y": 2020,
-		"wires": [
-			[
-				"c535695fade8b8a2"
-			]
-		]
-	},
-	{
-		"id": "c535695fade8b8a2",
-		"type": "http response",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"statusCode": "",
-		"headers": {},
-		"x": 690,
-		"y": 2020,
-		"wires": []
-	},
-	{
-		"id": "edad3dd1794c6a16",
-		"type": "http in",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"url": "/tacobot/minecraft/version",
-		"method": "post",
-		"upload": false,
-		"swaggerDoc": "",
-		"x": 150,
-		"y": 2080,
-		"wires": [
-			[
-				"1dd037df2735f99d"
-			]
-		]
-	},
-	{
-		"id": "aa5d784d7a865c78",
-		"type": "http response",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"statusCode": "",
-		"headers": {},
-		"x": 830,
-		"y": 2080,
-		"wires": []
-	},
-	{
-		"id": "8004625b4cb96651",
-		"type": "mongodb out",
-		"z": "46f750dd0c884772",
-		"mongodb": "cca90e0ad48e5446",
-		"name": "Update Settings",
-		"collection": "settings",
-		"payonly": false,
-		"upsert": false,
-		"multi": false,
-		"operation": "update",
-		"x": 800,
-		"y": 2120,
-		"wires": []
-	},
-	{
-		"id": "1dd037df2735f99d",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Query and Payload",
-		"func": "msg.collection = \"settings\";\nmsg.query = {\n    guild_id: msg.payload.guild_id,\n    name: msg.payload.name,\n};\nmsg.payload = {\n    guild_id: msg.payload.guild_id,\n    name: msg.payload.name,\n    settings: {\n        enabled: true,\n        help: \"https://imgur.com/a/wFFP48L\",\n        version: msg.payload.settings.version,\n        forge_version: msg.payload.settings.forge_version,\n        server: \"mc.fuku.io\",\n        mods: msg.payload.settings.mods,\n    }\n};\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 410,
-		"y": 2080,
-		"wires": [
-			[
-				"8004625b4cb96651",
-				"aa5d784d7a865c78"
-			]
-		]
-	},
-	{
-		"id": "d6ed9a4424142a33",
-		"type": "http in",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"url": "/tacobot/minecraft/version",
-		"method": "get",
-		"upload": false,
-		"swaggerDoc": "",
-		"x": 150,
-		"y": 2180,
-		"wires": [
-			[
-				"e6a9e24a3a11f133"
-			]
-		]
-	},
-	{
-		"id": "e6a9e24a3a11f133",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Query",
-		"func": "msg.collection = \"settings\";\nmsg.payload = {\n    guild_id: \"935294040386183228\",\n    name: \"minecraft\",\n};\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 350,
-		"y": 2180,
-		"wires": [
-			[
-				"5deb29fa416dfac1"
-			]
-		]
-	},
-	{
-		"id": "5deb29fa416dfac1",
-		"type": "mongodb in",
-		"z": "46f750dd0c884772",
-		"mongodb": "cca90e0ad48e5446",
-		"name": "Get Settings",
-		"collection": "settings",
-		"operation": "find",
-		"x": 530,
-		"y": 2180,
-		"wires": [
-			[
-				"dcf181a52b94bafd"
-			]
-		]
-	},
-	{
-		"id": "dcf181a52b94bafd",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Result",
-		"func": "\nif (msg.payload.length >= 1) {\n    msg.payload = msg.payload[0];\n    delete msg.payload._id;\n}\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 710,
-		"y": 2180,
-		"wires": [
-			[
-				"c44d92c5d1addad5"
-			]
-		]
-	},
-	{
-		"id": "c44d92c5d1addad5",
-		"type": "http response",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"statusCode": "",
-		"headers": {},
-		"x": 910,
-		"y": 2180,
-		"wires": []
-	},
-	{
-		"id": "8773196f827f3657",
-		"type": "http in",
-		"z": "46f750dd0c884772",
-		"name": "",
-		"url": "/taco/minecraft/status",
-		"method": "get",
-		"upload": false,
-		"swaggerDoc": "",
-		"x": 150,
-		"y": 1440,
-		"wires": [
-			[
-				"6c4c24579a1e7206"
-			]
-		]
-	},
-	{
-		"id": "9220fc289d8ce45f",
-		"type": "function",
-		"z": "46f750dd0c884772",
-		"name": "Create Cheer Action",
-		"func": "msg.payload = {\n    action: \"cheer\",\n    channel: msg.payload.channel.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    user: msg.payload.username.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\")\n};\nreturn msg;",
-		"outputs": 1,
-		"noerr": 0,
-		"initialize": "",
-		"finalize": "",
-		"libs": [],
-		"x": 880,
-		"y": 500,
-		"wires": [
-			[
-				"9ca901b9e40d2f55"
-			]
-		]
-	},
-	{
-		"id": "cca90e0ad48e5446",
-		"type": "mongodb",
-		"hostname": "andeddu.bit13.local",
-		"topology": "direct",
-		"connectOptions": "authSource=admin",
-		"port": "27017",
-		"db": "tacobot",
-		"name": "Tacobot"
-	},
-	{
-		"id": "c35c7083d8eba0bf",
-		"type": "minecraft-ping-server",
-		"host": "vader.bit13.local",
-		"port": "25565"
-	},
-	{
-		"id": "2c814fd5907f7043",
-		"type": "mqtt-broker",
-		"name": "VADER MQTT",
-		"broker": "mqtt.bit13.local",
-		"port": "1883",
-		"clientid": "",
-		"autoConnect": true,
-		"usetls": false,
-		"protocolVersion": "5",
-		"keepalive": "60",
-		"cleansession": true,
-		"birthTopic": "",
-		"birthQos": "0",
-		"birthPayload": "",
-		"birthMsg": {},
-		"closeTopic": "",
-		"closeQos": "0",
-		"closePayload": "",
-		"closeMsg": {},
-		"willTopic": "",
-		"willQos": "0",
-		"willPayload": "",
-		"willMsg": {},
-		"userProps": "",
-		"sessionExpiry": ""
-	}
+  {
+    "id": "46f750dd0c884772",
+    "type": "tab",
+    "label": "OurTacoBot",
+    "disabled": false,
+    "info": ""
+  },
+  {
+    "id": "a1086a4ec9e7afb7",
+    "type": "split",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "splt": "\\n",
+    "spltType": "str",
+    "arraySplt": 1,
+    "arraySpltType": "len",
+    "stream": false,
+    "addname": "",
+    "x": 930,
+    "y": 20,
+    "wires": [
+      [
+        "872337111ee46aba"
+      ]
+    ]
+  },
+  {
+    "id": "55cbd0c68d78eca6",
+    "type": "debug",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 2070,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "1234a5552197c0f7",
+    "type": "tmi-event-connected",
+    "z": "46f750dd0c884772",
+    "config": "",
+    "name": "",
+    "x": 100,
+    "y": 20,
+    "wires": [
+      [
+        "b7fe330fc6fde8b4"
+      ]
+    ]
+  },
+  {
+    "id": "872337111ee46aba",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "format data",
+    "func": "msg.payload = {\n    channel: msg.payload.channel\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1070,
+    "y": 20,
+    "wires": [
+      [
+        "8d07fe0812b084a8"
+      ]
+    ]
+  },
+  {
+    "id": "8d07fe0812b084a8",
+    "type": "tmi-command-join",
+    "z": "46f750dd0c884772",
+    "config": "",
+    "name": "",
+    "x": 1210,
+    "y": 20,
+    "wires": [
+      [],
+      []
+    ]
+  },
+  {
+    "id": "46229fbb87d2ac60",
+    "type": "tmi-event-hosted",
+    "z": "46f750dd0c884772",
+    "config": "",
+    "name": "",
+    "x": 90,
+    "y": 140,
+    "wires": [
+      [
+        "a736b6720f4061a3"
+      ]
+    ]
+  },
+  {
+    "id": "a49a3465e499a7bb",
+    "type": "tmi-event-raided",
+    "z": "46f750dd0c884772",
+    "config": "",
+    "name": "",
+    "x": 90,
+    "y": 240,
+    "wires": [
+      [
+        "35e9fdb59d20e549"
+      ]
+    ]
+  },
+  {
+    "id": "dfc1e527623c72e7",
+    "type": "tmi-event-cheer",
+    "z": "46f750dd0c884772",
+    "config": "",
+    "name": "",
+    "x": 90,
+    "y": 340,
+    "wires": [
+      [
+        "baf5258ea64c5e0b"
+      ]
+    ]
+  },
+  {
+    "id": "565c5f87b5816dcb",
+    "type": "tmi-event-subscription",
+    "z": "46f750dd0c884772",
+    "config": "",
+    "name": "",
+    "x": 110,
+    "y": 500,
+    "wires": [
+      [
+        "e6fd12deccdd2307"
+      ]
+    ]
+  },
+  {
+    "id": "e663ae9e85d5209d",
+    "type": "tmi-event-resub",
+    "z": "46f750dd0c884772",
+    "config": "",
+    "name": "",
+    "x": 90,
+    "y": 600,
+    "wires": [
+      [
+        "e6fd12deccdd2307"
+      ]
+    ]
+  },
+  {
+    "id": "d50a9ca967187113",
+    "type": "tmi-event-primepaidupgrade",
+    "z": "46f750dd0c884772",
+    "config": "",
+    "name": "",
+    "x": 130,
+    "y": 700,
+    "wires": [
+      [
+        "e6fd12deccdd2307"
+      ]
+    ]
+  },
+  {
+    "id": "3b1c7d52e3dbbe4d",
+    "type": "tmi-event-subgift",
+    "z": "46f750dd0c884772",
+    "config": "",
+    "name": "",
+    "x": 90,
+    "y": 800,
+    "wires": [
+      [
+        "e6fd12deccdd2307"
+      ]
+    ]
+  },
+  {
+    "id": "1eaf8485e3fb09da",
+    "type": "tmi-event-giftpaidupgrade",
+    "z": "46f750dd0c884772",
+    "config": "",
+    "name": "",
+    "x": 120,
+    "y": 900,
+    "wires": [
+      [
+        "e6fd12deccdd2307"
+      ]
+    ]
+  },
+  {
+    "id": "a736b6720f4061a3",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Create Action",
+    "func": "msg.payload = {\n    action: \"host\",\n    channel: msg.payload.channel.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    user: msg.payload.username.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    count: msg.payload.viewers\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 300,
+    "y": 140,
+    "wires": [
+      [
+        "9ca901b9e40d2f55"
+      ]
+    ]
+  },
+  {
+    "id": "ef440c7ac39f0f66",
+    "type": "tmi-command-say",
+    "z": "46f750dd0c884772",
+    "config": "",
+    "name": "",
+    "x": 1910,
+    "y": 280,
+    "wires": [
+      [],
+      []
+    ]
+  },
+  {
+    "id": "30b5f389976ccad1",
+    "type": "mongodb in",
+    "z": "46f750dd0c884772",
+    "mongodb": "cca90e0ad48e5446",
+    "name": "",
+    "collection": "",
+    "operation": "find",
+    "x": 800,
+    "y": 20,
+    "wires": [
+      [
+        "a1086a4ec9e7afb7"
+      ]
+    ]
+  },
+  {
+    "id": "b7a48f10569cc161",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Get Bot Channels Query",
+    "func": "msg.payload = {\n    \"guild_id\": \"935294040386183228\"\n};\nmsg.collection = \"twitch_channels\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 610,
+    "y": 20,
+    "wires": [
+      [
+        "30b5f389976ccad1"
+      ]
+    ]
+  },
+  {
+    "id": "35e9fdb59d20e549",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Create Action",
+    "func": "msg.payload = {\n    action: \"raid\",\n    channel: msg.payload.channel.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    user: msg.payload.username.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    count: msg.payload.viewers\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 300,
+    "y": 240,
+    "wires": [
+      [
+        "9ca901b9e40d2f55"
+      ]
+    ]
+  },
+  {
+    "id": "9ca901b9e40d2f55",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Build Command",
+    "func": "msg.payload = {\n    channel: \"ourtacobot\",\n    message: `!taco ${msg.payload.action} ${msg.payload.user} ${msg.payload.channel}`    \n}\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1100,
+    "y": 240,
+    "wires": [
+      [
+        "ffaaaab41b41a887",
+        "fbd7aed491c06946"
+      ]
+    ]
+  },
+  {
+    "id": "33fc045ae186aa3f",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "TEST RAID",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "test",
+        "v": "true",
+        "vt": "jsonata"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\",\"viewers\":5}",
+    "payloadType": "json",
+    "x": 110,
+    "y": 280,
+    "wires": [
+      [
+        "35e9fdb59d20e549"
+      ]
+    ]
+  },
+  {
+    "id": "58fd5a01580c6e98",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "TEST HOST",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "test",
+        "v": "true",
+        "vt": "jsonata"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\",\"viewers\":5}",
+    "payloadType": "json",
+    "x": 110,
+    "y": 180,
+    "wires": [
+      [
+        "a736b6720f4061a3"
+      ]
+    ]
+  },
+  {
+    "id": "e6fd12deccdd2307",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Create SUB Action",
+    "func": "msg.payload = {\n    action: \"subscribe\",\n    channel: msg.payload.channel.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    user: msg.payload.username.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\")\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 870,
+    "y": 720,
+    "wires": [
+      [
+        "9ca901b9e40d2f55"
+      ]
+    ]
+  },
+  {
+    "id": "baf5258ea64c5e0b",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Format Payload",
+    "func": "msg.payload = {\n  channel: msg.payload.channel,\n  username: msg.payload.userstate['display-name'].toLowerCase().replace(\"@\", \"\").replace(\"#\", \"\"),\n  amount: msg.payload.userstate.bits || 1\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 380,
+    "y": 400,
+    "wires": [
+      [
+        "e3f5771cb4dff405",
+        "5d5147cb9cd2625e"
+      ]
+    ]
+  },
+  {
+    "id": "40497c7d9234c271",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "TEST CHEER < 100",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "test",
+        "v": "true",
+        "vt": "jsonata"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"channel\":\"guynamemike\",\"userstate\":{\"display-name\":\"DarthMinos\",\"bits\":10}}",
+    "payloadType": "json",
+    "x": 130,
+    "y": 380,
+    "wires": [
+      [
+        "baf5258ea64c5e0b"
+      ]
+    ]
+  },
+  {
+    "id": "81cc523992ad7633",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "TEST SUBSCRIPTION",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "test",
+        "v": "true",
+        "vt": "jsonata"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\"}",
+    "payloadType": "json",
+    "x": 140,
+    "y": 540,
+    "wires": [
+      [
+        "e6fd12deccdd2307"
+      ]
+    ]
+  },
+  {
+    "id": "5b60394a7ab365c7",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "TEST RESUB",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "test",
+        "v": "true",
+        "vt": "jsonata"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\",\"streakMonths\":5}",
+    "payloadType": "json",
+    "x": 110,
+    "y": 640,
+    "wires": [
+      [
+        "e6fd12deccdd2307"
+      ]
+    ]
+  },
+  {
+    "id": "e9a418e2ded6fa78",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "TEST PRIME UPGRADE",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "test",
+        "v": "true",
+        "vt": "jsonata"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\"}",
+    "payloadType": "json",
+    "x": 150,
+    "y": 740,
+    "wires": [
+      [
+        "e6fd12deccdd2307"
+      ]
+    ]
+  },
+  {
+    "id": "fcc3e0a062c5b788",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "TEST SUBGIFT",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "test",
+        "v": "true",
+        "vt": "jsonata"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\"}",
+    "payloadType": "json",
+    "x": 120,
+    "y": 840,
+    "wires": [
+      [
+        "e6fd12deccdd2307"
+      ]
+    ]
+  },
+  {
+    "id": "c1f88b165672acaa",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "TEST GIFT UPGRADE",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "test",
+        "v": "true",
+        "vt": "jsonata"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"channel\":\"guynamemike\",\"username\":\"darthminos\"}",
+    "payloadType": "json",
+    "x": 140,
+    "y": 940,
+    "wires": [
+      [
+        "e6fd12deccdd2307"
+      ]
+    ]
+  },
+  {
+    "id": "ffaaaab41b41a887",
+    "type": "switch",
+    "z": "46f750dd0c884772",
+    "name": "Is TEST",
+    "property": "test",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "true",
+        "vt": "jsonata"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 1540,
+    "y": 240,
+    "wires": [
+      [
+        "55cbd0c68d78eca6"
+      ]
+    ]
+  },
+  {
+    "id": "fbd7aed491c06946",
+    "type": "switch",
+    "z": "46f750dd0c884772",
+    "name": "Is ACTION",
+    "property": "test",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "neq",
+        "v": "true",
+        "vt": "jsonata"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 1550,
+    "y": 280,
+    "wires": [
+      [
+        "f1bb52da63e95672",
+        "9bb875c9ece15ae0"
+      ]
+    ]
+  },
+  {
+    "id": "f1bb52da63e95672",
+    "type": "delay",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "pauseType": "rate",
+    "timeout": "5",
+    "timeoutUnits": "seconds",
+    "rate": "10",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 1760,
+    "y": 280,
+    "wires": [
+      [
+        "ef440c7ac39f0f66"
+      ]
+    ]
+  },
+  {
+    "id": "27accf06d04c7f46",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "TEST CHEER 100+",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "test",
+        "v": "true",
+        "vt": "jsonata"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"channel\":\"guynamemike\",\"userstate\":{\"display-name\":\"DarthMinos\",\"bits\":500}}",
+    "payloadType": "json",
+    "x": 130,
+    "y": 420,
+    "wires": [
+      [
+        "baf5258ea64c5e0b"
+      ]
+    ]
+  },
+  {
+    "id": "5d5147cb9cd2625e",
+    "type": "switch",
+    "z": "46f750dd0c884772",
+    "name": "Bits >= 100",
+    "property": "payload.amount",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "gte",
+        "v": "100",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 590,
+    "y": 500,
+    "wires": [
+      [
+        "9220fc289d8ce45f"
+      ]
+    ]
+  },
+  {
+    "id": "e3f5771cb4dff405",
+    "type": "switch",
+    "z": "46f750dd0c884772",
+    "name": "Bits < 100",
+    "property": "payload.amount",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "lt",
+        "v": "100",
+        "vt": "num"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 580,
+    "y": 300,
+    "wires": [
+      [
+        "f08aafad55e13bcd"
+      ]
+    ]
+  },
+  {
+    "id": "f08aafad55e13bcd",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Log Message",
+    "func": "msg.payload = { message: \"Ignoring Cheer: Fewer than 100 bits.\" }\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 760,
+    "y": 300,
+    "wires": [
+      [
+        "2e48570e2813eab2"
+      ]
+    ]
+  },
+  {
+    "id": "2e48570e2813eab2",
+    "type": "debug",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 750,
+    "y": 340,
+    "wires": []
+  },
+  {
+    "id": "617d105d8db46f55",
+    "type": "http in",
+    "z": "46f750dd0c884772",
+    "name": "Invite To Channel",
+    "url": "/tacobot/guild/:guild/invite/:channel",
+    "method": "post",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 120,
+    "y": 1020,
+    "wires": [
+      [
+        "b0f8aee21e010557",
+        "8ca13e0f98f994e7"
+      ]
+    ]
+  },
+  {
+    "id": "6f8a5950184f2997",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Format Payload",
+    "func": "msg.payload = {\n    action: \"invite\",\n    channel: msg.req.params.channel,\n    guild: msg.req.params.guild\n}\nmsg.statusCode = 200;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1120,
+    "y": 880,
+    "wires": [
+      [
+        "f961d1de47b5d3fa",
+        "5c632a06a9e4e5f7"
+      ]
+    ]
+  },
+  {
+    "id": "f961d1de47b5d3fa",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Build Command",
+    "func": "let _action = msg.payload.action;\nlet _channel = msg.payload.channel;\n\n\nmsg.payload = {\n    channel: \"ourtacobot\",\n    message: `!taco ${_action} ${_channel}`    \n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1360,
+    "y": 880,
+    "wires": [
+      [
+        "ffaaaab41b41a887",
+        "fbd7aed491c06946"
+      ]
+    ]
+  },
+  {
+    "id": "0e7bb96a38d4110c",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "TEST HTTP INVITE",
+    "props": [
+      {
+        "p": "req",
+        "v": "{\"params\":{\"channel\":\"darthminos\",\"guild\":\"935294040386183228\"},\"headers\":{\"X-AUTH-TOKEN\":\"935665133957566525\"}}",
+        "vt": "json"
+      },
+      {
+        "p": "test",
+        "v": "true",
+        "vt": "jsonata"
+      },
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{}",
+    "payloadType": "json",
+    "x": 130,
+    "y": 1060,
+    "wires": [
+      [
+        "b0f8aee21e010557",
+        "8ca13e0f98f994e7"
+      ]
+    ]
+  },
+  {
+    "id": "82d83ce5e40b7360",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "TEST HTTP INVITE [NOT AUTHORIZED]",
+    "props": [
+      {
+        "p": "req",
+        "v": "{\"params\":{\"channel\":\"darthminos\",\"guild\":\"935294040386183228\"},\"headers\":{\"X-AUTH-TOKEN\":\"262031734260891648\"}}",
+        "vt": "json"
+      },
+      {
+        "p": "test",
+        "v": "true",
+        "vt": "jsonata"
+      },
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{}",
+    "payloadType": "json",
+    "x": 200,
+    "y": 1100,
+    "wires": [
+      [
+        "b0f8aee21e010557",
+        "8ca13e0f98f994e7"
+      ]
+    ]
+  },
+  {
+    "id": "b0f8aee21e010557",
+    "type": "switch",
+    "z": "46f750dd0c884772",
+    "name": "Is Valid X-AUTH-TOKEN",
+    "property": "req.headers['X-AUTH-TOKEN']",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "935665133957566525",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 610,
+    "y": 920,
+    "wires": [
+      [
+        "43d5df8a1a51a83c",
+        "bd583d68bb5f6bc4"
+      ]
+    ]
+  },
+  {
+    "id": "43d5df8a1a51a83c",
+    "type": "switch",
+    "z": "46f750dd0c884772",
+    "name": "Is Valid Guild",
+    "property": "req.params.guild",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "935294040386183228",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 890,
+    "y": 880,
+    "wires": [
+      [
+        "6f8a5950184f2997"
+      ]
+    ]
+  },
+  {
+    "id": "8ca13e0f98f994e7",
+    "type": "switch",
+    "z": "46f750dd0c884772",
+    "name": "Is NOT Valid X-AUTH-TOKEN",
+    "property": "req.headers['X-AUTH-TOKEN']",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "neq",
+        "v": "935665133957566525",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 630,
+    "y": 1020,
+    "wires": [
+      [
+        "bfb71e71ad1ce767"
+      ]
+    ]
+  },
+  {
+    "id": "bd583d68bb5f6bc4",
+    "type": "switch",
+    "z": "46f750dd0c884772",
+    "name": "Is NOT Valid Guild",
+    "property": "req.params.guild",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "neq",
+        "v": "935294040386183228",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 910,
+    "y": 960,
+    "wires": [
+      [
+        "3e47e6fb49235e3e"
+      ]
+    ]
+  },
+  {
+    "id": "42ecfa1e206ce3ee",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "TEST HTTP INVITE [BAD GUILD]",
+    "props": [
+      {
+        "p": "req",
+        "v": "{\"params\":{\"channel\":\"darthminos\",\"guild\":\"262036511665422336\"},\"headers\":{\"X-AUTH-TOKEN\":\"935665133957566525\"}}",
+        "vt": "json"
+      },
+      {
+        "p": "test",
+        "v": "true",
+        "vt": "jsonata"
+      },
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{}",
+    "payloadType": "json",
+    "x": 180,
+    "y": 1140,
+    "wires": [
+      [
+        "b0f8aee21e010557",
+        "8ca13e0f98f994e7"
+      ]
+    ]
+  },
+  {
+    "id": "3e47e6fb49235e3e",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Message Output",
+    "func": "msg.payload = {\n    message: \"Invalid GUILD ID\",\n    req: msg.req\n}\nmsg.req = msg.req;\nmsg.statusCode = 403;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1120,
+    "y": 960,
+    "wires": [
+      [
+        "5c632a06a9e4e5f7"
+      ]
+    ]
+  },
+  {
+    "id": "bfb71e71ad1ce767",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Message Output",
+    "func": "msg.payload = {\n    message: \"Invalid X-AUTH-TOKEN\",\n    req: msg.req\n}\nmsg.statusCode = 403;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1120,
+    "y": 1020,
+    "wires": [
+      [
+        "5c632a06a9e4e5f7"
+      ]
+    ]
+  },
+  {
+    "id": "5c632a06a9e4e5f7",
+    "type": "debug",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1350,
+    "y": 1020,
+    "wires": []
+  },
+  {
+    "id": "d61d003709dca254",
+    "type": "http response",
+    "z": "46f750dd0c884772",
+    "name": "Return Status Code",
+    "statusCode": "",
+    "headers": {},
+    "x": 1950,
+    "y": 380,
+    "wires": []
+  },
+  {
+    "id": "9bb875c9ece15ae0",
+    "type": "switch",
+    "z": "46f750dd0c884772",
+    "name": "Check HTTP",
+    "property": "req",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "nnull"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 1750,
+    "y": 340,
+    "wires": [
+      [
+        "d61d003709dca254",
+        "8f3551e5552c98b7"
+      ]
+    ]
+  },
+  {
+    "id": "8f3551e5552c98b7",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "func": "msg.payload = {\n    message: \"IS HTTP REQUEST\"\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1920,
+    "y": 340,
+    "wires": [
+      [
+        "55cbd0c68d78eca6"
+      ]
+    ]
+  },
+  {
+    "id": "b56dbe3bdf0e2cf4",
+    "type": "comment",
+    "z": "46f750dd0c884772",
+    "name": "Invite To Channel",
+    "info": "This is https://nodered.bit13.local/ request to trigger a command",
+    "x": 100,
+    "y": 980,
+    "wires": []
+  },
+  {
+    "id": "b7fe330fc6fde8b4",
+    "type": "trigger",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "op1": "{\"message\":\"Trigger Join Channels\"}",
+    "op2": "0",
+    "op1type": "json",
+    "op2type": "str",
+    "duration": "-1",
+    "extend": false,
+    "overrideDelay": false,
+    "units": "hr",
+    "reset": "",
+    "bytopic": "all",
+    "topic": "topic",
+    "outputs": 1,
+    "x": 310,
+    "y": 20,
+    "wires": [
+      [
+        "b7a48f10569cc161",
+        "f3275be8e60ea5b0"
+      ]
+    ]
+  },
+  {
+    "id": "f3275be8e60ea5b0",
+    "type": "debug",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 570,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "09ece4d7dde857ed",
+    "type": "http in",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "url": "/tacobot/minecraft/whitelist.json",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 180,
+    "y": 1200,
+    "wires": [
+      [
+        "2f0f17821ea46aa2"
+      ]
+    ]
+  },
+  {
+    "id": "2f0f17821ea46aa2",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Get Whitelist Users Query",
+    "func": "msg.payload = {\n    \"whitelist\": true\n};\nmsg.collection = \"minecraft_users\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 490,
+    "y": 1200,
+    "wires": [
+      [
+        "7d05304ec9d87716"
+      ]
+    ]
+  },
+  {
+    "id": "7d05304ec9d87716",
+    "type": "mongodb in",
+    "z": "46f750dd0c884772",
+    "mongodb": "cca90e0ad48e5446",
+    "name": "",
+    "collection": "",
+    "operation": "find",
+    "x": 700,
+    "y": 1200,
+    "wires": [
+      [
+        "bac5cc89895b0ecf"
+      ]
+    ]
+  },
+  {
+    "id": "bac5cc89895b0ecf",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Format Payload",
+    "func": "let result = []\nfor(let i = 0; i < msg.payload.length; ++i) {\n    result.push({\n        \"uuid\": msg.payload[i].uuid,\n        \"name\": msg.payload[i].username\n    });\n}\nmsg.payload = result;\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 880,
+    "y": 1200,
+    "wires": [
+      [
+        "711792225dfc56f9"
+      ]
+    ]
+  },
+  {
+    "id": "711792225dfc56f9",
+    "type": "http response",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 1050,
+    "y": 1200,
+    "wires": []
+  },
+  {
+    "id": "83cb5407c78f1af7",
+    "type": "http in",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "url": "/tacobot/minecraft/ops.json",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 170,
+    "y": 1240,
+    "wires": [
+      [
+        "b43859e38a7f43d5"
+      ]
+    ]
+  },
+  {
+    "id": "b43859e38a7f43d5",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Get OPs Users Query",
+    "func": "msg.payload = {\n    \"whitelist\": true,\n    \"op.enabled\": true\n};\nmsg.collection = \"minecraft_users\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 480,
+    "y": 1240,
+    "wires": [
+      [
+        "3956c05b84f01d4c"
+      ]
+    ]
+  },
+  {
+    "id": "3956c05b84f01d4c",
+    "type": "mongodb in",
+    "z": "46f750dd0c884772",
+    "mongodb": "cca90e0ad48e5446",
+    "name": "",
+    "collection": "",
+    "operation": "find",
+    "x": 700,
+    "y": 1240,
+    "wires": [
+      [
+        "2ce7e0e132bf896f"
+      ]
+    ]
+  },
+  {
+    "id": "2ce7e0e132bf896f",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Format Payload",
+    "func": "let result = []\nfor(let i = 0; i < msg.payload.length; ++i) {\n    if (msg.payload[i].op) {\n        result.push({\n            \"uuid\": msg.payload[i].uuid,\n            \"name\": msg.payload[i].username,\n            \"level\": msg.payload[i].op.level,\n            \"bypassesPlayerLimit\":  msg.payload[i].op.bypassesPlayerLimit\n        });\n    }\n}\nmsg.payload = result;\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 880,
+    "y": 1240,
+    "wires": [
+      [
+        "98e687a80637b896"
+      ]
+    ]
+  },
+  {
+    "id": "98e687a80637b896",
+    "type": "http response",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 1050,
+    "y": 1240,
+    "wires": []
+  },
+  {
+    "id": "ea680f7f69fb6315",
+    "type": "http request",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "authType": "",
+    "x": 710,
+    "y": 1280,
+    "wires": [
+      [
+        "f26bfeb80d1dca08"
+      ]
+    ]
+  },
+  {
+    "id": "c50448f1b9de481f",
+    "type": "http in",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "url": "/tacobot/minecraft/uuid/:username",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 190,
+    "y": 1280,
+    "wires": [
+      [
+        "31671a48bfc81c6d"
+      ]
+    ]
+  },
+  {
+    "id": "31671a48bfc81c6d",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Create URL",
+    "func": "msg.url = `https://api.mojang.com/users/profiles/minecraft/${msg.req.params.username}`\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 450,
+    "y": 1280,
+    "wires": [
+      [
+        "ea680f7f69fb6315"
+      ]
+    ]
+  },
+  {
+    "id": "a6f143d14584811c",
+    "type": "http response",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 1050,
+    "y": 1280,
+    "wires": []
+  },
+  {
+    "id": "f26bfeb80d1dca08",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Format Payload",
+    "func": "function format_uuid(s) {\n    return s.replace(/^([a-f0-9]{8})([a-f0-9]{4})([a-f0-9]{4})([a-f0-9]{4})([a-f0-9]{12})$/gmi, '$1-$2-$3-$4-$5');\n}\n\nif(msg.statusCode < 200 || msg.statusCode > 399) {\n    msg.payload = { \"error\": msg.statusCode };\n    msg.statusCode = 200\n    return msg;\n} else if (msg.statusCode == 204) {\n    msg.statusCode = 404\n}\n\nif (msg.payload !== \"\") {\n    data_payload = JSON.parse(msg.payload)\n    console.log(data_payload)\n    msg.payload = {\n        \"name\": data_payload.name,\n        \"uuid\": format_uuid(data_payload.id)\n    }\n} else {\n    msg.payload = { \"error\": msg.statusCode };\n    msg.statusCode = 200\n}\n\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 880,
+    "y": 1280,
+    "wires": [
+      [
+        "a6f143d14584811c"
+      ]
+    ]
+  },
+  {
+    "id": "6c4c24579a1e7206",
+    "type": "minecraft-ping",
+    "z": "46f750dd0c884772",
+    "server": "c35c7083d8eba0bf",
+    "x": 450,
+    "y": 1360,
+    "wires": [
+      [
+        "46f1a40da4ef3538"
+      ]
+    ]
+  },
+  {
+    "id": "d31c3102ef0e7fa4",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "TEST HTTP STATUS",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 140,
+    "y": 1360,
+    "wires": [
+      [
+        "6c4c24579a1e7206"
+      ]
+    ]
+  },
+  {
+    "id": "02986aa4bc4d13fe",
+    "type": "http in",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "url": "/tacobot/minecraft/status",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 160,
+    "y": 1400,
+    "wires": [
+      [
+        "6c4c24579a1e7206"
+      ]
+    ]
+  },
+  {
+    "id": "46f1a40da4ef3538",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Format Payload",
+    "func": "const SERVER_HOST = \"mc.fuku.io\";\nif (msg.payload && \n    msg.payload.description && \n    msg.payload.description.text && \n    msg.payload.version && \n    msg.payload.version.name ) {\n    msg.payload = {\n        success: true,\n        host: SERVER_HOST,\n        title: msg.payload.description.text.replace(/§[0-9a-z]/gsi,\"\"),\n        status: \"online\",\n        online: true,\n        players: {\n            max: msg.payload.players.max || 0,\n            online: msg.payload.players.online || 0\n        },\n        version: msg.payload.version.name\n    }\n} else {\n    msg.payload = {\n        success: true,\n        host: SERVER_HOST,\n        online: false,\n        status: \"offline\",\n        title: \"OFFLINE\",\n        players: {\n            max: 0,\n            online: 0\n        },\n        version: \"OFFLINE\"\n    }\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 700,
+    "y": 1360,
+    "wires": [
+      [
+        "21317ff56cb936b7"
+      ]
+    ]
+  },
+  {
+    "id": "21317ff56cb936b7",
+    "type": "http response",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "statusCode": "200",
+    "headers": {},
+    "x": 880,
+    "y": 1400,
+    "wires": []
+  },
+  {
+    "id": "b7c801186c661167",
+    "type": "tcp request",
+    "z": "46f750dd0c884772",
+    "name": "MINECRAFT TCP CONNECT",
+    "server": "vader.bit13.local",
+    "port": " 25565",
+    "out": "time",
+    "ret": "string",
+    "splitc": "0",
+    "newline": "",
+    "trim": false,
+    "tls": "",
+    "x": 890,
+    "y": 1620,
+    "wires": [
+      [
+        "d8230fa52dd1f793"
+      ]
+    ]
+  },
+  {
+    "id": "8c9706e82ffceecc",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Status Payload",
+    "func": "msg.payload = Buffer.from([0xFE, 0x01]);\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 760,
+    "y": 1520,
+    "wires": [
+      [
+        "b7c801186c661167"
+      ]
+    ]
+  },
+  {
+    "id": "fba0041102cf2513",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "TEST STATUS",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 480,
+    "y": 1640,
+    "wires": [
+      [
+        "8c9706e82ffceecc"
+      ]
+    ]
+  },
+  {
+    "id": "d8230fa52dd1f793",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Parse Response",
+    "func": "var server_info = msg.payload.split(\"\\x00\\x00\\x00\");\nconst NUM_FIELDS = 6;\nif (server_info && server_info.length >= NUM_FIELDS) {\n    msg.payload = {\n      online: true,\n      version: server_info[2].replace(/\\u0000/g,''),\n      motd: server_info[3].replace(/\\u0000/g,''),\n      motd_clean: server_info[3].replace(/\\u0000/g,'').replace(/�[0-9a-z]/gi,''),\n      players: {\n          online: parseInt(server_info[4].replace(/\\u0000/g,'')),\n          max: parseInt(server_info[5].replace(/\\u0000/g,''))\n      }\n    };\n} else {\n   msg.payload = {\n       online: false\n   } \n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 990,
+    "y": 1560,
+    "wires": [
+      [
+        "e5af97a8c9c70002",
+        "6058e4212b3023bf"
+      ]
+    ]
+  },
+  {
+    "id": "002e7ab99fa94e1e",
+    "type": "catch",
+    "z": "46f750dd0c884772",
+    "name": "Minecraft Status Exception",
+    "scope": [
+      "b7c801186c661167"
+    ],
+    "uncaught": false,
+    "x": 770,
+    "y": 1720,
+    "wires": [
+      [
+        "145e438b94ef4b3b"
+      ]
+    ]
+  },
+  {
+    "id": "145e438b94ef4b3b",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "OFFLINE",
+    "func": "msg.payload = {\n       online: false\n   };\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 980,
+    "y": 1720,
+    "wires": [
+      [
+        "e5af97a8c9c70002",
+        "6058e4212b3023bf"
+      ]
+    ]
+  },
+  {
+    "id": "be1781432ef92877",
+    "type": "mqtt out",
+    "z": "46f750dd0c884772",
+    "name": "MINECRAFT STATUS / AVAILABILITY",
+    "topic": "",
+    "qos": "",
+    "retain": "true",
+    "respTopic": "",
+    "contentType": "",
+    "userProps": "",
+    "correl": "",
+    "expiry": "",
+    "broker": "2c814fd5907f7043",
+    "x": 1650,
+    "y": 1600,
+    "wires": []
+  },
+  {
+    "id": "6058e4212b3023bf",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Availablity Payload",
+    "func": "msg.topic = \"minecraft/availability\";\nmsg.payload = {\n    state: msg.payload.online\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1350,
+    "y": 1640,
+    "wires": [
+      [
+        "be1781432ef92877"
+      ]
+    ]
+  },
+  {
+    "id": "e5af97a8c9c70002",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Status Payload",
+    "func": "msg.topic = \"minecraft/status\";\n\n// let now = new Date();\n// let current = now.toISOString();\nmsg.payload = msg.payload;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1360,
+    "y": 1600,
+    "wires": [
+      [
+        "be1781432ef92877"
+      ]
+    ]
+  },
+  {
+    "id": "e19479213f50f34e",
+    "type": "status",
+    "z": "46f750dd0c884772",
+    "name": "MINECRAFT MQTT CONNECTED",
+    "scope": [
+      "be1781432ef92877"
+    ],
+    "x": 160,
+    "y": 1520,
+    "wires": [
+      [
+        "49531eb747cddef2"
+      ]
+    ]
+  },
+  {
+    "id": "49531eb747cddef2",
+    "type": "trigger",
+    "z": "46f750dd0c884772",
+    "name": "TRIGGER STATUS CHECK",
+    "op1": "",
+    "op2": "0",
+    "op1type": "date",
+    "op2type": "str",
+    "duration": "-60",
+    "extend": false,
+    "overrideDelay": false,
+    "units": "s",
+    "reset": "",
+    "bytopic": "all",
+    "topic": "topic",
+    "outputs": 1,
+    "x": 500,
+    "y": 1520,
+    "wires": [
+      [
+        "8c9706e82ffceecc"
+      ]
+    ]
+  },
+  {
+    "id": "a2d75312a1d53e67",
+    "type": "catch",
+    "z": "46f750dd0c884772",
+    "name": "Minecraft Ping Exception",
+    "scope": [
+      "6c4c24579a1e7206"
+    ],
+    "uncaught": false,
+    "x": 450,
+    "y": 1420,
+    "wires": [
+      [
+        "41b27a3f5ce909ab"
+      ]
+    ]
+  },
+  {
+    "id": "41b27a3f5ce909ab",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Format Payload",
+    "func": "msg.payload = {\n    success: false,\n    host: \"mc.fuku.io\",\n    message: \"Error when getting the status of the server.\",\n    status: \"unknown\"\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 700,
+    "y": 1420,
+    "wires": [
+      [
+        "21317ff56cb936b7"
+      ]
+    ]
+  },
+  {
+    "id": "441863df3525ef69",
+    "type": "http in",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "url": "/tacobot/minecraft/player/:uuid/stats/",
+    "method": "post",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 180,
+    "y": 1820,
+    "wires": [
+      [
+        "4fa6b71fd1d20d8a"
+      ]
+    ]
+  },
+  {
+    "id": "3a7993b8e7b5e6f9",
+    "type": "mongodb in",
+    "z": "46f750dd0c884772",
+    "mongodb": "cca90e0ad48e5446",
+    "name": "Find User",
+    "collection": "minecraft_users",
+    "operation": "find",
+    "x": 660,
+    "y": 1820,
+    "wires": [
+      [
+        "667072f5e1b88bf3"
+      ]
+    ]
+  },
+  {
+    "id": "4fa6b71fd1d20d8a",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "store stats payload",
+    "func": "global.set(\"mc_stats\", msg.req.body);\nglobal.set(\"mc_uuid\", msg.req.params.uuid);\nmsg.payload = {\n    \"uuid\": msg.req.params.uuid\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 470,
+    "y": 1820,
+    "wires": [
+      [
+        "3a7993b8e7b5e6f9"
+      ]
+    ]
+  },
+  {
+    "id": "667072f5e1b88bf3",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "User Info",
+    "func": "var user_info = msg.payload[0];\nvar data = global.get(\"mc_stats\")[\"stats\"];\nvar timestamp = Date.now();\nmsg.payload = {\n    \"$set\": {\n        \"uuid\": user_info.uuid,\n        \"user_id\": user_info.user_id,\n        \"username\": user_info.username,\n        \"stats\": data,\n        \"modified\": timestamp\n    }\n}\n\nmsg.query = {\n    \"uuid\": { \"$eq\": user_info.uuid }//,\n    //\"user_id\": { \"$eq\": user_info.user_id }\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 820,
+    "y": 1820,
+    "wires": [
+      [
+        "1d5873adb46dd15f",
+        "88933731f5c5743e",
+        "c14ce2e002771995"
+      ]
+    ]
+  },
+  {
+    "id": "1d5873adb46dd15f",
+    "type": "mongodb out",
+    "z": "46f750dd0c884772",
+    "mongodb": "cca90e0ad48e5446",
+    "name": "",
+    "collection": "minecraft_stats",
+    "payonly": true,
+    "upsert": true,
+    "multi": true,
+    "operation": "update",
+    "x": 1070,
+    "y": 1820,
+    "wires": []
+  },
+  {
+    "id": "88933731f5c5743e",
+    "type": "http response",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 1010,
+    "y": 1780,
+    "wires": []
+  },
+  {
+    "id": "c14ce2e002771995",
+    "type": "debug",
+    "z": "46f750dd0c884772",
+    "name": "MINECRAFT-STATS",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1060,
+    "y": 1880,
+    "wires": []
+  },
+  {
+    "id": "7c0550bed709438d",
+    "type": "http in",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "url": "/tacobot/minecraft/player/:username/stats",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 190,
+    "y": 1940,
+    "wires": [
+      [
+        "f38e97f485bdeabc"
+      ]
+    ]
+  },
+  {
+    "id": "cca0e9492cf722cd",
+    "type": "mongodb in",
+    "z": "46f750dd0c884772",
+    "mongodb": "cca90e0ad48e5446",
+    "name": "Find User Stats",
+    "collection": "minecraft_stats",
+    "operation": "find",
+    "x": 680,
+    "y": 1940,
+    "wires": [
+      [
+        "d6a16c507359253a"
+      ]
+    ]
+  },
+  {
+    "id": "f38e97f485bdeabc",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "user query",
+    "func": "msg.payload = {\n    \"username\": { \"$regex\": new RegExp(`^${msg.req.params.username}$`,\"i\") }\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 470,
+    "y": 1940,
+    "wires": [
+      [
+        "cca0e9492cf722cd"
+      ]
+    ]
+  },
+  {
+    "id": "d6a16c507359253a",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "format payload",
+    "func": "if (msg.payload && msg.payload.length > 0) {\n    let user_data = msg.payload[0];\n    msg.payload = {\n        \"uuid\": user_data.uuid,\n        \"username\": user_data.username,\n        \"user_id\": user_data.user_id,\n        \"modified\": user_data.modified,\n        \"stats\": user_data.stats\n    };\n\n} else {\n    msg.payload = null;\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 880,
+    "y": 1940,
+    "wires": [
+      [
+        "5271cab4f5a8cd09"
+      ]
+    ]
+  },
+  {
+    "id": "5271cab4f5a8cd09",
+    "type": "http response",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "statusCode": "",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "x": 1070,
+    "y": 1940,
+    "wires": []
+  },
+  {
+    "id": "ecbaecad8f7c4daa",
+    "type": "http in",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "url": "/tacobot/user/find/:userid",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 140,
+    "y": 2020,
+    "wires": [
+      [
+        "c535695fade8b8a2"
+      ]
+    ]
+  },
+  {
+    "id": "c535695fade8b8a2",
+    "type": "http response",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 690,
+    "y": 2020,
+    "wires": []
+  },
+  {
+    "id": "edad3dd1794c6a16",
+    "type": "http in",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "url": "/tacobot/minecraft/version",
+    "method": "post",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 150,
+    "y": 2080,
+    "wires": [
+      [
+        "1dd037df2735f99d"
+      ]
+    ]
+  },
+  {
+    "id": "aa5d784d7a865c78",
+    "type": "http response",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 830,
+    "y": 2080,
+    "wires": []
+  },
+  {
+    "id": "8004625b4cb96651",
+    "type": "mongodb out",
+    "z": "46f750dd0c884772",
+    "mongodb": "cca90e0ad48e5446",
+    "name": "Update Settings",
+    "collection": "settings",
+    "payonly": false,
+    "upsert": false,
+    "multi": false,
+    "operation": "update",
+    "x": 800,
+    "y": 2120,
+    "wires": []
+  },
+  {
+    "id": "1dd037df2735f99d",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Query and Payload",
+    "func": "msg.collection = \"settings\";\nmsg.query = {\n    guild_id: msg.payload.guild_id,\n    name: msg.payload.name,\n};\nmsg.payload = {\n    guild_id: msg.payload.guild_id,\n    name: msg.payload.name,\n    settings: {\n        enabled: true,\n        help: \"https://imgur.com/a/wFFP48L\",\n        version: msg.payload.settings.version,\n        forge_version: msg.payload.settings.forge_version,\n        server: \"mc.fuku.io\",\n        mods: msg.payload.settings.mods,\n    }\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 410,
+    "y": 2080,
+    "wires": [
+      [
+        "8004625b4cb96651",
+        "aa5d784d7a865c78"
+      ]
+    ]
+  },
+  {
+    "id": "d6ed9a4424142a33",
+    "type": "http in",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "url": "/tacobot/minecraft/version",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 150,
+    "y": 2180,
+    "wires": [
+      [
+        "e6a9e24a3a11f133"
+      ]
+    ]
+  },
+  {
+    "id": "e6a9e24a3a11f133",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Query",
+    "func": "msg.collection = \"settings\";\nmsg.payload = {\n    guild_id: \"935294040386183228\",\n    name: \"minecraft\",\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 350,
+    "y": 2180,
+    "wires": [
+      [
+        "5deb29fa416dfac1"
+      ]
+    ]
+  },
+  {
+    "id": "5deb29fa416dfac1",
+    "type": "mongodb in",
+    "z": "46f750dd0c884772",
+    "mongodb": "cca90e0ad48e5446",
+    "name": "Get Settings",
+    "collection": "settings",
+    "operation": "find",
+    "x": 530,
+    "y": 2180,
+    "wires": [
+      [
+        "dcf181a52b94bafd"
+      ]
+    ]
+  },
+  {
+    "id": "dcf181a52b94bafd",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Result",
+    "func": "\nif (msg.payload.length >= 1) {\n    msg.payload = msg.payload[0];\n    delete msg.payload._id;\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 710,
+    "y": 2180,
+    "wires": [
+      [
+        "c44d92c5d1addad5"
+      ]
+    ]
+  },
+  {
+    "id": "c44d92c5d1addad5",
+    "type": "http response",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 910,
+    "y": 2180,
+    "wires": []
+  },
+  {
+    "id": "8773196f827f3657",
+    "type": "http in",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "url": "/taco/minecraft/status",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 150,
+    "y": 1440,
+    "wires": [
+      [
+        "6c4c24579a1e7206"
+      ]
+    ]
+  },
+  {
+    "id": "9220fc289d8ce45f",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Create Cheer Action",
+    "func": "msg.payload = {\n    action: \"cheer\",\n    channel: msg.payload.channel.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    user: msg.payload.username.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\")\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 880,
+    "y": 500,
+    "wires": [
+      [
+        "9ca901b9e40d2f55"
+      ]
+    ]
+  },
+  {
+    "id": "cca90e0ad48e5446",
+    "type": "mongodb",
+    "hostname": "andeddu.bit13.local",
+    "topology": "direct",
+    "connectOptions": "authSource=admin",
+    "port": "27017",
+    "db": "tacobot",
+    "name": "Tacobot"
+  },
+  {
+    "id": "c35c7083d8eba0bf",
+    "type": "minecraft-ping-server",
+    "host": "vader.bit13.local",
+    "port": "25565"
+  },
+  {
+    "id": "2c814fd5907f7043",
+    "type": "mqtt-broker",
+    "name": "VADER MQTT",
+    "broker": "mqtt.bit13.local",
+    "port": "1883",
+    "clientid": "",
+    "autoConnect": true,
+    "usetls": false,
+    "protocolVersion": "5",
+    "keepalive": "60",
+    "cleansession": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "birthMsg": {},
+    "closeTopic": "",
+    "closeQos": "0",
+    "closePayload": "",
+    "closeMsg": {},
+    "willTopic": "",
+    "willQos": "0",
+    "willPayload": "",
+    "willMsg": {},
+    "userProps": "",
+    "sessionExpiry": ""
+  }
 ]

@@ -1,26 +1,23 @@
-import requests
-import json
 import traceback
-import typing
-class DiscordWebhook():
-    def __init__(self, webhook_url):
+
+import requests
+
+
+class DiscordWebhook:
+    def __init__(self, webhook_url: str) -> None:
         self.webhook_url = webhook_url
 
-    def send(self, **kwargs):
+    def send(self, **kwargs) -> None:
         try:
-
             data = {}
-            # if content is not None:
-            #     data['content'] = content
-            # if embeds is not None:
-            #     data['embeds'] = embeds
             # data['tts'] = False
 
             for key, value in kwargs.items():
                 if value is not None:
                     data[key] = value
 
-            print(json.dumps(data))
+            # force tts to be false
+            data['tts'] = False
 
             r = requests.post(self.webhook_url, json=data)
             if r.status_code != 200 and r.status_code != 204:

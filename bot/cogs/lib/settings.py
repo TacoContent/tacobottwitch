@@ -1,13 +1,12 @@
-import sys
-import os
-import traceback
 import glob
-import typing
-from . import utils
-import json
-from . import logger
-from . import loglevel
 import inspect
+import json
+import os
+import sys
+import traceback
+import typing
+
+from bot.cogs.lib import utils
 
 
 class Settings:
@@ -15,6 +14,10 @@ class Settings:
     BITRATE_DEFAULT = 64
 
     def __init__(self) -> None:
+        self.name = ""
+        self.author = ""
+        self.prefixes = []
+
         try:
             with open("app.manifest", encoding="UTF-8") as json_file:
                 self.__dict__.update(json.load(json_file))
@@ -64,9 +67,7 @@ class Settings:
 
     def get_channel_default_settings(self) -> dict:
         return {
-            "pokemoncommunitygame": {
-                "enabled": True,
-            },
+            "pokemoncommunitygame": {"enabled": True},
             "paul_wanker": {"enabled": True},
             "dixperbro": {"enabled": True},
             "streamelements": {
@@ -77,8 +78,8 @@ class Settings:
             "marblesonstream": {"enabled": True},
             "rainmaker": {
                 "enabled": True,
-                "action_message": r"^Thank you for tweeting out the stream, (?P<user>@?[a-zA-Z0-9-_]+).$"
-            }
+                "action_message": r"^Thank you for tweeting out the stream, (?P<user>@?[a-zA-Z0-9-_]+).$",
+            },
         }
 
     def get_channel_settings(self, db, channel: str) -> dict:
@@ -116,7 +117,7 @@ class Settings:
             else:
                 return utils.str_replace(f"{key}", *args, **kwargs)
 
-    def set_guild_strings(self, lang: str = None) -> None:
+    def set_guild_strings(self, lang: typing.Optional[str] = None) -> None:
         guild_id = self.discord_guild_id
         _method = inspect.stack()[1][3]
         # guild_settings = self.db.get_guild_settings(guildId)

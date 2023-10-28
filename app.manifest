@@ -1,767 +1,773 @@
 {
-	"name": "Taco Bot",
-	"url": "http://darthminos.tv",
-	"version": "1.0.0-snapshot",
-	"icon": "https://i.imgur.com/ejJu8de.png",
-	"author": "DarthMinos#1161",
-	"twitch_author": "DarthMinos",
-	"changelog": "changelog.txt",
-	"bot_name": "OurTacoBot",
-	"prefixes": [
-		"!taco ",
-		"#taco ",
-		"?taco "
-	],
-	"restricted_channels": [
-		"ourtaco",
-		"ourtacobot"
-	],
-	"commands": {
-		"commands": {
-			"description": "Get a url to view documentation for all commands.",
-			"usage": "{{prefix}}commands",
-			"cooldown": 30,
-			"permissions": [
-				"everyone"
-			],
-			"examples": [
-				"{{prefix}}commands"
-			],
-			"enabled": true,
-			"arguments": {},
-			"restricted": [],
-			"previews": [
-				"https://i.imgur.com/8lx0Ohy.png"
-			]
-		},
-		"discord": {
-			"description": "Promotes the TACO discord using an invite that you have created in the discord.",
-			"usage": "{{prefix}}discord",
-			"examples": [
-				"{{prefix}}discord"
-			],
-			"cooldown": 30,
-			"permissions": [
-				"everyone"
-			],
-			"arguments": {},
-			"enabled": true,
-			"subcommands": {},
-			"aliases": [
-				"taco"
-			],
-			"previews": [
-				"https://i.imgur.com/n0wBukf.png"
-			]
-		},
-		"dixper": {
-			"description": "Allows you to control if the bot will give tacos for purchase of dixper packs. If you do not use dixper in your channel, this will not matter.",
-			"usage": "{{prefix}}dixper <on/off>",
-			"examples": [
-				"{{prefix}}dixper on",
-				"{{prefix}}dixper start",
-				"{{prefix}}dixper enable",
-				"{{prefix}}dixper off",
-				"{{prefix}}dixper stop",
-				"{{prefix}}dixper disable"
-			],
-			"cooldown": 30,
-			"permissions": [
-				"moderator"
-			],
-			"enabled": true,
-			"subcommands": {
-				"start": {
-					"description": "Enables the bot to give tacos when people purchase dixper packs.",
-					"usage": "{{prefix}}dixper start",
-					"examples": [
-						"{{prefix}}dixper on",
-						"{{prefix}}dixper start",
-						"{{prefix}}dixper enable"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"moderator"
-					],
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [
-						"start",
-						"on",
-						"enable"
-					],
-					"previews": [
-						"https://i.imgur.com/3fkoGdY.png"
-					]
-				},
-				"stop": {
-					"description": "Disabled the bot from giving tacos when people purchase dixper packs.",
-					"usage": "{{prefix}}dixper stop",
-					"examples": [
-						"{{prefix}}dixper off",
-						"{{prefix}}dixper stop",
-						"{{prefix}}dixper disable"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"moderator"
-					],
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [
-						"stop",
-						"off",
-						"disable"
-					],
-					"previews": []
-				}
-			}
-		},"rainmaker": {
-			"description": "Allows you to control if the bot will give tacos for retweets notified via rainmaker. If you do not use rainmaker in your channel, this will not matter.",
-			"usage": "{{prefix}}rainmaker <on/off>",
-			"examples": [
-				"{{prefix}}rainmaker on",
-				"{{prefix}}rainmaker start",
-				"{{prefix}}rainmaker enable",
-				"{{prefix}}rainmaker off",
-				"{{prefix}}rainmaker stop",
-				"{{prefix}}rainmaker disable"
-			],
-			"cooldown": 30,
-			"permissions": [
-				"moderator"
-			],
-			"enabled": true,
-			"subcommands": {
-				"start": {
-					"description": "Enables the bot to give tacos when people retweet.",
-					"usage": "{{prefix}}rainmaker start",
-					"examples": [
-						"{{prefix}}rainmaker on",
-						"{{prefix}}rainmaker start",
-						"{{prefix}}rainmaker enable"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"moderator"
-					],
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [
-						"start",
-						"on",
-						"enable"
-					],
-					"previews": [
-						"https://i.imgur.com/3fkoGdY.png"
-					]
-				},
-				"set": {
-					"description": "Set the retweet message regular expression. By default it is set to match the default rainmaker message. If you have a custom message, you can set it here.",
-					"usage": "{{prefix}}rainmaker set <regex>",
-					"examples": [
-						"{{prefix}}rainmaker set ^Thank you for tweeting out the stream, (?P<user>@?[a-zA-Z0-9-_]+).$"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"moderator"
-					],
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [
-						"set"
-					],
-					"previews": []
-				},
-				"stop": {
-					"description": "Disabled the bot from giving tacos when people retweet.",
-					"usage": "{{prefix}}rainmaker stop",
-					"examples": [
-						"{{prefix}}rainmaker off",
-						"{{prefix}}rainmaker stop",
-						"{{prefix}}rainmaker disable"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"moderator"
-					],
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [
-						"stop",
-						"off",
-						"disable"
-					],
-					"previews": []
-				}
-			}
-		},
-		"game": {
-			"description": "Shows the name of the game that is currently being offered via the TACO Rewards.",
-			"usage": "{{prefix}}game",
-			"examples": [
-				"{{prefix}}game"
-			],
-			"cooldown": 30,
-			"permissions": [
-				"everyone"
-			],
-			"arguments": {},
-			"enabled": true,
-			"subcommands": {},
-			"previews": [
-				"https://i.imgur.com/9pPPWhz.png"
-			]
-		},
-		"invite": {
-			"description": "Invite OurTacoBot to your twitch channel.",
-			"usage": "{{prefix}}invite",
-			"examples": [
-				"{{prefix}}invite"
-			],
-			"cooldown": 30,
-			"permissions": [
-				"everyone"
-			],
-			"arguments": {},
-			"enabled": true,
-			"subcommands": {},
-			"aliases": [
-				"inv",
-				"join"
-			],
-			"restricted": [
-				"ourtaco",
-				"ourtacobot"
-			],
-			"previews": [
-				"https://i.imgur.com/vJgtOCj.png"
-			]
-		},
-		"leave": {
-			"description": "Remove OurTacoBot to your twitch channel.",
-			"usage": "{{prefix}}leave",
-			"examples": [
-				"{{prefix}}leave"
-			],
-			"cooldown": 30,
-			"permissions": [
-				"everyone"
-			],
-			"arguments": {},
-			"enabled": true,
-			"subcommands": {},
-			"aliases": [
-				"part",
-				"remove"
-			],
-			"restricted": [
-				"ourtaco",
-				"ourtacobot"
-			],
-			"previews": [
-				"https://i.imgur.com/6mkkHmk.png"
-			]
-		},
-		"pokemon": {
-			"description": "Allows you to control if the bot will participate in the pokemon community game. If you do not have the pokemon game in your channel, the bot will already not participate.",
-			"usage": "{{prefix}}pokemon <on/off>",
-			"examples": [
-				"{{prefix}}pokemon on",
-				"{{prefix}}pokemon start",
-				"{{prefix}}pokemon enable",
-				"{{prefix}}pokemon off",
-				"{{prefix}}pokemon stop",
-				"{{prefix}}pokemon disable"
-			],
-			"cooldown": 30,
-			"permissions": [
-				"moderator"
-			],
-			"enabled": false,
-			"subcommands": {
-				"start": {
-					"description": "Enables the bot to participate in the pokemon community game.",
-					"usage": "{{prefix}}pokemon start",
-					"examples": [
-						"{{prefix}}pokemon on",
-						"{{prefix}}pokemon start",
-						"{{prefix}}pokemon enable"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"moderator"
-					],
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [
-						"start",
-						"on",
-						"enable"
-					],
-					"previews": [
-						"https://i.imgur.com/SP3RlsM.png"
-					]
-				},
-				"stop": {
-					"description": "Disables the bot from participating in the pokemon community game.",
-					"usage": "{{prefix}}pokemon stop",
-					"examples": [
-						"{{prefix}}pokemon off",
-						"{{prefix}}pokemon stop",
-						"{{prefix}}pokemon disable"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"moderator"
-					],
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [
-						"stop",
-						"off",
-						"disable"
-					],
-					"previews": [
-						"https://i.imgur.com/oc6hRpS.png"
-					]
-				}
-			}
-		},
-		"streamelements": {
-			"description": "Allows you to control if the bot will give tacos for streamelements tips. If you do not use streamelements  in your channel, this setting doesn't matter.",
-			"usage": "{{prefix}}streamelements <on/off>",
-			"examples": [
-				"{{prefix}}streamelements on",
-				"{{prefix}}streamelements start",
-				"{{prefix}}streamelements enable",
-				"{{prefix}}streamelements off",
-				"{{prefix}}streamelements stop",
-				"{{prefix}}streamelements disable"
-			],
-			"cooldown": 30,
-			"permissions": [
-				"moderator"
-			],
-			"enabled": true,
-			"subcommands": {
-				"start": {
-					"description": "Enables the bot to give tacos if someone tips through streamelements.",
-					"usage": "{{prefix}}streamelements start",
-					"examples": [
-						"{{prefix}}streamelements on",
-						"{{prefix}}streamelements start",
-						"{{prefix}}streamelements enable"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"moderator"
-					],
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [
-						"start",
-						"on",
-						"enable"
-					],
-					"previews": [
-						"https://i.imgur.com/meTuhIQ.png"
-					]
-				},
-				"stop": {
-					"description": "Disables the bot from giving tacos if someone tips through streamelements.",
-					"usage": "{{prefix}}streamelements stop",
-					"examples": [
-						"{{prefix}}streamelements off",
-						"{{prefix}}streamelements stop",
-						"{{prefix}}streamelements disable"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"moderator"
-					],
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [
-						"stop",
-						"off",
-						"disable"
-					],
-					"previews": [
-						"https://i.imgur.com/Uzy2O9B.png"
-					]
-				},
-				"tip": {
-					"description": "Sets the streamelements tip message so the bot knows what to look for. Make sure to include the `{user}`, `{currency}`, `{amount}` tags. If you use the default message, you do not need to set this.",
-					"usage": "{{prefix}}streamelements tip <message>",
-					"examples": [
-						"{{prefix}}streamelements tip {user} just tipped {currency}{amount} PogChamp"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"broadcaster"
-					],
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [
-						"tip"
-					],
-					"arguments": {
-						"message": {
-							"required": true,
-							"description": "The message to set as the tip message. Make sure to include the `{user}`, `{currency}`, `{amount}` tags.",
-							"type": "string",
-							"default": "\"\""
-						}
-					},
-					"previews": [
-						"https://i.imgur.com/X5rOzTo.png"
-					]
-				}
-			}
-		},
-		"streamraiders": {
-			"description": "Allows you to control if the bot will give tacos for streamraiders tips. If you do not use streamraiders  in your channel, this setting doesn't matter.",
-			"usage": "{{prefix}}streamraiders <on/off>",
-			"examples": [
-				"{{prefix}}streamraiders on",
-				"{{prefix}}streamraiders start",
-				"{{prefix}}streamraiders enable",
-				"{{prefix}}streamraiders off",
-				"{{prefix}}streamraiders stop",
-				"{{prefix}}streamraiders disable"
-			],
-			"cooldown": 30,
-			"permissions": [
-				"moderator"
-			],
-			"enabled": true,
-			"subcommands": {
-				"start": {
-					"description": "Enables the bot to give tacos if someone Epic on the battlefield in streamraiders.",
-					"usage": "{{prefix}}streamraiders start",
-					"examples": [
-						"{{prefix}}streamraiders on",
-						"{{prefix}}streamraiders start",
-						"{{prefix}}streamraiders enable"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"moderator"
-					],
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [
-						"start",
-						"on",
-						"enable"
-					],
-					"previews": [
-						"https://i.imgur.com/Fup71Na.png"
-					]
-				},
-				"stop": {
-					"description": "Disables the bot from giving tacos if someone places an Epic on the battlefield in streamraiders.",
-					"usage": "{{prefix}}streamraiders stop",
-					"examples": [
-						"{{prefix}}streamraiders off",
-						"{{prefix}}streamraiders stop",
-						"{{prefix}}streamraiders disable"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"moderator"
-					],
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [
-						"stop",
-						"off",
-						"disable"
-					],
-					"previews": [
-						"https://i.imgur.com/EJYrl1Y.png"
-					]
-				}
-			}
-		},
-		"tacos": {
-			"description": "Set of commands to deal with tacos.",
-			"usage": "{{prefix}}tacos help",
-			"examples": [
-				"{{prefix}}tacos help"
-			],
-			"cooldown": 30,
-			"permissions": [
-				"everyone"
-			],
-			"enabled": true,
-			"subcommands": {
-				"count": {
-					"description": "Get the number of tacos that you have.",
-					"usage": "{{prefix}}tacos count",
-					"examples": [
-						"{{prefix}}tacos count"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"everyone"
-					],
-					"arguments": {},
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [
-						"balance",
-						"bal"
-					],
-					"restricted": [],
-					"previews": [
-						"https://i.imgur.com/BHwu2db.png"
-					]
-				},
-				"_count": {
-					"description": "Get the number of tacos for a user",
-					"usage": "{{prefix}}tacos count <user>",
-					"examples": [
-						"{{prefix}}tacos count @DarthMinos"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"moderator"
-					],
-					"arguments": {
-						"user": {
-							"type": "string",
-							"description": "The user to get the taco count for.",
-							"required": true
-						}
-					},
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [
-						"balance",
-						"bal"
-					],
-					"restricted": [],
-					"previews": [
-						"https://i.imgur.com/k1wxnVL.png"
-					]
-				},
-				"give": {
-					"description": "Give a user tacos. The maximum amount of tacos that can be given at a time is 10. The maximum amount that can be given to a user in a rolling 24 hour period is 50. The maximum amount that can be given total in a rolling 24 hour period is 500.",
-					"usage": "{{prefix}}tacos give <user> <amount> [reason]",
-					"examples": [
-						"{{prefix}}tacos give @DarthMinos 1 being awesome"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"moderator"
-					],
-					"arguments": {
-						"user": {
-							"type": "string",
-							"description": "The user to give tacos to.",
-							"required": true
-						},
-						"amount": {
-							"type": "number",
-							"description": "The amount of tacos to give.",
-							"required": true,
-							"min": 1,
-							"max": 10
-						},
-						"reason": {
-							"type": "string",
-							"description": "The reason for the giving tacos.",
-							"required": false,
-							"default": "No reason given"
-						}
-					},
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [],
-					"restricted": [],
-					"previews": [
-						"https://i.imgur.com/IyvB6oq.png"
-					]
-				},
-				"take": {
-					"description": "Take tacos from a user.",
-					"usage": "{{prefix}}tacos take <user> <amount> [reason]",
-					"examples": [
-						"{{prefix}}tacos take @DarthMinos 1 incorrect trivia answer"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"moderator"
-					],
-					"arguments": {
-						"user": {
-							"type": "string",
-							"description": "The user to take tacos from.",
-							"required": true
-						},
-						"amount": {
-							"type": "number",
-							"description": "The amount of tacos to take.",
-							"required": true,
-							"min": 1,
-							"max": 10
-						},
-						"reason": {
-							"type": "string",
-							"description": "The reason for taking the tacos.",
-							"required": false,
-							"default": "No reason given"
-						}
-					},
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [],
-					"restricted": [],
-					"previews": [
-						"https://i.imgur.com/A3PS0Y7.png"
-					]
-				},
-				"top": {
-					"description": "Get the leader board for users tacos.",
-					"usage": "{{prefix}}tacos top [limit]",
-					"examples": [
-						"{{prefix}}tacos top 5"
-					],
-					"cooldown": 30,
-					"permissions": [
-						"moderator"
-					],
-					"arguments": {
-						"limit": {
-							"type": "number",
-							"description": "The amount of users to show on the leader board.",
-							"required": false,
-							"min": 1,
-							"max": 10,
-							"default": 5
-						}
-					},
-					"enabled": true,
-					"subcommands": {},
-					"aliases": [
-						"leaderboard",
-						"lb"
-					],
-					"restricted": [],
-					"previews": [
-						"https://i.imgur.com/XY0y4Qc.png",
-						"https://i.imgur.com/hYJKHvj.png"
-					]
-				}
-			}
-		},
-		"tqotd": {
-			"description": "Gives you the TACO question of the day.",
-			"usage": "{{prefix}}tqotd",
-			"examples": [
-				"{{prefix}}tqotd"
-			],
-			"cooldown": 30,
-			"permissions": [
-				"everyone"
-			],
-			"arguments": {},
-			"enabled": true,
-			"subcommands": {},
-			"previews": [
-				"https://i.imgur.com/A1MdC8Q.png"
-			]
-		},
-		"link": {
-			"description": "Gives you a command and a code to run in discord to link your twitch with your discord account.",
-			"usage": "{{prefix}}link",
-			"examples": [
-				"{{prefix}}link"
-			],
-			"arguments": {},
-			"cooldown": 30,
-			"permissions": [
-				"everyone"
-			],
-			"enabled": true,
-			"subcommands": {},
-			"previews": [
-				"https://i.imgur.com/opzviIC.png",
-				"https://i.imgur.com/OdqB6vK.png"
-			]
-		},
-		"_link": {
-			"label": "link \\<code\\>",
-			"description": "Links your discord account with your twitch account.",
-			"usage": "{{prefix}}link <code>",
-			"examples": [
-				"{{prefix}}link ABC567"
-			],
-			"cooldown": 30,
-			"permissions": [
-				"everyone"
-			],
-			"arguments": {
-				"code": {
-					"type": "string",
-					"description": "The code you received from the link command.",
-					"required": true
-				}
-			},
-			"enabled": true,
-			"subcommands": {},
-			"previews": [
-				"https://i.imgur.com/aZ4rSnO.png",
-				"https://i.imgur.com/OdqB6vK.png"
-			]
-		}
-	},
-	"events": {
-		"description": "Here are some events that @ourtacobot will act on.",
-		"triggers": {
-			"first_chat": {
-				"name": "First Chat",
-				"description": "The first time someone chats in your channel, in a rolling 24 hour period, I will give them 1 taco."
-			},
-			"raid": {
-				"name": "Raid",
-				"description": "When an incoming raid from a TACO member is detected I will give the raiding channel 5 tacos."
-			},
-			"host": {
-				"name": "Host",
-				"description": "When an incoming host from a TACO member is detected I will give the raiding channel 5 tacos."
-			},
-			"cheer": {
-				"name": "Cheer",
-				"description": "When a cheer >= 100 bits is detected I will give the person 5 tacos for supporting."
-			},
-			"subscription": {
-				"name": "Subscription",
-				"description": "When a user subscribes, or gifts a subscription to the channel I will give them 5 tacos."
-			},
-			"streamraiders": {
-				"name": "Stream Raiders Epic Placement",
-				"description": "When someone places an Epic on the Battlefield for Stream Raiders, I will give them 2 tacos."
-			},
-			"dixper": {
-				"name": "Dixper",
-				"description": "When someone purchases Dixper packs, I will give them 5 tacos."
-			},
-			"rainmaker": {
-				"name": "Rainmaker",
-				"description": "When someone retweets the stream, and rainmaker notifies the chat of the retweet, I will give them 5 tacos."
-			},
-			"streamelements": {
-				"name": "Stream Elements Tip",
-				"description": "When someone tips through Stream Elements, I will give them 5 tacos."
-			},
-			"pokemon": {
-				"enabled": false,
-				"name": "Pokemon Community Game",
-				"description": "If you have the Pokemon Community Game running in your channel, I will try to catch Pokemon in your channel."
-			}
-		}
-	}
+  "name": "Taco Bot",
+  "url": "http://darthminos.tv",
+  "version": "1.0.0-snapshot",
+  "icon": "https://i.imgur.com/ejJu8de.png",
+  "author": "@DarthMinos",
+  "twitch_author": "DarthMinos",
+  "changelog": "changelog.txt",
+  "bot_name": "OurTacoBot",
+  "prefixes": [
+    "!taco ",
+    "#taco ",
+    "?taco "
+  ],
+  "restricted_channels": [
+    "ourtaco",
+    "ourtacobot"
+  ],
+  "commands": {
+    "commands": {
+      "description": "Get a url to view documentation for all commands.",
+      "usage": "{{prefix}}commands",
+      "cooldown": 30,
+      "permissions": [
+        "everyone"
+      ],
+      "examples": [
+        "{{prefix}}commands"
+      ],
+      "enabled": true,
+      "arguments": {},
+      "restricted": [],
+      "previews": [
+        "https://i.imgur.com/8lx0Ohy.png"
+      ]
+    },
+    "discord": {
+      "description": "Promotes the TACO discord using an invite that you have created in the discord.",
+      "usage": "{{prefix}}discord",
+      "examples": [
+        "{{prefix}}discord"
+      ],
+      "cooldown": 30,
+      "permissions": [
+        "everyone"
+      ],
+      "arguments": {},
+      "enabled": true,
+      "subcommands": {},
+      "aliases": [
+        "taco"
+      ],
+      "previews": [
+        "https://i.imgur.com/n0wBukf.png"
+      ]
+    },
+    "dixper": {
+      "description": "Allows you to control if the bot will give tacos for purchase of dixper packs. If you do not use dixper in your channel, this will not matter.",
+      "usage": "{{prefix}}dixper <on/off>",
+      "examples": [
+        "{{prefix}}dixper on",
+        "{{prefix}}dixper start",
+        "{{prefix}}dixper enable",
+        "{{prefix}}dixper off",
+        "{{prefix}}dixper stop",
+        "{{prefix}}dixper disable"
+      ],
+      "cooldown": 30,
+      "permissions": [
+        "moderator"
+      ],
+      "enabled": true,
+      "subcommands": {
+        "start": {
+          "description": "Enables the bot to give tacos when people purchase dixper packs.",
+          "usage": "{{prefix}}dixper start",
+          "examples": [
+            "{{prefix}}dixper on",
+            "{{prefix}}dixper start",
+            "{{prefix}}dixper enable"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "moderator"
+          ],
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [
+            "start",
+            "on",
+            "enable"
+          ],
+          "previews": [
+            "https://i.imgur.com/3fkoGdY.png"
+          ]
+        },
+        "stop": {
+          "description": "Disabled the bot from giving tacos when people purchase dixper packs.",
+          "usage": "{{prefix}}dixper stop",
+          "examples": [
+            "{{prefix}}dixper off",
+            "{{prefix}}dixper stop",
+            "{{prefix}}dixper disable"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "moderator"
+          ],
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [
+            "stop",
+            "off",
+            "disable"
+          ],
+          "previews": []
+        }
+      }
+    },
+    "rainmaker": {
+      "description": "Allows you to control if the bot will give tacos for retweets notified via rainmaker. If you do not use rainmaker in your channel, this will not matter.",
+      "usage": "{{prefix}}rainmaker <on/off>",
+      "examples": [
+        "{{prefix}}rainmaker on",
+        "{{prefix}}rainmaker start",
+        "{{prefix}}rainmaker enable",
+        "{{prefix}}rainmaker off",
+        "{{prefix}}rainmaker stop",
+        "{{prefix}}rainmaker disable"
+      ],
+      "cooldown": 30,
+      "permissions": [
+        "moderator"
+      ],
+      "enabled": true,
+      "subcommands": {
+        "start": {
+          "description": "Enables the bot to give tacos when people retweet.",
+          "usage": "{{prefix}}rainmaker start",
+          "examples": [
+            "{{prefix}}rainmaker on",
+            "{{prefix}}rainmaker start",
+            "{{prefix}}rainmaker enable"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "moderator"
+          ],
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [
+            "start",
+            "on",
+            "enable"
+          ],
+          "previews": [
+            "https://i.imgur.com/3fkoGdY.png"
+          ]
+        },
+        "set": {
+          "description": "Set the retweet message regular expression. By default it is set to match the default rainmaker message. If you have a custom message, you can set it here.",
+          "usage": "{{prefix}}rainmaker set <regex>",
+          "examples": [
+            "{{prefix}}rainmaker set ^Thank you for tweeting out the stream, (?P<user>@?[a-zA-Z0-9-_]+).$"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "moderator"
+          ],
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [
+            "set"
+          ],
+          "previews": []
+        },
+        "stop": {
+          "description": "Disabled the bot from giving tacos when people retweet.",
+          "usage": "{{prefix}}rainmaker stop",
+          "examples": [
+            "{{prefix}}rainmaker off",
+            "{{prefix}}rainmaker stop",
+            "{{prefix}}rainmaker disable"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "moderator"
+          ],
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [
+            "stop",
+            "off",
+            "disable"
+          ],
+          "previews": []
+        }
+      }
+    },
+    "game": {
+      "description": "Shows the name of the game that is currently being offered via the TACO Rewards.",
+      "usage": "{{prefix}}game",
+      "examples": [
+        "{{prefix}}game"
+      ],
+      "cooldown": 30,
+      "permissions": [
+        "everyone"
+      ],
+      "arguments": {},
+      "enabled": true,
+      "subcommands": {},
+      "previews": [
+        "https://i.imgur.com/9pPPWhz.png"
+      ]
+    },
+    "invite": {
+      "description": "Invite OurTacoBot to your twitch channel.",
+      "usage": "{{prefix}}invite",
+      "examples": [
+        "{{prefix}}invite"
+      ],
+      "cooldown": 30,
+      "permissions": [
+        "everyone"
+      ],
+      "arguments": {},
+      "enabled": true,
+      "subcommands": {},
+      "aliases": [
+        "inv",
+        "join"
+      ],
+      "restricted": [
+        "ourtaco",
+        "ourtacobot"
+      ],
+      "previews": [
+        "https://i.imgur.com/vJgtOCj.png"
+      ]
+    },
+    "leave": {
+      "description": "Remove OurTacoBot to your twitch channel.",
+      "usage": "{{prefix}}leave",
+      "examples": [
+        "{{prefix}}leave"
+      ],
+      "cooldown": 30,
+      "permissions": [
+        "everyone"
+      ],
+      "arguments": {},
+      "enabled": true,
+      "subcommands": {},
+      "aliases": [
+        "part",
+        "remove"
+      ],
+      "restricted": [
+        "ourtaco",
+        "ourtacobot"
+      ],
+      "previews": [
+        "https://i.imgur.com/6mkkHmk.png"
+      ]
+    },
+    "pokemon": {
+      "description": "Allows you to control if the bot will participate in the pokemon community game. If you do not have the pokemon game in your channel, the bot will already not participate.",
+      "usage": "{{prefix}}pokemon <on/off>",
+      "examples": [
+        "{{prefix}}pokemon on",
+        "{{prefix}}pokemon start",
+        "{{prefix}}pokemon enable",
+        "{{prefix}}pokemon off",
+        "{{prefix}}pokemon stop",
+        "{{prefix}}pokemon disable"
+      ],
+      "cooldown": 30,
+      "permissions": [
+        "moderator"
+      ],
+      "enabled": false,
+      "subcommands": {
+        "start": {
+          "description": "Enables the bot to participate in the pokemon community game.",
+          "usage": "{{prefix}}pokemon start",
+          "examples": [
+            "{{prefix}}pokemon on",
+            "{{prefix}}pokemon start",
+            "{{prefix}}pokemon enable"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "moderator"
+          ],
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [
+            "start",
+            "on",
+            "enable"
+          ],
+          "previews": [
+            "https://i.imgur.com/SP3RlsM.png"
+          ]
+        },
+        "stop": {
+          "description": "Disables the bot from participating in the pokemon community game.",
+          "usage": "{{prefix}}pokemon stop",
+          "examples": [
+            "{{prefix}}pokemon off",
+            "{{prefix}}pokemon stop",
+            "{{prefix}}pokemon disable"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "moderator"
+          ],
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [
+            "stop",
+            "off",
+            "disable"
+          ],
+          "previews": [
+            "https://i.imgur.com/oc6hRpS.png"
+          ]
+        }
+      }
+    },
+    "streamelements": {
+      "description": "Allows you to control if the bot will give tacos for streamelements tips. If you do not use streamelements  in your channel, this setting doesn't matter.",
+      "usage": "{{prefix}}streamelements <on/off>",
+      "examples": [
+        "{{prefix}}streamelements on",
+        "{{prefix}}streamelements start",
+        "{{prefix}}streamelements enable",
+        "{{prefix}}streamelements off",
+        "{{prefix}}streamelements stop",
+        "{{prefix}}streamelements disable"
+      ],
+      "cooldown": 30,
+      "permissions": [
+        "moderator"
+      ],
+      "enabled": true,
+      "subcommands": {
+        "start": {
+          "description": "Enables the bot to give tacos if someone tips through streamelements.",
+          "usage": "{{prefix}}streamelements start",
+          "examples": [
+            "{{prefix}}streamelements on",
+            "{{prefix}}streamelements start",
+            "{{prefix}}streamelements enable"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "moderator"
+          ],
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [
+            "start",
+            "on",
+            "enable"
+          ],
+          "previews": [
+            "https://i.imgur.com/meTuhIQ.png"
+          ]
+        },
+        "stop": {
+          "description": "Disables the bot from giving tacos if someone tips through streamelements.",
+          "usage": "{{prefix}}streamelements stop",
+          "examples": [
+            "{{prefix}}streamelements off",
+            "{{prefix}}streamelements stop",
+            "{{prefix}}streamelements disable"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "moderator"
+          ],
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [
+            "stop",
+            "off",
+            "disable"
+          ],
+          "previews": [
+            "https://i.imgur.com/Uzy2O9B.png"
+          ]
+        },
+        "tip": {
+          "description": "Sets the streamelements tip message so the bot knows what to look for. Make sure to include the `{user}`, `{currency}`, `{amount}` tags. If you use the default message, you do not need to set this.",
+          "usage": "{{prefix}}streamelements tip <message>",
+          "examples": [
+            "{{prefix}}streamelements tip {user} just tipped {currency}{amount} PogChamp"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "broadcaster"
+          ],
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [
+            "tip"
+          ],
+          "arguments": {
+            "message": {
+              "required": true,
+              "description": "The message to set as the tip message. Make sure to include the `{user}`, `{currency}`, `{amount}` tags.",
+              "type": "string",
+              "default": "\"\""
+            }
+          },
+          "previews": [
+            "https://i.imgur.com/X5rOzTo.png"
+          ]
+        }
+      }
+    },
+    "streamraiders": {
+      "description": "Allows you to control if the bot will give tacos for streamraiders tips. If you do not use streamraiders  in your channel, this setting doesn't matter.",
+      "usage": "{{prefix}}streamraiders <on/off>",
+      "examples": [
+        "{{prefix}}streamraiders on",
+        "{{prefix}}streamraiders start",
+        "{{prefix}}streamraiders enable",
+        "{{prefix}}streamraiders off",
+        "{{prefix}}streamraiders stop",
+        "{{prefix}}streamraiders disable"
+      ],
+      "cooldown": 30,
+      "permissions": [
+        "moderator"
+      ],
+      "enabled": true,
+      "subcommands": {
+        "start": {
+          "description": "Enables the bot to give tacos if someone Epic on the battlefield in streamraiders.",
+          "usage": "{{prefix}}streamraiders start",
+          "examples": [
+            "{{prefix}}streamraiders on",
+            "{{prefix}}streamraiders start",
+            "{{prefix}}streamraiders enable"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "moderator"
+          ],
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [
+            "start",
+            "on",
+            "enable"
+          ],
+          "previews": [
+            "https://i.imgur.com/Fup71Na.png"
+          ]
+        },
+        "stop": {
+          "description": "Disables the bot from giving tacos if someone places an Epic on the battlefield in streamraiders.",
+          "usage": "{{prefix}}streamraiders stop",
+          "examples": [
+            "{{prefix}}streamraiders off",
+            "{{prefix}}streamraiders stop",
+            "{{prefix}}streamraiders disable"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "moderator"
+          ],
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [
+            "stop",
+            "off",
+            "disable"
+          ],
+          "previews": [
+            "https://i.imgur.com/EJYrl1Y.png"
+          ]
+        }
+      }
+    },
+    "tacos": {
+      "description": "Set of commands to deal with tacos.",
+      "usage": "{{prefix}}tacos help",
+      "examples": [
+        "{{prefix}}tacos help"
+      ],
+      "cooldown": 30,
+      "permissions": [
+        "everyone"
+      ],
+      "enabled": true,
+      "subcommands": {
+        "count": {
+          "description": "Get the number of tacos that you have.",
+          "usage": "{{prefix}}tacos count",
+          "examples": [
+            "{{prefix}}tacos count"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "everyone"
+          ],
+          "arguments": {},
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [
+            "balance",
+            "bal"
+          ],
+          "restricted": [],
+          "previews": [
+            "https://i.imgur.com/BHwu2db.png"
+          ]
+        },
+        "_count": {
+          "description": "Get the number of tacos for a user",
+          "usage": "{{prefix}}tacos count <user>",
+          "examples": [
+            "{{prefix}}tacos count @DarthMinos"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "moderator"
+          ],
+          "arguments": {
+            "user": {
+              "type": "string",
+              "description": "The user to get the taco count for.",
+              "required": true
+            }
+          },
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [
+            "balance",
+            "bal"
+          ],
+          "restricted": [],
+          "previews": [
+            "https://i.imgur.com/k1wxnVL.png"
+          ]
+        },
+        "give": {
+          "description": "Give a user tacos. The maximum amount of tacos that can be given at a time is 10. The maximum amount that can be given to a user in a rolling 24 hour period is 50. The maximum amount that can be given total in a rolling 24 hour period is 500.",
+          "usage": "{{prefix}}tacos give <user> <amount> [reason]",
+          "examples": [
+            "{{prefix}}tacos give @DarthMinos 1 being awesome"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "moderator"
+          ],
+          "arguments": {
+            "user": {
+              "type": "string",
+              "description": "The user to give tacos to.",
+              "required": true
+            },
+            "amount": {
+              "type": "number",
+              "description": "The amount of tacos to give.",
+              "required": true,
+              "min": 1,
+              "max": 10
+            },
+            "reason": {
+              "type": "string",
+              "description": "The reason for the giving tacos.",
+              "required": false,
+              "default": "No reason given"
+            }
+          },
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [],
+          "restricted": [],
+          "previews": [
+            "https://i.imgur.com/IyvB6oq.png"
+          ]
+        },
+        "take": {
+          "description": "Take tacos from a user.",
+          "usage": "{{prefix}}tacos take <user> <amount> [reason]",
+          "examples": [
+            "{{prefix}}tacos take @DarthMinos 1 incorrect trivia answer"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "moderator"
+          ],
+          "arguments": {
+            "user": {
+              "type": "string",
+              "description": "The user to take tacos from.",
+              "required": true
+            },
+            "amount": {
+              "type": "number",
+              "description": "The amount of tacos to take.",
+              "required": true,
+              "min": 1,
+              "max": 10
+            },
+            "reason": {
+              "type": "string",
+              "description": "The reason for taking the tacos.",
+              "required": false,
+              "default": "No reason given"
+            }
+          },
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [],
+          "restricted": [],
+          "previews": [
+            "https://i.imgur.com/A3PS0Y7.png"
+          ]
+        },
+        "top": {
+          "description": "Get the leader board for users tacos.",
+          "usage": "{{prefix}}tacos top [limit]",
+          "examples": [
+            "{{prefix}}tacos top 5"
+          ],
+          "cooldown": 30,
+          "permissions": [
+            "moderator"
+          ],
+          "arguments": {
+            "limit": {
+              "type": "number",
+              "description": "The amount of users to show on the leader board.",
+              "required": false,
+              "min": 1,
+              "max": 10,
+              "default": 5
+            }
+          },
+          "enabled": true,
+          "subcommands": {},
+          "aliases": [
+            "leaderboard",
+            "lb"
+          ],
+          "restricted": [],
+          "previews": [
+            "https://i.imgur.com/XY0y4Qc.png",
+            "https://i.imgur.com/hYJKHvj.png"
+          ]
+        }
+      }
+    },
+    "tqotd": {
+      "description": "Gives you the TACO question of the day.",
+      "usage": "{{prefix}}tqotd",
+      "examples": [
+        "{{prefix}}tqotd"
+      ],
+      "cooldown": 30,
+      "permissions": [
+        "everyone"
+      ],
+      "arguments": {},
+      "enabled": true,
+      "subcommands": {},
+      "previews": [
+        "https://i.imgur.com/A1MdC8Q.png"
+      ]
+    },
+    "link": {
+      "description": "Gives you a command and a code to run in discord to link your twitch with your discord account.",
+      "usage": "{{prefix}}link",
+      "examples": [
+        "{{prefix}}link"
+      ],
+      "arguments": {},
+      "cooldown": 30,
+      "permissions": [
+        "everyone"
+      ],
+      "enabled": true,
+      "subcommands": {},
+      "previews": [
+        "https://i.imgur.com/opzviIC.png",
+        "https://i.imgur.com/OdqB6vK.png"
+      ]
+    },
+    "_link": {
+      "label": "link \\<code\\>",
+      "description": "Links your discord account with your twitch account.",
+      "usage": "{{prefix}}link <code>",
+      "examples": [
+        "{{prefix}}link ABC567"
+      ],
+      "cooldown": 30,
+      "permissions": [
+        "everyone"
+      ],
+      "arguments": {
+        "code": {
+          "type": "string",
+          "description": "The code you received from the link command.",
+          "required": true
+        }
+      },
+      "enabled": true,
+      "subcommands": {},
+      "previews": [
+        "https://i.imgur.com/aZ4rSnO.png",
+        "https://i.imgur.com/OdqB6vK.png"
+      ]
+    }
+  },
+  "events": {
+    "description": "Here are some events that @ourtacobot will act on.",
+    "triggers": {
+      "first_chat": {
+        "name": "First Chat",
+        "description": "The first time someone chats in your channel, in a rolling 24 hour period, I will give them 1 taco."
+      },
+      "raid": {
+        "name": "Raid",
+        "description": "When an incoming raid from a TACO member is detected I will give the raiding channel 5 tacos."
+      },
+      "host": {
+        "name": "Host",
+        "description": "When an incoming host from a TACO member is detected I will give the raiding channel 5 tacos."
+      },
+      "cheer": {
+        "name": "Cheer",
+        "description": "When a cheer >= 100 bits is detected I will give the person 5 tacos for supporting."
+      },
+      "subscription": {
+        "name": "Subscription",
+        "description": "When a user subscribes, or gifts a subscription to the channel I will give them 5 tacos."
+      },
+      "streamraiders": {
+        "name": "Stream Raiders Epic Placement",
+        "description": "When someone places an Epic on the Battlefield for Stream Raiders, I will give them 2 tacos."
+      },
+      "dixper": {
+        "name": "Dixper",
+        "description": "When someone purchases Dixper packs, I will give them 5 tacos."
+      },
+      "rainmaker": {
+        "name": "Rainmaker",
+        "description": "When someone retweets the stream, and rainmaker notifies the chat of the retweet, I will give them 5 tacos."
+      },
+      "streamelements": {
+        "name": "Stream Elements Tip",
+        "description": "When someone tips through Stream Elements, I will give them 5 tacos."
+      },
+      "pokemon": {
+        "enabled": false,
+        "name": "Pokemon Community Game",
+        "description": "If you have the Pokemon Community Game running in your channel, I will try to catch Pokemon in your channel."
+      },
+      "streamavatars": {
+        "enabled": true,
+        "name": "Stream Avatars",
+        "description": "When someone challenges me to a duel for 1 or more 'currency', if you win, I will give them 5 tacos."
+      }
+    }
+  }
 }

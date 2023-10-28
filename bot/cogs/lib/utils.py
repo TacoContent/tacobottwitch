@@ -1,15 +1,12 @@
-import json
-import traceback
-import sys
-import os
-import glob
-import typing
-import requests
-import random
-import string
-import re
 import datetime
-import inspect
+import json
+import random
+import re
+import string
+import traceback
+import typing
+
+import requests
 
 
 def dict_get(dictionary, key, default_value=None) -> typing.Any:
@@ -29,11 +26,13 @@ def get_scalar_result(conn, sql, default_value=None, *args) -> typing.Any:
         traceback.print_exc()
         return default_value
 
+
 def clean_channel_name(channel: typing.Optional[str]) -> str:
     if channel is None:
         return ""
-    
+
     return channel.lower().strip().replace("#", "").replace("@", "")
+
 
 def str2bool(v) -> bool:
     return v.lower() in ("yes", "true", "yup", "1", "t", "y", "on")
@@ -81,7 +80,7 @@ def get_random_name(noun_count=1, adjective_count=1) -> str:
                 return "New Voice Channel"
 
 
-def to_timestamp(date, tz: datetime.timezone = None) -> float:
+def to_timestamp(date, tz: typing.Optional[datetime.timezone] = None) -> float:
     return (date - datetime.datetime(1970, 1, 1, tzinfo=tz)).total_seconds()
 
 
