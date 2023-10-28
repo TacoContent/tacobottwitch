@@ -19,17 +19,17 @@ class Log:
         message: str,
         stackTrace: typing.Optional[str] = None,
         file: typing.IO = sys.stdout,
-    ):
+    ) -> None:
         if channel is None:
             channel = str(loglevel.EmptyChannel())
 
         color = Colors.get_color(level)
         m_level = Colors.colorize(color, f"[{level.name}]", bold=True)
-        m_method = Colors.colorize(Colors.HEADER, f"[{method}]", bold=True)
-        m_channel = Colors.colorize(Colors.OKGREEN, f"[{channel}]", bold=True)
+        m_method = Colors.colorize(Colors.HEADER, f"[{method}]", bold=False)
         m_message = f"{Colors.colorize(color, message)}"
-
+        m_channel = Colors.colorize(Colors.OKGREEN, f"[{channel}]", bold=False)
         str_out = f"{m_level} {m_method} {m_channel} {m_message}"
+
         print(str_out, file=file)
         if stackTrace:
             print(Colors.colorize(color, stackTrace), file=file)
