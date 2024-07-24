@@ -1190,722 +1190,8 @@
     "id": "f3275be8e60ea5b0",
     "type": "debug",
     "z": "46f750dd0c884772",
-    "name": "",
+    "name": "Get Bot Channels",
     "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "false",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 570,
-    "y": 60,
-    "wires": []
-  },
-  {
-    "id": "09ece4d7dde857ed",
-    "type": "http in",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "url": "/tacobot/minecraft/whitelist.json",
-    "method": "get",
-    "upload": false,
-    "swaggerDoc": "",
-    "x": 180,
-    "y": 1200,
-    "wires": [
-      [
-        "2f0f17821ea46aa2"
-      ]
-    ]
-  },
-  {
-    "id": "2f0f17821ea46aa2",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "Get Whitelist Users Query",
-    "func": "msg.payload = {\n    \"whitelist\": true\n};\nmsg.collection = \"minecraft_users\";\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 490,
-    "y": 1200,
-    "wires": [
-      [
-        "7d05304ec9d87716"
-      ]
-    ]
-  },
-  {
-    "id": "7d05304ec9d87716",
-    "type": "mongodb in",
-    "z": "46f750dd0c884772",
-    "mongodb": "cca90e0ad48e5446",
-    "name": "",
-    "collection": "",
-    "operation": "find",
-    "x": 700,
-    "y": 1200,
-    "wires": [
-      [
-        "bac5cc89895b0ecf"
-      ]
-    ]
-  },
-  {
-    "id": "bac5cc89895b0ecf",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "Format Payload",
-    "func": "let result = []\nfor(let i = 0; i < msg.payload.length; ++i) {\n    result.push({\n        \"uuid\": msg.payload[i].uuid,\n        \"name\": msg.payload[i].username\n    });\n}\nmsg.payload = result;\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n}\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 880,
-    "y": 1200,
-    "wires": [
-      [
-        "711792225dfc56f9"
-      ]
-    ]
-  },
-  {
-    "id": "711792225dfc56f9",
-    "type": "http response",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "statusCode": "",
-    "headers": {},
-    "x": 1050,
-    "y": 1200,
-    "wires": []
-  },
-  {
-    "id": "83cb5407c78f1af7",
-    "type": "http in",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "url": "/tacobot/minecraft/ops.json",
-    "method": "get",
-    "upload": false,
-    "swaggerDoc": "",
-    "x": 170,
-    "y": 1240,
-    "wires": [
-      [
-        "b43859e38a7f43d5"
-      ]
-    ]
-  },
-  {
-    "id": "b43859e38a7f43d5",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "Get OPs Users Query",
-    "func": "msg.payload = {\n    \"whitelist\": true,\n    \"op.enabled\": true\n};\nmsg.collection = \"minecraft_users\";\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 480,
-    "y": 1240,
-    "wires": [
-      [
-        "3956c05b84f01d4c"
-      ]
-    ]
-  },
-  {
-    "id": "3956c05b84f01d4c",
-    "type": "mongodb in",
-    "z": "46f750dd0c884772",
-    "mongodb": "cca90e0ad48e5446",
-    "name": "",
-    "collection": "",
-    "operation": "find",
-    "x": 700,
-    "y": 1240,
-    "wires": [
-      [
-        "2ce7e0e132bf896f"
-      ]
-    ]
-  },
-  {
-    "id": "2ce7e0e132bf896f",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "Format Payload",
-    "func": "let result = []\nfor(let i = 0; i < msg.payload.length; ++i) {\n    if (msg.payload[i].op) {\n        result.push({\n            \"uuid\": msg.payload[i].uuid,\n            \"name\": msg.payload[i].username,\n            \"level\": msg.payload[i].op.level,\n            \"bypassesPlayerLimit\":  msg.payload[i].op.bypassesPlayerLimit\n        });\n    }\n}\nmsg.payload = result;\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n}\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 880,
-    "y": 1240,
-    "wires": [
-      [
-        "98e687a80637b896"
-      ]
-    ]
-  },
-  {
-    "id": "98e687a80637b896",
-    "type": "http response",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "statusCode": "",
-    "headers": {},
-    "x": 1050,
-    "y": 1240,
-    "wires": []
-  },
-  {
-    "id": "ea680f7f69fb6315",
-    "type": "http request",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "method": "GET",
-    "ret": "txt",
-    "paytoqs": "ignore",
-    "url": "",
-    "tls": "",
-    "persist": false,
-    "proxy": "",
-    "authType": "",
-    "x": 710,
-    "y": 1280,
-    "wires": [
-      [
-        "f26bfeb80d1dca08"
-      ]
-    ]
-  },
-  {
-    "id": "c50448f1b9de481f",
-    "type": "http in",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "url": "/tacobot/minecraft/uuid/:username",
-    "method": "get",
-    "upload": false,
-    "swaggerDoc": "",
-    "x": 190,
-    "y": 1280,
-    "wires": [
-      [
-        "31671a48bfc81c6d"
-      ]
-    ]
-  },
-  {
-    "id": "31671a48bfc81c6d",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "Create URL",
-    "func": "msg.url = `https://api.mojang.com/users/profiles/minecraft/${msg.req.params.username}`\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 450,
-    "y": 1280,
-    "wires": [
-      [
-        "ea680f7f69fb6315"
-      ]
-    ]
-  },
-  {
-    "id": "a6f143d14584811c",
-    "type": "http response",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "statusCode": "",
-    "headers": {},
-    "x": 1050,
-    "y": 1280,
-    "wires": []
-  },
-  {
-    "id": "f26bfeb80d1dca08",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "Format Payload",
-    "func": "function format_uuid(s) {\n    return s.replace(/^([a-f0-9]{8})([a-f0-9]{4})([a-f0-9]{4})([a-f0-9]{4})([a-f0-9]{12})$/gmi, '$1-$2-$3-$4-$5');\n}\n\nif(msg.statusCode < 200 || msg.statusCode > 399) {\n    msg.payload = { \"error\": msg.statusCode };\n    msg.statusCode = 200\n    return msg;\n} else if (msg.statusCode == 204) {\n    msg.statusCode = 404\n}\n\nif (msg.payload !== \"\") {\n    data_payload = JSON.parse(msg.payload)\n    console.log(data_payload)\n    msg.payload = {\n        \"name\": data_payload.name,\n        \"uuid\": format_uuid(data_payload.id)\n    }\n} else {\n    msg.payload = { \"error\": msg.statusCode };\n    msg.statusCode = 200\n}\n\n\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n}\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 880,
-    "y": 1280,
-    "wires": [
-      [
-        "a6f143d14584811c"
-      ]
-    ]
-  },
-  {
-    "id": "6c4c24579a1e7206",
-    "type": "minecraft-ping",
-    "z": "46f750dd0c884772",
-    "server": "c35c7083d8eba0bf",
-    "x": 450,
-    "y": 1360,
-    "wires": [
-      [
-        "46f1a40da4ef3538"
-      ]
-    ]
-  },
-  {
-    "id": "d31c3102ef0e7fa4",
-    "type": "inject",
-    "z": "46f750dd0c884772",
-    "name": "TEST HTTP STATUS",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "onceDelay": 0.1,
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 140,
-    "y": 1360,
-    "wires": [
-      [
-        "6c4c24579a1e7206"
-      ]
-    ]
-  },
-  {
-    "id": "02986aa4bc4d13fe",
-    "type": "http in",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "url": "/tacobot/minecraft/status",
-    "method": "get",
-    "upload": false,
-    "swaggerDoc": "",
-    "x": 160,
-    "y": 1400,
-    "wires": [
-      [
-        "6c4c24579a1e7206"
-      ]
-    ]
-  },
-  {
-    "id": "46f1a40da4ef3538",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "Format Payload",
-    "func": "const SERVER_HOST = \"mc.fuku.io\";\nif (msg.payload && \n    msg.payload.description && \n    msg.payload.description.text && \n    msg.payload.version && \n    msg.payload.version.name ) {\n    msg.payload = {\n        success: true,\n        host: SERVER_HOST,\n        title: msg.payload.description.text.replace(/§[0-9a-z]/gsi,\"\"),\n        status: \"online\",\n        online: true,\n        players: {\n            max: msg.payload.players.max || 0,\n            online: msg.payload.players.online || 0\n        },\n        version: msg.payload.version.name\n    }\n} else {\n    msg.payload = {\n        success: true,\n        host: SERVER_HOST,\n        online: false,\n        status: \"offline\",\n        title: \"OFFLINE\",\n        players: {\n            max: 0,\n            online: 0\n        },\n        version: \"OFFLINE\"\n    }\n}\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 700,
-    "y": 1360,
-    "wires": [
-      [
-        "21317ff56cb936b7"
-      ]
-    ]
-  },
-  {
-    "id": "21317ff56cb936b7",
-    "type": "http response",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "statusCode": "200",
-    "headers": {},
-    "x": 880,
-    "y": 1400,
-    "wires": []
-  },
-  {
-    "id": "b7c801186c661167",
-    "type": "tcp request",
-    "z": "46f750dd0c884772",
-    "name": "MINECRAFT TCP CONNECT",
-    "server": "vader.bit13.local",
-    "port": " 25565",
-    "out": "time",
-    "ret": "string",
-    "splitc": "0",
-    "newline": "",
-    "trim": false,
-    "tls": "",
-    "x": 890,
-    "y": 1620,
-    "wires": [
-      [
-        "d8230fa52dd1f793"
-      ]
-    ]
-  },
-  {
-    "id": "8c9706e82ffceecc",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "Status Payload",
-    "func": "msg.payload = Buffer.from([0xFE, 0x01]);\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 760,
-    "y": 1520,
-    "wires": [
-      [
-        "b7c801186c661167"
-      ]
-    ]
-  },
-  {
-    "id": "fba0041102cf2513",
-    "type": "inject",
-    "z": "46f750dd0c884772",
-    "name": "TEST STATUS",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "onceDelay": 0.1,
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 480,
-    "y": 1640,
-    "wires": [
-      [
-        "8c9706e82ffceecc"
-      ]
-    ]
-  },
-  {
-    "id": "d8230fa52dd1f793",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "Parse Response",
-    "func": "var server_info = msg.payload.split(\"\\x00\\x00\\x00\");\nconst NUM_FIELDS = 6;\nif (server_info && server_info.length >= NUM_FIELDS) {\n    msg.payload = {\n      online: true,\n      version: server_info[2].replace(/\\u0000/g,''),\n      motd: server_info[3].replace(/\\u0000/g,''),\n      motd_clean: server_info[3].replace(/\\u0000/g,'').replace(/�[0-9a-z]/gi,''),\n      players: {\n          online: parseInt(server_info[4].replace(/\\u0000/g,'')),\n          max: parseInt(server_info[5].replace(/\\u0000/g,''))\n      }\n    };\n} else {\n   msg.payload = {\n       online: false\n   } \n}\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 990,
-    "y": 1560,
-    "wires": [
-      [
-        "e5af97a8c9c70002",
-        "6058e4212b3023bf"
-      ]
-    ]
-  },
-  {
-    "id": "002e7ab99fa94e1e",
-    "type": "catch",
-    "z": "46f750dd0c884772",
-    "name": "Minecraft Status Exception",
-    "scope": [
-      "b7c801186c661167"
-    ],
-    "uncaught": false,
-    "x": 770,
-    "y": 1720,
-    "wires": [
-      [
-        "145e438b94ef4b3b"
-      ]
-    ]
-  },
-  {
-    "id": "145e438b94ef4b3b",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "OFFLINE",
-    "func": "msg.payload = {\n       online: false\n   };\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 980,
-    "y": 1720,
-    "wires": [
-      [
-        "e5af97a8c9c70002",
-        "6058e4212b3023bf"
-      ]
-    ]
-  },
-  {
-    "id": "be1781432ef92877",
-    "type": "mqtt out",
-    "z": "46f750dd0c884772",
-    "name": "MINECRAFT STATUS / AVAILABILITY",
-    "topic": "",
-    "qos": "",
-    "retain": "true",
-    "respTopic": "",
-    "contentType": "",
-    "userProps": "",
-    "correl": "",
-    "expiry": "",
-    "broker": "2c814fd5907f7043",
-    "x": 1650,
-    "y": 1600,
-    "wires": []
-  },
-  {
-    "id": "6058e4212b3023bf",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "Availablity Payload",
-    "func": "msg.topic = \"minecraft/availability\";\nmsg.payload = {\n    state: msg.payload.online\n}\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 1350,
-    "y": 1640,
-    "wires": [
-      [
-        "be1781432ef92877"
-      ]
-    ]
-  },
-  {
-    "id": "e5af97a8c9c70002",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "Status Payload",
-    "func": "msg.topic = \"minecraft/status\";\n\n// let now = new Date();\n// let current = now.toISOString();\nmsg.payload = msg.payload;\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 1360,
-    "y": 1600,
-    "wires": [
-      [
-        "be1781432ef92877"
-      ]
-    ]
-  },
-  {
-    "id": "e19479213f50f34e",
-    "type": "status",
-    "z": "46f750dd0c884772",
-    "name": "MINECRAFT MQTT CONNECTED",
-    "scope": [
-      "be1781432ef92877"
-    ],
-    "x": 160,
-    "y": 1520,
-    "wires": [
-      [
-        "49531eb747cddef2"
-      ]
-    ]
-  },
-  {
-    "id": "49531eb747cddef2",
-    "type": "trigger",
-    "z": "46f750dd0c884772",
-    "name": "TRIGGER STATUS CHECK",
-    "op1": "",
-    "op2": "0",
-    "op1type": "date",
-    "op2type": "str",
-    "duration": "-60",
-    "extend": false,
-    "overrideDelay": false,
-    "units": "s",
-    "reset": "",
-    "bytopic": "all",
-    "topic": "topic",
-    "outputs": 1,
-    "x": 500,
-    "y": 1520,
-    "wires": [
-      [
-        "8c9706e82ffceecc"
-      ]
-    ]
-  },
-  {
-    "id": "a2d75312a1d53e67",
-    "type": "catch",
-    "z": "46f750dd0c884772",
-    "name": "Minecraft Ping Exception",
-    "scope": [
-      "6c4c24579a1e7206"
-    ],
-    "uncaught": false,
-    "x": 450,
-    "y": 1420,
-    "wires": [
-      [
-        "41b27a3f5ce909ab"
-      ]
-    ]
-  },
-  {
-    "id": "41b27a3f5ce909ab",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "Format Payload",
-    "func": "msg.payload = {\n    success: false,\n    host: \"mc.fuku.io\",\n    message: \"Error when getting the status of the server.\",\n    status: \"unknown\"\n}\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 700,
-    "y": 1420,
-    "wires": [
-      [
-        "21317ff56cb936b7"
-      ]
-    ]
-  },
-  {
-    "id": "441863df3525ef69",
-    "type": "http in",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "url": "/tacobot/minecraft/player/:uuid/stats/",
-    "method": "post",
-    "upload": false,
-    "swaggerDoc": "",
-    "x": 180,
-    "y": 1820,
-    "wires": [
-      [
-        "4fa6b71fd1d20d8a"
-      ]
-    ]
-  },
-  {
-    "id": "3a7993b8e7b5e6f9",
-    "type": "mongodb in",
-    "z": "46f750dd0c884772",
-    "mongodb": "cca90e0ad48e5446",
-    "name": "Find User",
-    "collection": "minecraft_users",
-    "operation": "find",
-    "x": 660,
-    "y": 1820,
-    "wires": [
-      [
-        "667072f5e1b88bf3"
-      ]
-    ]
-  },
-  {
-    "id": "4fa6b71fd1d20d8a",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "store stats payload",
-    "func": "global.set(\"mc_stats\", msg.req.body);\nglobal.set(\"mc_uuid\", msg.req.params.uuid);\nmsg.payload = {\n    \"uuid\": msg.req.params.uuid\n}\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 470,
-    "y": 1820,
-    "wires": [
-      [
-        "3a7993b8e7b5e6f9"
-      ]
-    ]
-  },
-  {
-    "id": "667072f5e1b88bf3",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "User Info",
-    "func": "var user_info = msg.payload[0];\nvar data = global.get(\"mc_stats\")[\"stats\"];\nvar timestamp = Date.now();\nmsg.payload = {\n    \"$set\": {\n        \"uuid\": user_info.uuid,\n        \"user_id\": user_info.user_id,\n        \"username\": user_info.username,\n        \"stats\": data,\n        \"modified\": timestamp\n    }\n}\n\nmsg.query = {\n    \"uuid\": { \"$eq\": user_info.uuid }//,\n    //\"user_id\": { \"$eq\": user_info.user_id }\n};\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 820,
-    "y": 1820,
-    "wires": [
-      [
-        "1d5873adb46dd15f",
-        "88933731f5c5743e",
-        "c14ce2e002771995"
-      ]
-    ]
-  },
-  {
-    "id": "1d5873adb46dd15f",
-    "type": "mongodb out",
-    "z": "46f750dd0c884772",
-    "mongodb": "cca90e0ad48e5446",
-    "name": "",
-    "collection": "minecraft_stats",
-    "payonly": true,
-    "upsert": true,
-    "multi": true,
-    "operation": "update",
-    "x": 1070,
-    "y": 1820,
-    "wires": []
-  },
-  {
-    "id": "88933731f5c5743e",
-    "type": "http response",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "statusCode": "",
-    "headers": {},
-    "x": 1010,
-    "y": 1780,
-    "wires": []
-  },
-  {
-    "id": "c14ce2e002771995",
-    "type": "debug",
-    "z": "46f750dd0c884772",
-    "name": "MINECRAFT-STATS",
-    "active": false,
     "tosidebar": true,
     "console": false,
     "tostatus": false,
@@ -1913,283 +1199,9 @@
     "targetType": "msg",
     "statusVal": "",
     "statusType": "auto",
-    "x": 1060,
-    "y": 1880,
+    "x": 590,
+    "y": 60,
     "wires": []
-  },
-  {
-    "id": "7c0550bed709438d",
-    "type": "http in",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "url": "/tacobot/minecraft/player/:username/stats",
-    "method": "get",
-    "upload": false,
-    "swaggerDoc": "",
-    "x": 190,
-    "y": 1940,
-    "wires": [
-      [
-        "f38e97f485bdeabc"
-      ]
-    ]
-  },
-  {
-    "id": "cca0e9492cf722cd",
-    "type": "mongodb in",
-    "z": "46f750dd0c884772",
-    "mongodb": "cca90e0ad48e5446",
-    "name": "Find User Stats",
-    "collection": "minecraft_stats",
-    "operation": "find",
-    "x": 680,
-    "y": 1940,
-    "wires": [
-      [
-        "d6a16c507359253a"
-      ]
-    ]
-  },
-  {
-    "id": "f38e97f485bdeabc",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "user query",
-    "func": "msg.payload = {\n    \"username\": { \"$regex\": new RegExp(`^${msg.req.params.username}$`,\"i\") }\n}\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 470,
-    "y": 1940,
-    "wires": [
-      [
-        "cca0e9492cf722cd"
-      ]
-    ]
-  },
-  {
-    "id": "d6a16c507359253a",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "format payload",
-    "func": "if (msg.payload && msg.payload.length > 0) {\n    let user_data = msg.payload[0];\n    msg.payload = {\n        \"uuid\": user_data.uuid,\n        \"username\": user_data.username,\n        \"user_id\": user_data.user_id,\n        \"modified\": user_data.modified,\n        \"stats\": user_data.stats\n    };\n\n} else {\n    msg.payload = null;\n}\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 880,
-    "y": 1940,
-    "wires": [
-      [
-        "5271cab4f5a8cd09"
-      ]
-    ]
-  },
-  {
-    "id": "5271cab4f5a8cd09",
-    "type": "http response",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "statusCode": "",
-    "headers": {
-      "Content-Type": "application/json"
-    },
-    "x": 1070,
-    "y": 1940,
-    "wires": []
-  },
-  {
-    "id": "ecbaecad8f7c4daa",
-    "type": "http in",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "url": "/tacobot/user/find/:userid",
-    "method": "get",
-    "upload": false,
-    "swaggerDoc": "",
-    "x": 140,
-    "y": 2020,
-    "wires": [
-      [
-        "c535695fade8b8a2"
-      ]
-    ]
-  },
-  {
-    "id": "c535695fade8b8a2",
-    "type": "http response",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "statusCode": "",
-    "headers": {},
-    "x": 690,
-    "y": 2020,
-    "wires": []
-  },
-  {
-    "id": "edad3dd1794c6a16",
-    "type": "http in",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "url": "/tacobot/minecraft/version",
-    "method": "post",
-    "upload": false,
-    "swaggerDoc": "",
-    "x": 150,
-    "y": 2080,
-    "wires": [
-      [
-        "1dd037df2735f99d"
-      ]
-    ]
-  },
-  {
-    "id": "aa5d784d7a865c78",
-    "type": "http response",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "statusCode": "",
-    "headers": {},
-    "x": 830,
-    "y": 2080,
-    "wires": []
-  },
-  {
-    "id": "8004625b4cb96651",
-    "type": "mongodb out",
-    "z": "46f750dd0c884772",
-    "mongodb": "cca90e0ad48e5446",
-    "name": "Update Settings",
-    "collection": "settings",
-    "payonly": false,
-    "upsert": false,
-    "multi": false,
-    "operation": "update",
-    "x": 800,
-    "y": 2120,
-    "wires": []
-  },
-  {
-    "id": "1dd037df2735f99d",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "Query and Payload",
-    "func": "msg.collection = \"settings\";\nmsg.query = {\n    guild_id: msg.payload.guild_id,\n    name: msg.payload.name,\n};\nmsg.payload = {\n    guild_id: msg.payload.guild_id,\n    name: msg.payload.name,\n    settings: {\n        enabled: true,\n        help: \"https://imgur.com/a/wFFP48L\",\n        version: msg.payload.settings.version,\n        forge_version: msg.payload.settings.forge_version,\n        server: \"mc.fuku.io\",\n        mods: msg.payload.settings.mods,\n    }\n};\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 410,
-    "y": 2080,
-    "wires": [
-      [
-        "8004625b4cb96651",
-        "aa5d784d7a865c78"
-      ]
-    ]
-  },
-  {
-    "id": "d6ed9a4424142a33",
-    "type": "http in",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "url": "/tacobot/minecraft/version",
-    "method": "get",
-    "upload": false,
-    "swaggerDoc": "",
-    "x": 150,
-    "y": 2180,
-    "wires": [
-      [
-        "e6a9e24a3a11f133"
-      ]
-    ]
-  },
-  {
-    "id": "e6a9e24a3a11f133",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "Query",
-    "func": "msg.collection = \"settings\";\nmsg.payload = {\n    guild_id: \"935294040386183228\",\n    name: \"minecraft\",\n};\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 350,
-    "y": 2180,
-    "wires": [
-      [
-        "5deb29fa416dfac1"
-      ]
-    ]
-  },
-  {
-    "id": "5deb29fa416dfac1",
-    "type": "mongodb in",
-    "z": "46f750dd0c884772",
-    "mongodb": "cca90e0ad48e5446",
-    "name": "Get Settings",
-    "collection": "settings",
-    "operation": "find",
-    "x": 530,
-    "y": 2180,
-    "wires": [
-      [
-        "dcf181a52b94bafd"
-      ]
-    ]
-  },
-  {
-    "id": "dcf181a52b94bafd",
-    "type": "function",
-    "z": "46f750dd0c884772",
-    "name": "Result",
-    "func": "\nif (msg.payload.length >= 1) {\n    msg.payload = msg.payload[0];\n    delete msg.payload._id;\n}\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 710,
-    "y": 2180,
-    "wires": [
-      [
-        "c44d92c5d1addad5"
-      ]
-    ]
-  },
-  {
-    "id": "c44d92c5d1addad5",
-    "type": "http response",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "statusCode": "",
-    "headers": {},
-    "x": 910,
-    "y": 2180,
-    "wires": []
-  },
-  {
-    "id": "8773196f827f3657",
-    "type": "http in",
-    "z": "46f750dd0c884772",
-    "name": "",
-    "url": "/taco/minecraft/status",
-    "method": "get",
-    "upload": false,
-    "swaggerDoc": "",
-    "x": 150,
-    "y": 1440,
-    "wires": [
-      [
-        "6c4c24579a1e7206"
-      ]
-    ]
   },
   {
     "id": "9220fc289d8ce45f",
@@ -2211,6 +1223,517 @@
     ]
   },
   {
+    "id": "befdf892ceb26d77",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Create Follow Action",
+    "func": "msg.payload = {\n    action: \"follow\",\n    channel: msg.payload.channel.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\"),\n    user: msg.payload.username.toLowerCase().replace(\"#\", \"\").replace(\"@\", \"\")\n};\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 880,
+    "y": 140,
+    "wires": [
+      [
+        "9ca901b9e40d2f55"
+      ]
+    ]
+  },
+  {
+    "id": "d90cd1d702a59016",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "PRODUCTION Manual Trigger",
+    "props": [
+      {
+        "p": "post_url",
+        "v": "http://lb.bit13.local:8931/webhook/game",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 190,
+    "y": 1360,
+    "wires": [
+      [
+        "3db47b900e76d324"
+      ]
+    ]
+  },
+  {
+    "id": "a9e9560d17d2de50",
+    "type": "trigger",
+    "z": "46f750dd0c884772",
+    "name": "1 Hour Trigger",
+    "op1": "{\"post_url\":\"http://lb.bit13.local:8931/webhook/game\"}",
+    "op2": "0",
+    "op1type": "json",
+    "op2type": "str",
+    "duration": "-1",
+    "extend": false,
+    "overrideDelay": false,
+    "units": "hr",
+    "reset": "",
+    "bytopic": "all",
+    "topic": "topic",
+    "outputs": 1,
+    "x": 140,
+    "y": 1320,
+    "wires": [
+      [
+        "3db47b900e76d324"
+      ]
+    ]
+  },
+  {
+    "id": "0828258bd3f2db4a",
+    "type": "http request",
+    "z": "46f750dd0c884772",
+    "name": "gamerpower.com/api/giveaways",
+    "method": "GET",
+    "ret": "obj",
+    "paytoqs": "ignore",
+    "url": "https://www.gamerpower.com/api/giveaways",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": true,
+    "headers": [],
+    "x": 770,
+    "y": 1320,
+    "wires": [
+      [
+        "8a34ae17a641b0cd"
+      ]
+    ]
+  },
+  {
+    "id": "890ce78b0abea93e",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Format Entry",
+    "func": "function reformat_title(s) {\n    // var re = /(\\:$|\\sPack\\sSteam$|\\sSteam$|\\sfree\\s?|\\sfree\\sgift\\s?|\\s?\\(.*?\\)\\s?|\\s?gift\\s?$|\\s?giveaway\\s?|PackGiveaway|(gift|(in-)?game)? packs? keys?$|\\skey$|\\sfor FREE!$|:\\sFree\\s$|\\-Gift)/gi;\n    var re = /^free\\s|(\\s?\\(.*?\\)\\s?|steam|(for\\s|on\\s)?xbox(\\s(360|One|x\\|s))|giveaway)/gsi;\n    return s.replace(re, \"\").replace(\"  \", \" \");\n}\n\nvar ignore_ids = [\n    1531,\n    2409\n];\n\n\nvar entry = msg.payload;\nif (ignore_ids.includes(entry.id)) {\n    msg.payload = null;\n    return msg;\n}\nif (entry.status != \"Active\") {\n    // inactive. leave now\n    msg.payload = null;\n    return msg;\n}\n\nentry.title = reformat_title(reformat_title(entry.title)).trim();\nentry.game_id = entry.id;\ndelete entry.id;\ndelete entry.status;\ndelete entry.gamerpower_url;\ndelete entry.open_giveaway;\ndelete entry.users;\nentry.platforms = entry.platforms.split(\", \").map(item => item.trim());\nentry.formatted_published_date = entry.published_date;\nentry.published_date =  new Date(entry.published_date).getTime() / 1000;\nentry.formatted_end_date = entry.end_date;\n\nif (entry.end_date == \"N/A\") {\n    entry.end_date = null;\n} else {\n    entry.end_date = new Date(entry.end_date).getTime() / 1000;\n}\n\n// if (entry.end_date !== null && new Date(entry.end_date) < new Date()) {\n//     msg.payload = null;\n//     // skip expired\n//     return msg;\n// }\n\nmsg.payload = entry;\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1210,
+    "y": 1320,
+    "wires": [
+      [
+        "8bcf83b488da7ad4"
+      ]
+    ]
+  },
+  {
+    "id": "41cefddbe52b21cc",
+    "type": "catch",
+    "z": "46f750dd0c884772",
+    "name": "",
+    "scope": [
+      "d90cd1d702a59016",
+      "a9e9560d17d2de50",
+      "0828258bd3f2db4a",
+      "890ce78b0abea93e",
+      "8a34ae17a641b0cd",
+      "5a908a7ec7ab8002",
+      "8bcf83b488da7ad4",
+      "b847438fe9da980a",
+      "c65243ee89b7ee76",
+      "8eddfae3478194d5",
+      "987d7c325cae46ce",
+      "34c3879e34032d05",
+      "ba5104ca0bf3ebbe",
+      "108c997bfb2362d2",
+      "76bd62e1f71697fc",
+      "834fce834f9f43fb",
+      "3db47b900e76d324",
+      "0b36be2dc5bd1912"
+    ],
+    "uncaught": false,
+    "x": 360,
+    "y": 1220,
+    "wires": [
+      [
+        "580a78a6ba9760a5"
+      ]
+    ]
+  },
+  {
+    "id": "8a34ae17a641b0cd",
+    "type": "split",
+    "z": "46f750dd0c884772",
+    "name": "Split / Process API",
+    "splt": "\\n",
+    "spltType": "str",
+    "arraySplt": 1,
+    "arraySpltType": "len",
+    "stream": false,
+    "addname": "",
+    "property": "payload",
+    "x": 1030,
+    "y": 1320,
+    "wires": [
+      [
+        "890ce78b0abea93e"
+      ]
+    ]
+  },
+  {
+    "id": "5a908a7ec7ab8002",
+    "type": "mongodb in",
+    "z": "46f750dd0c884772",
+    "mongodb": "cca90e0ad48e5446",
+    "name": "Find Game",
+    "collection": "free_game_keys",
+    "operation": "find",
+    "x": 710,
+    "y": 1360,
+    "wires": [
+      [
+        "b847438fe9da980a"
+      ]
+    ]
+  },
+  {
+    "id": "580a78a6ba9760a5",
+    "type": "debug",
+    "z": "46f750dd0c884772",
+    "name": "ERROR",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 520,
+    "y": 1220,
+    "wires": []
+  },
+  {
+    "id": "8bcf83b488da7ad4",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Find Query",
+    "func": "msg.collection = \"free_game_keys\";\nmsg.entry = msg.payload;\n\nif (msg.entry === null) { \n  msg.payload = {\n    \"game_id\": -1   \n  }\n  return msg;\n}\n\nmsg.payload = {\n    \"game_id\": msg.entry.game_id\n};\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 550,
+    "y": 1360,
+    "wires": [
+      [
+        "5a908a7ec7ab8002"
+      ]
+    ]
+  },
+  {
+    "id": "b847438fe9da980a",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Ignore Items Found",
+    "func": "\nif (msg.entry === null) {\n    msg.payload = null;\n    return msg;\n}\n\nif ((msg.payload && msg.payload.length > 0)) {\n    msg.payload = null;\n    return msg;\n} else {\n    msg.payload = msg.entry;\n    return msg;\n}",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 890,
+    "y": 1360,
+    "wires": [
+      [
+        "c65243ee89b7ee76"
+      ]
+    ]
+  },
+  {
+    "id": "c65243ee89b7ee76",
+    "type": "switch",
+    "z": "46f750dd0c884772",
+    "name": "Filter Found Games",
+    "property": "payload",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "null",
+        "vt": "jsonata"
+      },
+      {
+        "t": "neq",
+        "v": "null",
+        "vt": "jsonata"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 2,
+    "x": 1100,
+    "y": 1360,
+    "wires": [
+      [
+        "9057fb0a0f8125f2"
+      ],
+      [
+        "60aa9d78642fa184",
+        "0b36be2dc5bd1912"
+      ]
+    ]
+  },
+  {
+    "id": "8eddfae3478194d5",
+    "type": "mongodb out",
+    "z": "46f750dd0c884772",
+    "mongodb": "cca90e0ad48e5446",
+    "name": "",
+    "collection": "free_game_keys",
+    "payonly": true,
+    "upsert": false,
+    "multi": false,
+    "operation": "insert",
+    "x": 1370,
+    "y": 1440,
+    "wires": []
+  },
+  {
+    "id": "9057fb0a0f8125f2",
+    "type": "debug",
+    "z": "46f750dd0c884772",
+    "name": "IGNORE EXISTING",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "entry",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1360,
+    "y": 1360,
+    "wires": []
+  },
+  {
+    "id": "60aa9d78642fa184",
+    "type": "debug",
+    "z": "46f750dd0c884772",
+    "name": "NEW GAME",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1330,
+    "y": 1400,
+    "wires": []
+  },
+  {
+    "id": "987d7c325cae46ce",
+    "type": "http request",
+    "z": "46f750dd0c884772",
+    "name": "Send Payload",
+    "method": "POST",
+    "ret": "obj",
+    "paytoqs": "body",
+    "url": "",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": true,
+    "headers": [
+      {
+        "keyType": "other",
+        "keyValue": "X-TACOBOT-TOKEN",
+        "valueType": "other",
+        "valueValue": "jR5mf5FaUthvJR9uXofNbjmhpoxjU5ATyPHPpQHH5H"
+      }
+    ],
+    "x": 720,
+    "y": 1400,
+    "wires": [
+      [
+        "34c3879e34032d05"
+      ]
+    ]
+  },
+  {
+    "id": "34c3879e34032d05",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Process Response",
+    "func": "if (msg.payload.error) {\n    msg.payload = null;\n    return msg;\n}\n\nif (msg.payload === '') {\n    msg.payload = null;\n    return msg;\n}\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 910,
+    "y": 1400,
+    "wires": [
+      [
+        "ba5104ca0bf3ebbe"
+      ]
+    ]
+  },
+  {
+    "id": "ba5104ca0bf3ebbe",
+    "type": "switch",
+    "z": "46f750dd0c884772",
+    "name": "Ignore Empty Payload",
+    "property": "payload",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "null",
+        "vt": "jsonata"
+      },
+      {
+        "t": "neq",
+        "v": "null",
+        "vt": "jsonata"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 2,
+    "x": 1120,
+    "y": 1400,
+    "wires": [
+      [],
+      [
+        "8eddfae3478194d5"
+      ]
+    ]
+  },
+  {
+    "id": "108c997bfb2362d2",
+    "type": "status",
+    "z": "46f750dd0c884772",
+    "name": "MONGODB CONNECTED",
+    "scope": [
+      "5a908a7ec7ab8002"
+    ],
+    "x": 170,
+    "y": 1260,
+    "wires": [
+      [
+        "76bd62e1f71697fc"
+      ]
+    ]
+  },
+  {
+    "id": "76bd62e1f71697fc",
+    "type": "switch",
+    "z": "46f750dd0c884772",
+    "name": "WAIT FOR MONGODB CONNECTED",
+    "property": "status.text",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "connected",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 450,
+    "y": 1260,
+    "wires": [
+      [
+        "a9e9560d17d2de50"
+      ]
+    ]
+  },
+  {
+    "id": "834fce834f9f43fb",
+    "type": "inject",
+    "z": "46f750dd0c884772",
+    "name": "BETA Manual Trigger",
+    "props": [
+      {
+        "p": "post_url",
+        "v": "http://bane.bit13.local:8931/webhook/game",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "x": 160,
+    "y": 1400,
+    "wires": [
+      [
+        "3db47b900e76d324"
+      ]
+    ]
+  },
+  {
+    "id": "3db47b900e76d324",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Global Set GP_POST_URL",
+    "func": "if (!msg.post_url) {\n msg.post_url = \"http://lb.bit13.local:8931/webhook/game\";\n}\n\nglobal.set(\"GP_POST_URL\", msg.post_url);\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 500,
+    "y": 1320,
+    "wires": [
+      [
+        "0828258bd3f2db4a"
+      ]
+    ]
+  },
+  {
+    "id": "0b36be2dc5bd1912",
+    "type": "function",
+    "z": "46f750dd0c884772",
+    "name": "Set Post Url",
+    "func": "var post_url = global.get(\"GP_POST_URL\");\nmsg.url = post_url;\nmsg.method = \"POST\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 550,
+    "y": 1400,
+    "wires": [
+      [
+        "987d7c325cae46ce"
+      ]
+    ]
+  },
+  {
     "id": "cca90e0ad48e5446",
     "type": "mongodb",
     "hostname": "andeddu.bit13.local",
@@ -2219,38 +1742,5 @@
     "port": "27017",
     "db": "tacobot",
     "name": "Tacobot"
-  },
-  {
-    "id": "c35c7083d8eba0bf",
-    "type": "minecraft-ping-server",
-    "host": "vader.bit13.local",
-    "port": "25565"
-  },
-  {
-    "id": "2c814fd5907f7043",
-    "type": "mqtt-broker",
-    "name": "VADER MQTT",
-    "broker": "mqtt.bit13.local",
-    "port": "1883",
-    "clientid": "",
-    "autoConnect": true,
-    "usetls": false,
-    "protocolVersion": "5",
-    "keepalive": "60",
-    "cleansession": true,
-    "birthTopic": "",
-    "birthQos": "0",
-    "birthPayload": "",
-    "birthMsg": {},
-    "closeTopic": "",
-    "closeQos": "0",
-    "closePayload": "",
-    "closeMsg": {},
-    "willTopic": "",
-    "willQos": "0",
-    "willPayload": "",
-    "willMsg": {},
-    "userProps": "",
-    "sessionExpiry": ""
   }
 ]

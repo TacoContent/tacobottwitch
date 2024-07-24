@@ -261,13 +261,16 @@ class TacosCog(commands.Cog):
                     # give the broadcaster 5 tacos for using the command.
                     taco_word = "taco" if amount == 1 else "tacos"
 
-                    await self.tacos_log.give_user_tacos(
-                        fromUser=utils.clean_channel_name(self.settings.bot_name),
-                        toUser=utils.clean_channel_name(ctx.message.channel.name),
-                        reason=f"giving {user} {amount} {taco_word} 🌮",
-                        give_type=tacotypes.TacoTypes.TWITCH_GIVE_TACOS,
-                        amount=amount,
-                    )
+                    bot_user_channel = utils.clean_channel_name(self.settings.bot_name)
+                    clean_channel = utils.clean_channel_name(ctx.message.channel.name)
+                    if clean_channel != bot_user_channel:
+                        await self.tacos_log.give_user_tacos(
+                            fromUser=utils.clean_channel_name(self.settings.bot_name),
+                            toUser=utils.clean_channel_name(ctx.message.channel.name),
+                            reason=f"giving {user} {amount} {taco_word} 🌮",
+                            give_type=tacotypes.TacoTypes.TWITCH_GIVE_TACOS,
+                            amount=amount,
+                        )
 
                 else:
                     await ctx.send(f"You can't give negative tacos!")

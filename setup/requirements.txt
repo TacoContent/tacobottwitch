@@ -1,6 +1,6 @@
-twitchio~=2.8.2
-pymongo==4.5.0
-validators==0.22.0
-python-dotenv==1.0.0
+twitchio~=2.9.1
+pymongo==4.6.3
+validators==0.28.1
+python-dotenv==1.0.1
 requests
 pytz

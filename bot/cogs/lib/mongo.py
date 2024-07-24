@@ -687,17 +687,16 @@ class MongoDatabase:
                 channel=None,
             )
 
-    def get_total_gifted_tacos(self, channel: str, timespan_seconds: int = 86400) -> int:
+    def get_total_gifted_tacos(self, from_user_id: str, timespan_seconds: int = 86400) -> int:
         _method = inspect.stack()[0][3]
         try:
             if self.connection is None:
                 self.open()
             timestamp = utils.to_timestamp(datetime.datetime.utcnow())
-            channel = utils.clean_channel_name(channel)
             data = self.connection.taco_gifts.find(
                 {
                     "guild_id": self.settings.discord_guild_id,
-                    "channel": channel,
+                    "from_user_id": from_user_id,
                     "timestamp": {"$gt": timestamp - timespan_seconds},
                 }
             )
@@ -718,19 +717,18 @@ class MongoDatabase:
             )
             return 0
 
-    def get_total_gifted_tacos_to_user(self, channel: str, user: str, timespan_seconds: int = 86400) -> int:
+    def get_total_gifted_tacos_to_user(self, from_user_id: str, to_user_id: str, timespan_seconds: int = 86400) -> int:
         _method = inspect.stack()[0][3]
         try:
             if self.connection is None:
                 self.open()
             timestamp = utils.to_timestamp(datetime.datetime.utcnow())
-            channel = utils.clean_channel_name(channel)
-            user = utils.clean_channel_name(user)
+
             data = self.connection.taco_gifts.find(
                 {
                     "guild_id": self.settings.discord_guild_id,
-                    "channel": channel,
-                    "twitch_name": user,
+                    "from_user_id": from_user_id,
+                    "to_user_id": to_user_id,
                     "timestamp": {"$gt": timestamp - timespan_seconds},
                 }
             )

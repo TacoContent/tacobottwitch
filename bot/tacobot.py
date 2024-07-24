@@ -3,8 +3,10 @@ import os
 import traceback
 import typing
 
-from bot.cogs.lib import logger, loglevel, mongo, settings
+from bot.cogs.lib import logger, loglevel, mongo, settings #, utils
+# import twitchio
 from twitchio.ext import commands
+# from twitchio.ext import eventsub
 
 
 # https://twitchio.dev/en/latest/exts/commands.html#twitchio.ext.commands.Bot.load_module
@@ -72,22 +74,35 @@ class TacoBot(commands.Bot):
         self.run()
 
     # async def __ainit__(self) -> None:
+    #     self.log.debug("NONE", "tacobot.__ainit__", "Starting eventsub client")
     #     self.loop.create_task(self.esclient.listen(port=4000))
 
     #     # get all the channels that we are monitoring and create the eventsub subscriptions
     #     channels = []
     #     if self.settings.IS_DEBUG:
+    #         self.log.debug("NONE", "tacobot.__ainit__", "debug mode, subscribing to default channels")
     #         channels = self.settings.default_channels
     #     else:
+    #         self.log.debug("NONE", "tacobot.__ainit__", "getting channels from database")
     #         channels = self.db.get_bot_twitch_channels()
 
-    #     for channel in channels:
-    #         try:
-    #             self.log.debug("NONE", "tacobot.__ainit__", f"subscribing to follow event for channel: {channel}")
-    #             await self.esclient.subscribe_channel_follows_v2(broadcaster=utils.clean_channel_name(channel), moderator=self.user_id)
-    #         except twitchio.HTTPException as e:
-    #             self.log.error("NONE", "tacobot.__ainit__", f"failed to subscribe to follow event for channel: {channel} -> {str(e)}", traceback.format_exc())
-    #             pass
+    #     if channels:
+    #         for channel in channels:
+    #             self.log.debug("NONE", "tacobot.__ainit__", f"subscribing to channel: {channel}")
+    #             try:
+    #                 if self.user_id:
+    #                     self.log.debug("NONE", "tacobot.__ainit__", f"subscribing to follow event for channel: {channel}")
+    #                     await self.esclient.subscribe_channel_follows_v2(broadcaster=utils.clean_channel_name(channel), moderator=self.user_id)
+    #                 else:
+    #                     self.log.error("NONE", "tacobot.__ainit__", "user_id is not set. Cannot subscribe to follow event.")
+    #             except twitchio.HTTPException as e:
+    #                 self.log.error("NONE", "tacobot.__ainit__", f"failed to subscribe to follow event for channel: {channel} -> {str(e)}", traceback.format_exc())
+    #                 pass
+    #     else:
+    #         self.log.debug("NONE", "tacobot.__ainit__", "no channels found in database, not subscribing to any events")
+
+    async def event_ready(self):
+        self.log.debug("NONE", "tacobot.event_ready", "Bot is ready")
 
     def get_initial_channels(self) -> typing.Optional[list[str]]:
         _method = inspect.stack()[0][3]
