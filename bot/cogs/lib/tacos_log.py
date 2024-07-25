@@ -4,19 +4,17 @@ import traceback
 import typing
 
 from bot.cogs.lib import logger, loglevel, mongo, settings, tacotypes, utils
-from bot.cogs.lib.discord import webhook as discord_webhook
 from bot.cogs.lib.tacobot.tacos_payload import TacosWebhookPayload
 from bot.cogs.lib.tacobot.webhook import TacobotWebhook
-
 
 class TacosLog:
     def __init__(self, bot):
         _method = inspect.stack()[0][3]
         # get the file name without the extension and without the directory
         self._module = os.path.basename(__file__)[:-3]
+        self._class = self.__class__.__name__
         self.settings = settings.Settings()
         self.bot = bot
-        self.webhook = discord_webhook.DiscordWebhook(self.settings.discord_tacos_log_webhook_url)
         self.tacos_webhook = TacobotWebhook(f"{self.settings.tacobot_webhook_url}webhook/tacos", self.settings.tacobot_webhook_token)
         self.db = mongo.MongoDatabase()
 
@@ -29,6 +27,7 @@ class TacosLog:
     async def _log(
         self, fromUser: str, toUser: str, amount: int, total_taco_count: int, reason: typing.Optional[str] = None
     ) -> None:
+        _method = inspect.stack()[0][3]
         if amount == 0:
             return
         action = "received"
@@ -48,32 +47,6 @@ class TacosLog:
 
         content = f"@{toUser} has {action} {abs_amount} {taco_word} 🌮 {action_adverb} @{fromUser} for {reason}, giving them {total_taco_count} {total_taco_word} 🌮 total."
 
-        # TODO use a defined type for this instead of a list of dicts
-        # fields = [
-        #     {"name": "▶ TO USER", "value": toUser},
-        #     {"name": "◀ FROM USER", "value": fromUser},
-        #     {"name": f"🎬 {action.upper()}", "value": f"{abs_amount} {taco_word}"},
-        #     {"name": "🌮 TOTAL TACOS", "value": f"{total_taco_count} {total_taco_word}"},
-        #     {"name": "ℹ REASON", "value": reason},
-        # ]
-
-        # embeds = [
-        #     {
-        #         "author": {
-        #             "name": "@OurTacoBot",
-        #             "icon_url": "https://i.imgur.com/ejJu8de.png",
-        #             "url": "https://twitch.tv/ourtacobot",
-        #         },
-        #         "color": 0x7289DA,
-        #         "fields": fields,
-        #         "footer": {
-        #             "text": f"{self.settings.name} [Twitch] v{self.settings.APP_VERSION} developed by {self.settings.author}"
-        #         },
-        #     }
-        # ]
-
-        # send to discord
-        # self.webhook.send(embeds=embeds)
         channels = [utils.clean_channel_name(fromUser)]
         # send to bot channels + the fromUser
         [
@@ -83,10 +56,13 @@ class TacosLog:
         ]
 
         for c in channels:
-            channel = self.bot.get_channel(c)
-            if channel:
-                if content:
-                    await channel.send(content)
+            try:
+                channel = self.bot.get_channel(c)
+                if channel:
+                    if content:
+                        await channel.send(content)
+            except Exception as e:
+                self.log.error(c, f"{self._module}.{self._class}.{_method}", str(e), traceback.format_exc())
 
     async def give_user_tacos(
         self,
@@ -120,20 +96,7 @@ class TacosLog:
                 taco_count = taco_count
             else:
                 taco_count = taco_settings[taco_type_key]
-            reason_msg = reason if reason else "no reason given"  # self.settings.get_string(fromUser, 'no_reason')
-
-            # total_taco_count = self.db.add_tacos(toUser, taco_count) or 0
-            # self.db.track_taco_gift(
-            #     utils.clean_channel_name(fromUser), utils.clean_channel_name(toUser), taco_count, reason_msg
-            # )
-
-            # self.db.track_tacos_log(
-            #     channel=utils.clean_channel_name(fromUser),
-            #     user=utils.clean_channel_name(toUser),
-            #     count=taco_count,
-            #     type=tacotypes.TacoTypes.get_db_type_from_taco_type(give_type),
-            #     reason=reason_msg,
-            # )
+            reason_msg = reason if reason else "no reason given"
 
             result = self.tacos_webhook.send_payload(
                 TacosWebhookPayload(

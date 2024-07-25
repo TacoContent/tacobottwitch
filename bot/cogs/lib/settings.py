@@ -36,7 +36,7 @@ class Settings:
 
         self.tacobot_webhook_token = utils.dict_get(os.environ, "TBWH_WEBHOOK_TOKEN", default_value=None)
         self.tacobot_webhook_url = utils.dict_get(os.environ, "TBWH_WEBHOOK_URL", default_value=None)
-        
+
         self.bot_restricted_channels = [
             f"{c.lower().strip()}"
             for c in utils.dict_get(os.environ, "BOT_RESTRICTED_CHANNELS", default_value="ourtacobot,ourtaco").split(
