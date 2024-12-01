@@ -36,6 +36,7 @@ class TacoTypes(Enum):
     POST_INTRODUCTION = 28
     APPROVE_INTRODUCTION = 29
     GAME_DONATE_REDEEM = 30
+    GAME_KEY_RESET = 31
 
     TWITCH_BOT_INVITE = 1000  # Invite @OurTacoBot to your Twitch channel
     TWITCH_RAID = 1001
@@ -48,6 +49,9 @@ class TacoTypes(Enum):
     TWITCH_FOLLOW = 1007  # not yet implemented until i can figure out how to get the event from eventsub
 
     TWITCH_STREAM_AVATARS = 1008
+
+    MINECRAFT_LOGIN = 2000
+
     PURGE = 9996
     LEAVE_SERVER = 9997
 
@@ -143,6 +147,8 @@ class TacoTypes(Enum):
             return "twitch_stream_avatars"
         elif self == TacoTypes.TWITCH_CUSTOM:
             return "twitch_custom"
+        elif self == TacoTypes.MINECRAFT_LOGIN:
+            return "minecraft_login"
         else:
             return "custom"
 
@@ -241,6 +247,8 @@ class TacoTypes(Enum):
             return TacoTypes.TWITCH_STREAM_AVATARS
         elif taco_type_string == "twitch_custom":
             return TacoTypes.TWITCH_CUSTOM
+        elif taco_type_string == "minecraft_login":
+            return TacoTypes.MINECRAFT_LOGIN
         else:
             return TacoTypes.CUSTOM
 
@@ -338,5 +346,7 @@ class TacoTypes(Enum):
             return "twitch_stream_avatars"
         elif taco_type == TacoTypes.TWITCH_CUSTOM:
             return "twitch_custom"
+        elif taco_type == TacoTypes.MINECRAFT_LOGIN:
+            return "minecraft_login"
         else:
             return "custom"
