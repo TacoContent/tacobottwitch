@@ -106,6 +106,9 @@ class MongoDatabase:
                 stackTrace=traceback.format_exc(),
                 channel=channel,
             )
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def clear_log(self, channel: str) -> None:
         _method = inspect.stack()[0][3]
@@ -122,6 +125,9 @@ class MongoDatabase:
                 stackTrace=traceback.format_exc(),
                 channel=channel,
             )
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def get_channel_settings(self, channel: str) -> typing.Optional[dict]:
         _method = inspect.stack()[0][3]
@@ -145,6 +151,9 @@ class MongoDatabase:
                 channel=channel,
             )
             return None
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def set_channel_settings(self, channel: str, settings: dict) -> None:
         _method = inspect.stack()[0][3]
@@ -167,6 +176,9 @@ class MongoDatabase:
                 channel=channel,
             )
             raise ex
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def get_settings(self, name: str) -> typing.Optional[dict]:
         _method = inspect.stack()[0][3]
@@ -187,6 +199,9 @@ class MongoDatabase:
                 stackTrace=traceback.format_exc(),
                 channel=None,
             )
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def get_channels(self) -> typing.Optional[typing.List[str]]:
         return self.get_bot_twitch_channels()
@@ -223,6 +238,9 @@ class MongoDatabase:
                 channel=None,
             )
             return None
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def add_bot_to_channel(self, twitch_channel) -> bool:
         _method = inspect.stack()[0][3]
@@ -262,6 +280,9 @@ class MongoDatabase:
                 channel=twitch_channel,
             )
             raise ex
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def remove_bot_from_channel(self, twitch_channel) -> bool:
         _method = inspect.stack()[0][3]
@@ -290,6 +311,9 @@ class MongoDatabase:
                 channel=twitch_channel,
             )
             raise ex
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def get_any_invite(self) -> typing.Optional[dict]:
         _method = inspect.stack()[0][3]
@@ -324,6 +348,9 @@ class MongoDatabase:
                 channel=None,
             )
             return None
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def get_invite_for_user(self, twitch_name: str) -> typing.Optional[dict]:
         _method = inspect.stack()[0][3]
@@ -357,6 +384,9 @@ class MongoDatabase:
                 channel=None,
             )
             return None
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def get_discord_id_for_twitch_username(self, username: str) -> typing.Optional[str]:
         _method = inspect.stack()[0][3]
@@ -406,16 +436,30 @@ class MongoDatabase:
                 channel=None,
             )
             return None
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def _get_discord_id(self, username: str) -> typing.Optional[str]:
-        if self.connection is None:
-            self.open()
-        username = utils.clean_channel_name(username)
-        result = self.connection.twitch_user.find_one({"twitch_name": username})
-        if result:
-            return result["user_id"]
-        else:
-            return None
+        try:
+            if self.connection is None:
+                self.open()
+            username = utils.clean_channel_name(username)
+            result = self.connection.twitch_user.find_one({"twitch_name": username})
+            if result:
+                return result["user_id"]
+            else:
+                return None
+        except Exception as ex:
+            self.log(
+                level=loglevel.LogLevel.ERROR,
+                method=f"{self._module}.{self._class}.{_method}",
+                message=f"{ex}",
+                stackTrace=traceback.format_exc(),
+            )
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def set_twitch_discord_link_code(self, username: str, code: str) -> bool:
         _method = inspect.stack()[0][3]
@@ -439,6 +483,9 @@ class MongoDatabase:
                 channel=None,
             )
             raise ex
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def link_twitch_to_discord_from_code(self, twitch_name: str, code: str) -> bool:
         _method = inspect.stack()[0][3]
@@ -472,6 +519,9 @@ class MongoDatabase:
                 channel=None,
             )
             raise ex
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def get_top_tacos_leaderboard(self, limit: int = 10) -> typing.Optional[list]:
         _method = inspect.stack()[0][3]
@@ -508,6 +558,9 @@ class MongoDatabase:
                 channel=None,
             )
             return None
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def get_tacos_count(self, twitch_name: str) -> typing.Optional[int]:
         _method = inspect.stack()[0][3]
@@ -540,6 +593,9 @@ class MongoDatabase:
                 stackTrace=traceback.format_exc(),
                 channel=None,
             )
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def add_tacos(self, twitch_name: str, count: int) -> typing.Optional[int]:
         _method = inspect.stack()[0][3]
@@ -592,6 +648,9 @@ class MongoDatabase:
                 stackTrace=traceback.format_exc(),
                 channel=None,
             )
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def remove_tacos(self, twitch_name: str, count: int) -> int:
         _method = inspect.stack()[0][3]
@@ -655,6 +714,9 @@ class MongoDatabase:
                 stackTrace=traceback.format_exc(),
                 channel=None,
             )
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def track_taco_gift(self, channel: str, user: str, amount: int, reason: typing.Optional[str] = None) -> None:
         _method = inspect.stack()[0][3]
@@ -686,6 +748,9 @@ class MongoDatabase:
                 stackTrace=traceback.format_exc(),
                 channel=None,
             )
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def get_total_gifted_tacos(self, from_user_id: str, timespan_seconds: int = 86400) -> int:
         _method = inspect.stack()[0][3]
@@ -716,6 +781,9 @@ class MongoDatabase:
                 channel=None,
             )
             return 0
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def get_total_gifted_tacos_to_user(self, from_user_id: str, to_user_id: str, timespan_seconds: int = 86400) -> int:
         _method = inspect.stack()[0][3]
@@ -749,6 +817,9 @@ class MongoDatabase:
                 channel=None,
             )
             return 0
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def track_user_message_in_chat(self, channel: str, user: str, message: str, timespan_seconds: int = 86400) -> bool:
         _method = inspect.stack()[0][3]
@@ -799,6 +870,9 @@ class MongoDatabase:
                 channel=None,
             )
             return False
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def get_active_game_offer(self) -> typing.Optional[dict]:
         _method = inspect.stack()[0][3]
@@ -824,6 +898,9 @@ class MongoDatabase:
                 channel=None,
             )
             return None
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def track_tacos_log(self, channel: str, user: str, count: int, type: str, reason: str):
         _method = inspect.stack()[0][3]
@@ -857,6 +934,9 @@ class MongoDatabase:
                 stackTrace=traceback.format_exc(),
                 channel=None,
             )
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def track_twitch_stream_avatar_duel(
         self,
@@ -964,6 +1044,9 @@ class MongoDatabase:
                 stackTrace=traceback.format_exc(),
                 channel=None,
             )
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def get_twitch_stream_avatar_duel_from_challenger_opponent(
         self, channel: str, challenger: str, opponent: str, type: StreamAvatarTypes = StreamAvatarTypes.ACCEPTED
@@ -1004,6 +1087,9 @@ class MongoDatabase:
                 channel=None,
             )
             return None
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def close_twitch_stream_avatar_open_duels(self, channel: str) -> None:
         _method = inspect.stack()[0][3]
@@ -1039,6 +1125,9 @@ class MongoDatabase:
                 stackTrace=traceback.format_exc(),
                 channel=None,
             )
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
 
     def get_twitch_stream_avatar_duel_from_user(
         self, channel: str, user: str, type: StreamAvatarTypes = StreamAvatarTypes.ACCEPTED
@@ -1090,3 +1179,6 @@ class MongoDatabase:
                 stackTrace=traceback.format_exc(),
                 channel=None,
             )
+        finally:
+            if self.connection is not None and self.client is not None:
+                self.close()
