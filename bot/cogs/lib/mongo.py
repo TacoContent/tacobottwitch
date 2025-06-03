@@ -1108,6 +1108,8 @@ class MongoDatabase:
             channel_discord_user_id = self._get_discord_id(channel)
             # close requested or accepted duels that have been open for more than 5 minutes.
             # set them as unknown as the actual state is unknown since they did not close correctly.
+            if self.connection is None:
+                self.open()
             self.connection.twitch_stream_avatar_duel.update_many(
                 {
                     "guild_id": self.settings.discord_guild_id,
