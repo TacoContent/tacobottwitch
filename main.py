@@ -1,5 +1,5 @@
-from dotenv import find_dotenv, load_dotenv
 import bot.tacobot as bot
+from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv())
 
