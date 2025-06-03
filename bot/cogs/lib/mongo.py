@@ -635,6 +635,8 @@ class MongoDatabase:
                 stackTrace=traceback.format_exc(),
                 channel=None,
             )
+            if self.connection is None:
+                self.open()
             self.connection.tacos.update_one(
                 {"guild_id": self.settings.discord_guild_id, "user_id": discord_user_id},
                 {"$set": {"count": user_tacos}},
@@ -665,13 +667,13 @@ class MongoDatabase:
                     channel=None,
                 )
                 return 0
-            if self.connection is None:
-                self.open()
             twitch_name = utils.clean_channel_name(twitch_name)
             discord_user_id = self._get_discord_id(twitch_name)
             if not discord_user_id:
                 return 0
 
+            if self.connection is None:
+                self.open()
             user_tacos = self.get_tacos_count(twitch_name=twitch_name)
             if user_tacos is None:
                 self.log(
@@ -701,6 +703,8 @@ class MongoDatabase:
                 stackTrace=traceback.format_exc(),
                 channel=None,
             )
+            if self.connection is None:
+                self.open()
             self.connection.tacos.update_one(
                 {"guild_id": self.settings.discord_guild_id, "user_id": discord_user_id},
                 {"$set": {"count": user_tacos}},
@@ -739,6 +743,8 @@ class MongoDatabase:
                 "timestamp": utils.get_timestamp(),
                 "reason": reason,
             }
+            if self.connection is None:
+                self.open()
 
             self.connection.twitch_tacos_gifts.insert_one(payload)
         except Exception as ex:
@@ -925,6 +931,8 @@ class MongoDatabase:
                 "reason": reason,
                 "timestamp": timestamp,
             }
+            if self.connection is None:
+                self.open()
 
             self.connection.tacos_log.insert_one(payload)
         except Exception as ex:
@@ -1014,6 +1022,8 @@ class MongoDatabase:
 
             # timestamp within 2 minutes
             timestamp_2_minutes_ago = timestamp - (2 * 60)
+            if self.connection is None:
+                self.open()
             self.connection.twitch_stream_avatar_duel.update_one(
                 {
                     "guild_id": self.settings.discord_guild_id,
@@ -1068,6 +1078,8 @@ class MongoDatabase:
             channel_discord_user_id = self._get_discord_id(channel)
             challenger_discord_user_id = self._get_discord_id(challenger)
             opponent_discord_user_id = self._get_discord_id(opponent)
+            if self.connection is None:
+                self.open()
 
             return self.connection.twitch_stream_avatar_duel.find_one(
                 {
@@ -1151,6 +1163,8 @@ class MongoDatabase:
 
             channel_discord_user_id = self._get_discord_id(channel)
             user_discord_user_id = self._get_discord_id(user)
+            if self.connection is None:
+                self.open()
 
             return self.connection.twitch_stream_avatar_duel.find_one(
                 {
