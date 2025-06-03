@@ -3,7 +3,7 @@ import os
 import traceback
 import typing
 
-from bot.cogs.lib import logger, loglevel, mongo, settings 
+from bot.cogs.lib import logger, loglevel, mongo, settings
 from twitchio.ext import commands
 
 

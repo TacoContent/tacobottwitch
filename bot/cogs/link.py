@@ -70,6 +70,9 @@ class DiscordAccountLinkCog(commands.Cog):
                         )
                         discord_invite = invite_data["info"]["url"]
 
+                if not discord_invite:
+                    raise ValueError("No discord invite found. Please create an invite and try again.")
+
                 code = utils.get_random_string(length=6)
                 # save code to db
                 result = self.db.set_twitch_discord_link_code(utils.clean_channel_name(ctx.message.author.name), code)

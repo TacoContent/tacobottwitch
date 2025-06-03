@@ -11,6 +11,7 @@ class TacobotWebhook:
 
     def send_payload(self, payload: dict) -> None:
         try:
+            headers = {}
             if self.auth_token is not None:
                 headers = {"X-TACOBOT-TOKEN": f"{self.auth_token}"}
 

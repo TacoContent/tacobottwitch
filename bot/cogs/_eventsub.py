@@ -8,6 +8,7 @@ from twitchio.ext import commands, eventsub
 
 # https://twitchio.dev/en/latest/exts/eventsub.html
 class EventSubCog(commands.Cog):
+
     def __init__(self, bot: commands.Bot) -> None:
         _method = inspect.stack()[0][3]
         self._class = self.__class__.__name__
@@ -32,7 +33,9 @@ class EventSubCog(commands.Cog):
         self.log.debug("NONE", f"{self._module}.{self._class}.{_method}", "Initialized")
 
     @commands.Cog.event()
-    async def event_eventsub_notification_followV2(self, payload: eventsub.ChannelFollowData) -> None:
+    async def event_eventsub_notification_followV2(
+        self, payload: eventsub.ChannelFollowData
+    ) -> None:
         return None
 
 
