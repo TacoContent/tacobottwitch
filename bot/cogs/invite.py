@@ -119,7 +119,7 @@ class TacoInviteCog(commands.Cog):
             await self.tacos_log.give_user_tacos(
                 fromUser=utils.clean_channel_name(self.bot.nick),
                 toUser=channel,
-                reason=f"Inviting @ourtacobot to their channel.",
+                reason="Inviting @ourtacobot to their channel.",
                 give_type=tacotypes.TacoTypes.TWITCH_BOT_INVITE,
                 amount=5,
             )

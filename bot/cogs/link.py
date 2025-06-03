@@ -52,6 +52,7 @@ class DiscordAccountLinkCog(commands.Cog):
             try:
                 # generate code
                 # link this invite to the channel
+                discord_invite = None
                 invite_data = self.db.get_invite_for_user(utils.clean_channel_name(ctx.message.channel.name))
                 if invite_data:
                     self.log.debug(
@@ -70,7 +71,7 @@ class DiscordAccountLinkCog(commands.Cog):
                         )
                         discord_invite = invite_data["info"]["url"]
 
-                if not discord_invite:
+                if discord_invite is None or discord_invite == "":
                     raise ValueError("No discord invite found. Please create an invite and try again.")
 
                 code = utils.get_random_string(length=6)

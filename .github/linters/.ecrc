@@ -6,7 +6,8 @@
   "NoColor": false,
   "exclude": [
     ".git",
-    ".vscode"
+    ".vscode",
+    ".github/linters"
   ],
   "AllowedContentTypes": [],
   "PassedFiles": [],
