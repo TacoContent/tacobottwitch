@@ -10,6 +10,7 @@ from twitchio.ext import commands
 # Tracks a users first chat message in a channel in a 24 hour rolling window.
 # give the user tacos for their first chat message in a channel.
 class FirstChatCog(commands.Cog):
+
     def __init__(self, bot: commands.Bot) -> None:
         _method = inspect.stack()[0][3]
         self._class = self.__class__.__name__

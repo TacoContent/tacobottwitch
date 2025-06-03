@@ -2,6 +2,7 @@ import inspect
 import os
 import re
 import traceback
+import typing
 
 from bot.cogs.lib import logger, loglevel, mongo, permissions, settings, tacos_log, tacotypes, utils
 from twitchio.ext import commands
@@ -40,7 +41,7 @@ class RainmakerCog(commands.Cog):
         self.log.debug("NONE", f"{self._module}.{self._class}.{_method}", "Initialized")
 
     @commands.command(name="rainmaker")
-    async def rainmaker(self, ctx: commands.Context, subcommand: str = None, *args) -> None:
+    async def rainmaker(self, ctx: commands.Context, subcommand: typing.Optional[str] = None, *args) -> None:
         _method = inspect.stack()[1][3]
 
         if not self.permissions_helper.has_permission(ctx.message.author, permissions.PermissionLevel.EVERYONE):

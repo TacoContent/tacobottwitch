@@ -6,6 +6,7 @@ from twitchio.ext import commands
 
 
 class CustomCommandCog(commands.Cog):
+
     def __init__(self, bot: commands.Bot) -> None:
         _method = inspect.stack()[0][3]
         self._class = self.__class__.__name__

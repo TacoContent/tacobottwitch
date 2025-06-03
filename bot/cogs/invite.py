@@ -25,7 +25,7 @@ class TacoInviteCog(commands.Cog):
         self.log = logger.Log(minimumLogLevel=log_level)
         self.permissions_helper = permissions.Permissions()
 
-        self.invite_message = "🌮🌮🌮 Join an amazing discord community that I am passionate about. TACO - The Alliance Collective Order - Tacos Aren't Just For Tuesday 🌮🌮🌮 -> Discord: {{url}} -> Twitch Team: https://twitch.tv/team/{{team}} -> Twitter: https://www.twitter.com/OurTaco"
+        self.invite_message = "🌮🌮🌮 Join an amazing discord community that I am passionate about. TACO - Tacos Aren't Just For Tuesday 🌮🌮🌮 -> Discord: {{url}} -> Twitch Team: https://twitch.tv/team/{{team}} -> Twitter: https://www.twitter.com/OurTaco"
         self.log.debug("NONE", f"{self._module}.{self._class}.{_method}", "Initialized")
 
     @commands.command(name="discord", aliases=["taco"])
@@ -119,7 +119,7 @@ class TacoInviteCog(commands.Cog):
             await self.tacos_log.give_user_tacos(
                 fromUser=utils.clean_channel_name(self.bot.nick),
                 toUser=channel,
-                reason=f"Inviting @ourtacobot to their channel.",
+                reason="Inviting @ourtacobot to their channel.",
                 give_type=tacotypes.TacoTypes.TWITCH_BOT_INVITE,
                 amount=5,
             )

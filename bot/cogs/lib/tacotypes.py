@@ -1,5 +1,5 @@
 ### NOTE: UPDATE THIS FILE WHEN CHANGING TACO TYPES ###
-### UPDATE TacoBot/cogs/lib/tacotypes.py WHEN CHANGING TACO TYPES ###
+### UPDATE TacoBot/lib/tacotypes.py WHEN CHANGING TACO TYPES ###
 ### UPDATE TacoBotTwitch/cogs/lib/tacotypes.py WHEN CHANGING TACO TYPES ###
 
 from enum import Enum
@@ -36,6 +36,7 @@ class TacoTypes(Enum):
     POST_INTRODUCTION = 28
     APPROVE_INTRODUCTION = 29
     GAME_DONATE_REDEEM = 30
+    GAME_KEY_RESET = 31
 
     TWITCH_BOT_INVITE = 1000  # Invite @OurTacoBot to your Twitch channel
     TWITCH_RAID = 1001
@@ -48,11 +49,23 @@ class TacoTypes(Enum):
     TWITCH_FOLLOW = 1007  # not yet implemented until i can figure out how to get the event from eventsub
 
     TWITCH_STREAM_AVATARS = 1008
+
+    MINECRAFT_LOGIN = 2000
+
+    MINECRAFT_CUSTOM = 2999
+
     PURGE = 9996
     LEAVE_SERVER = 9997
 
     TWITCH_CUSTOM = 9998
     CUSTOM = 9999
+
+    def __str__(self):
+        return TacoTypes.get_string_from_taco_type(self)
+
+    @staticmethod
+    def str_to_enum(type: str):
+        return TacoTypes.get_from_string(type)
 
     @staticmethod
     def get_from_string(taco_type_string):
@@ -145,6 +158,8 @@ class TacoTypes(Enum):
             return TacoTypes.TWITCH_STREAM_AVATARS
         elif taco_type_string == "twitch_custom":
             return TacoTypes.TWITCH_CUSTOM
+        elif taco_type_string == "minecraft_login":
+            return TacoTypes.MINECRAFT_LOGIN
         else:
             return TacoTypes.CUSTOM
 
@@ -242,5 +257,9 @@ class TacoTypes(Enum):
             return "twitch_stream_avatars"
         elif taco_type == TacoTypes.TWITCH_CUSTOM:
             return "twitch_custom"
+        elif taco_type == TacoTypes.MINECRAFT_LOGIN:
+            return "minecraft_login"
+        elif taco_type == TacoTypes.MINECRAFT_CUSTOM:
+            return "minecraft_custom"
         else:
             return "custom"
