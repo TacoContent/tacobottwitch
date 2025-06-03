@@ -1,11 +1,12 @@
+import bot.tacobot as bot
 from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv())
-import bot.tacobot as bot
 
 
 def main() -> None:
-    tacobot = bot.TacoBot()
+    bot.TacoBot()
+    # tacobot = bot.TacoBot()
     # tacobot.loop.run_until_complete(tacobot.__ainit__())
     # tacobot.run()
 

@@ -45,7 +45,7 @@ class TacoGameKeyCog(commands.Cog):
                 await ctx.send(f"TACO Game Redeem: Get a key for '{game['title']}' using your tacos 🌮.")
         else:
             self.log.warn(channel, f"{self._module}.{self._class}.{_method}", "No game found.")
-            await ctx.send(f"No TACO Game Redeem currently active. Check back later.")
+            await ctx.send("No TACO Game Redeem currently active. Check back later.")
 
 
 def prepare(bot) -> None:
