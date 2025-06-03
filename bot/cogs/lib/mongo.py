@@ -441,6 +441,7 @@ class MongoDatabase:
                 self.close()
 
     def _get_discord_id(self, username: str) -> typing.Optional[str]:
+        _method = inspect.stack()[0][3]
         try:
             if self.connection is None:
                 self.open()

@@ -7,6 +7,7 @@ from bot.cogs.lib import logger, loglevel, mongo, settings, tacotypes, utils
 from bot.cogs.lib.tacobot.tacos_payload import TacosWebhookPayload
 from bot.cogs.lib.tacobot.webhook import TacobotWebhook
 
+
 class TacosLog:
     def __init__(self, bot):
         _method = inspect.stack()[0][3]
@@ -15,7 +16,9 @@ class TacosLog:
         self._class = self.__class__.__name__
         self.settings = settings.Settings()
         self.bot = bot
-        self.tacos_webhook = TacobotWebhook(f"{self.settings.tacobot_webhook_url}webhook/tacos", self.settings.tacobot_webhook_token)
+        self.tacos_webhook = TacobotWebhook(
+            f"{self.settings.tacobot_webhook_url}webhook/tacos", self.settings.tacobot_webhook_token
+        )
         self.db = mongo.MongoDatabase()
 
         log_level = loglevel.LogLevel[self.settings.log_level.upper()]
