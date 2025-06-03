@@ -229,7 +229,7 @@ class MongoDatabase:
                     channel=None,
                 )
                 return self.settings.default_channels
-        except Exception as ex:
+        except Exception:
             self.log(
                 level=loglevel.LogLevel.ERROR,
                 method=f"{self._module}.{self._class}.{_method}",
@@ -334,7 +334,7 @@ class MongoDatabase:
                 self.log(
                     loglevel.LogLevel.WARNING,
                     f"{self._module}.{self._class}.{_method}",
-                    f"Unable to find invite code for bot",
+                    "Unable to find invite code for bot",
                     traceback.format_exc(),
                     channel=None,
                 )
@@ -660,7 +660,7 @@ class MongoDatabase:
                 self.log(
                     level=loglevel.LogLevel.DEBUG,
                     method=f"{self._module}.{self._class}.{_method}",
-                    message=f"Count is fewer than 0.",
+                    message="Count is fewer than 0.",
                     stackTrace=traceback.format_exc(),
                     channel=None,
                 )
@@ -914,7 +914,7 @@ class MongoDatabase:
             user = utils.clean_channel_name(user)
 
             from_discord_user_id = self._get_discord_id(channel)
-            to_discord_user_id = self._get_discord_id(user)
+            # to_discord_user_id = self._get_discord_id(user)
 
             payload = {
                 "guild_id": self.settings.discord_guild_id,
@@ -1058,8 +1058,8 @@ class MongoDatabase:
                 self.open()
 
             # find the open duel from the channel, (challenger or opponent) where the type is START and the timestamp is within the last 5 minutes
-            date = datetime.datetime.utcnow()
-            timestamp = utils.to_timestamp(date)
+            # date = datetime.datetime.utcnow()
+            # timestamp = utils.to_timestamp(date)
 
             channel = utils.clean_channel_name(channel)
             challenger = utils.clean_channel_name(challenger)

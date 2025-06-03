@@ -1,8 +1,8 @@
 from dotenv import find_dotenv, load_dotenv
-
-load_dotenv(find_dotenv())
 import bot.tacobot as bot
 
+
+load_dotenv(find_dotenv())
 
 def main() -> None:
     tacobot = bot.TacoBot()

@@ -31,6 +31,7 @@ jobs:
           VALIDATE_PYTHON_MYPY: false
           VALIDATE_PYTHON_PYINK: false
           VALIDATE_CHECKOV: false
+          VALIDATE_YAML_PRETTIER: false
           FIX_MARKDOWN_PRETTIER: false
           FIX_YAML_PRETTIER: false
           FIX_JSON_PRETTIER: false
