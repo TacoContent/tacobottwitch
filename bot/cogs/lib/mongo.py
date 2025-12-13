@@ -248,11 +248,11 @@ class MongoDatabase:
             if self.connection is None:
                 self.open()
             twitch_channel = utils.clean_channel_name(twitch_channel)
-            result = self.connection.twitch_channels.find_one(
+            result = self.connection.twitch_channels.find_one(  # type: ignore
                 {"guild_id": self.settings.discord_guild_id, "channel": twitch_channel}
             )
             if not result:
-                timestamp = utils.to_timestamp(datetime.datetime.utcnow())
+                timestamp = utils.to_timestamp(datetime.datetime.now(tz=datetime.timezone.utc))
                 payload = {
                     "guild_id": self.settings.discord_guild_id,
                     "channel": twitch_channel,
@@ -407,7 +407,7 @@ class MongoDatabase:
         try:
             if self.connection is None:
                 self.open()
-            date = datetime.datetime.utcnow().date()
+            date = datetime.datetime.now(tz=datetime.timezone.utc).date()
             ts_date = datetime.datetime.combine(date, datetime.time.min)
             timestamp = utils.to_timestamp(ts_date)
 
@@ -757,7 +757,7 @@ class MongoDatabase:
         try:
             if self.connection is None:
                 self.open()
-            timestamp = utils.to_timestamp(datetime.datetime.utcnow())
+            timestamp = utils.to_timestamp(datetime.datetime.now(tz=datetime.timezone.utc))
             data = self.connection.taco_gifts.find(
                 {
                     "guild_id": self.settings.discord_guild_id,
@@ -790,7 +790,7 @@ class MongoDatabase:
         try:
             if self.connection is None:
                 self.open()
-            timestamp = utils.to_timestamp(datetime.datetime.utcnow())
+            timestamp = utils.to_timestamp(datetime.datetime.now(tz=datetime.timezone.utc))
 
             data = self.connection.taco_gifts.find(
                 {
@@ -827,7 +827,7 @@ class MongoDatabase:
         try:
             if self.connection is None:
                 self.open()
-            timestamp = utils.to_timestamp(datetime.datetime.utcnow())
+            timestamp = utils.to_timestamp(datetime.datetime.now(tz=datetime.timezone.utc))
             channel = utils.clean_channel_name(channel)
             user = utils.clean_channel_name(user)
             data = self.connection.twitch_first_message.find_one(
@@ -907,7 +907,7 @@ class MongoDatabase:
         try:
             if self.connection is None:
                 self.open()
-            date = datetime.datetime.utcnow()
+            date = datetime.datetime.now(tz=datetime.timezone.utc)
             timestamp = utils.to_timestamp(date)
             channel = utils.clean_channel_name(channel)
             user = utils.clean_channel_name(user)
@@ -952,7 +952,7 @@ class MongoDatabase:
         try:
             if self.connection is None:
                 self.open()
-            date = datetime.datetime.utcnow()
+            date = datetime.datetime.now(tz=datetime.timezone.utc)
             timestamp = utils.to_timestamp(date)
             channel = utils.clean_channel_name(channel)
             challenger = utils.clean_channel_name(challenger)
@@ -1057,7 +1057,7 @@ class MongoDatabase:
                 self.open()
 
             # find the open duel from the channel, (challenger or opponent) where the type is START and the timestamp is within the last 5 minutes
-            date = datetime.datetime.utcnow()
+            date = datetime.datetime.now(tz=datetime.timezone.utc)
             timestamp = utils.to_timestamp(date)
 
             channel = utils.clean_channel_name(channel)
@@ -1098,7 +1098,7 @@ class MongoDatabase:
                 self.open()
 
             # find the open duel from the channel, (challenger or opponent) where the type is START and the timestamp is within the last 5 minutes
-            date = datetime.datetime.utcnow()
+            date = datetime.datetime.now(tz=datetime.timezone.utc)
             timestamp = utils.to_timestamp(date)
             # 5 minutes ago
             timestamp_5_minutes_ago = timestamp - (5 * 60)
@@ -1138,7 +1138,7 @@ class MongoDatabase:
                 self.open()
 
             # find the open duel from the channel, (challenger or opponent) where the type is START and the timestamp is within the last 5 minutes
-            date = datetime.datetime.utcnow()
+            date = datetime.datetime.now(tz=datetime.timezone.utc)
             timestamp = utils.to_timestamp(date)
             # 5 minutes ago
             timestamp_2_minutes_ago = timestamp - (2 * 60)

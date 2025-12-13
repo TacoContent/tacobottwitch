@@ -89,7 +89,7 @@ def from_timestamp(timestamp) -> datetime.datetime:
 
 
 def get_timestamp() -> float:
-    return to_timestamp(datetime.datetime.utcnow())
+    return to_timestamp(datetime.datetime.now(tz=datetime.timezone.utc))
 
 
 def load_from_gist(type, count) -> typing.List[str]:

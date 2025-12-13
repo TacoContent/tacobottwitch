@@ -37,6 +37,8 @@ class TacoTypes(Enum):
     APPROVE_INTRODUCTION = 29
     GAME_DONATE_REDEEM = 30
     GAME_KEY_RESET = 31
+    PULLTAB_REDEEM = 33
+    PULLTAB_PURCHASE = 34
 
     TWITCH_BOT_INVITE = 1000  # Invite @OurTacoBot to your Twitch channel
     TWITCH_RAID = 1001
@@ -47,10 +49,11 @@ class TacoTypes(Enum):
     TWITCH_GIVE_TACOS = 32
     TWITCH_RECEIVE_TACOS = 1006
     TWITCH_FOLLOW = 1007  # not yet implemented until i can figure out how to get the event from eventsub
-
     TWITCH_STREAM_AVATARS = 1008
 
     MINECRAFT_LOGIN = 2000
+    MINECRAFT_SHOP_PURCHASE = 2001
+    MINECRAFT_SHOP_SELL = 2002
 
     MINECRAFT_CUSTOM = 2999
 
@@ -63,11 +66,9 @@ class TacoTypes(Enum):
     def __str__(self):
         return TacoTypes.get_string_from_taco_type(self)
 
-
     @staticmethod
     def str_to_enum(type: str):
         return TacoTypes.get_from_string(type)
-
 
     @staticmethod
     def get_from_string(taco_type_string):
@@ -136,6 +137,10 @@ class TacoTypes(Enum):
             return TacoTypes.POST_INTRODUCTION
         elif taco_type_string == "approve_introduction_count":
             return TacoTypes.APPROVE_INTRODUCTION
+        elif taco_type_string == "pulltab_purchase":
+            return TacoTypes.PULLTAB_PURCHASE
+        elif taco_type_string == "pulltab_redeem":
+            return TacoTypes.PULLTAB_REDEEM
         elif taco_type_string == "twitch_bot_invite":
             return TacoTypes.TWITCH_BOT_INVITE
         elif taco_type_string == "twitch_raid_count":
@@ -162,14 +167,18 @@ class TacoTypes(Enum):
             return TacoTypes.TWITCH_CUSTOM
         elif taco_type_string == "minecraft_login":
             return TacoTypes.MINECRAFT_LOGIN
+        elif taco_type_string == "minecraft_shop_purchase":
+            return TacoTypes.MINECRAFT_SHOP_PURCHASE
+        elif taco_type_string == "minecraft_shop_sell":
+            return TacoTypes.MINECRAFT_SHOP_SELL
+        elif taco_type_string == "minecraft_custom":
+            return TacoTypes.MINECRAFT_CUSTOM
         else:
             return TacoTypes.CUSTOM
-
 
     @staticmethod
     def get_db_type_from_taco_type(taco_type):
         return taco_type.name.upper()
-
 
     @staticmethod
     def get_string_from_taco_type(taco_type):
@@ -237,6 +246,10 @@ class TacoTypes(Enum):
             return "post_introduction_count"
         elif taco_type == TacoTypes.APPROVE_INTRODUCTION:
             return "approve_introduction_count"
+        elif taco_type == TacoTypes.PULLTAB_PURCHASE:
+            return "pulltab_purchase"
+        elif taco_type == TacoTypes.PULLTAB_REDEEM:
+            return "pulltab_redeem"
         elif taco_type == TacoTypes.TWITCH_BOT_INVITE:
             return "twitch_bot_invite_count"
         elif taco_type == TacoTypes.TWITCH_RAID:
@@ -263,6 +276,10 @@ class TacoTypes(Enum):
             return "twitch_custom"
         elif taco_type == TacoTypes.MINECRAFT_LOGIN:
             return "minecraft_login"
+        elif taco_type == TacoTypes.MINECRAFT_SHOP_PURCHASE:
+            return "minecraft_shop_purchase"
+        elif taco_type == TacoTypes.MINECRAFT_SHOP_SELL:
+            return "minecraft_shop_sell"
         elif taco_type == TacoTypes.MINECRAFT_CUSTOM:
             return "minecraft_custom"
         else:
