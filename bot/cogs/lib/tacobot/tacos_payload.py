@@ -1,5 +1,6 @@
 from bot.cogs.lib.tacotypes import TacoTypes
 
+
 class TacosWebhookPayload:
     def __init__(self, guild_id: int, from_user: str, to_user: str, amount: int, reason: str, type: TacoTypes):
         self.guild_id = guild_id

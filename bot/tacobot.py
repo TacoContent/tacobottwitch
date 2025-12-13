@@ -3,10 +3,8 @@ import os
 import traceback
 import typing
 
-from bot.cogs.lib import logger, loglevel, mongo, settings #, utils
-# import twitchio
+from bot.cogs.lib import logger, loglevel, mongo, settings
 from twitchio.ext import commands
-# from twitchio.ext import eventsub
 
 
 # https://twitchio.dev/en/latest/exts/commands.html#twitchio.ext.commands.Bot.load_module

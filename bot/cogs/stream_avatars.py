@@ -48,7 +48,7 @@ class StreamAvatars(commands.Cog):
             if message.author is None or message.channel is None:
                 return
 
-            sender = utils.clean_channel_name(message.author.name)
+            # sender = utils.clean_channel_name(message.author.name)
             channel = utils.clean_channel_name(message.channel.name)
 
             if not duel or winner is None or winner == "":

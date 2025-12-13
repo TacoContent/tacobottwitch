@@ -273,7 +273,7 @@ class TacosCog(commands.Cog):
                         )
 
                 else:
-                    await ctx.send(f"You can't give negative tacos!")
+                    await ctx.send("You can't give negative tacos!")
             else:
                 await ctx.send(f"{amount} is not a valid number!")
         else:

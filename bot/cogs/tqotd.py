@@ -44,7 +44,7 @@ class TacoQuestionOfTheDayCog(commands.Cog):
                 await ctx.send(f"TACO Question of the Day: {question}")
         else:
             self.log.warn(channel, f"{self._module}.{self._class}.{_method}", "No question found.")
-            await ctx.send(f"No TACO Question of the Day found. Check back later.")
+            await ctx.send("No TACO Question of the Day found. Check back later.")
 
 
 def prepare(bot) -> None:
